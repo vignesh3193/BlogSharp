@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataLayer
 {
+    public class UserContext : DbContext
+    {
+        public virtual DbSet<User> Users { get; set; }
+
+        public System.Data.Entity.DbSet<DataLayer.BlogPost> BlogPosts { get; set; }
+
+
+    }
     public class User
     {
         [Key]

@@ -9,6 +9,19 @@ using System.Threading.Tasks;
 
 namespace DataLayer
 {
+    public class BlogPostContext : DbContext
+    {
+        public virtual DbSet<BlogPost> BlogPosts { get; set; }
+
+        public System.Data.Entity.DbSet<DataLayer.User> Users { get; set; }
+
+        public System.Data.Entity.DbSet<DataLayer.Comment> Comments { get; set; }
+
+        public System.Data.Entity.DbSet<DataLayer.Rating> Ratings { get; set; }
+
+
+    }
+
     public class BlogPost
     {
         [Key]
@@ -16,10 +29,13 @@ namespace DataLayer
         public int Id { get; set; }
 
         [Required]
-        public long totalRaters { get; set; }
+        public int UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public virtual User user { get; set; }
 
         [Required]
-        public long totalRatings { get; set; }
+        public ICollection<Rating> ratings { get; set; }
 
         [Required]
         public ICollection<Comment> comments { get; set; }
@@ -37,7 +53,7 @@ namespace DataLayer
         public string content { get; set; }
 
         [Required]
-        public ICollection<User> ratings { get; set; }
+        public ICollection<User> userRatings { get; set; }
 
     }
 }

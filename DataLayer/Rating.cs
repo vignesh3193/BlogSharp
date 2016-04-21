@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataLayer
 {
+    public class RatingContext : DbContext
+    {
+        public virtual DbSet<Rating> Ratings { get; set; }
+    }
+
     public class Rating
     {
         [Key]
