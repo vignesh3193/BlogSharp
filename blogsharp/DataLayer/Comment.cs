@@ -14,7 +14,7 @@ namespace DataLayer
     {
         public virtual DbSet<Comment> Comments { get; set; }
 
-        public System.Data.Entity.DbSet<DataLayer.User> Users { get; set; }
+        public System.Data.Entity.DbSet<DataLayer.Person> Users { get; set; }
 
         public System.Data.Entity.DbSet<DataLayer.BlogPost> Blogs { get; set; }
 

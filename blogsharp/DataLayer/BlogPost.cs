@@ -13,7 +13,7 @@ namespace DataLayer
     {
         public virtual DbSet<BlogPost> BlogPosts { get; set; }
 
-        public System.Data.Entity.DbSet<DataLayer.User> Users { get; set; }
+        public System.Data.Entity.DbSet<DataLayer.Person> Users { get; set; }
 
         public System.Data.Entity.DbSet<DataLayer.Comment> Comments { get; set; }
 
@@ -32,7 +32,7 @@ namespace DataLayer
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public virtual User user { get; set; }
+        public virtual Person user { get; set; }
 
         [Required]
         public ICollection<Rating> ratings { get; set; }
@@ -53,7 +53,7 @@ namespace DataLayer
         public string content { get; set; }
 
         [Required]
-        public ICollection<User> userRatings { get; set; }
+        public ICollection<Person> userRatings { get; set; }
 
     }
 }

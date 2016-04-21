@@ -11,13 +11,13 @@ namespace DataLayer
 {
     public class UserContext : DbContext
     {
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Person> Users { get; set; }
 
         public System.Data.Entity.DbSet<DataLayer.BlogPost> BlogPosts { get; set; }
 
 
     }
-    public class User
+    public class Person
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -30,10 +30,10 @@ namespace DataLayer
         public ICollection<BlogPost> posts { get; set; }
 
         [Required]
-        public ICollection<User> followers { get; set; }
+        public ICollection<Person> followers { get; set; }
 
         [Required]
-        public ICollection<User> following { get; set; }
+        public ICollection<Person> following { get; set; }
 
         [Required]
         public DateTime creation { get; set; }
