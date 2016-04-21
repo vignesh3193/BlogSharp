@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DataLayer
 {
-    public class UserContext : DbContext
+    public class PersonContext : DbContext
     {
-        public virtual DbSet<Person> Users { get; set; }
+        public virtual DbSet<Person> People { get; set; }
 
         public System.Data.Entity.DbSet<DataLayer.BlogPost> BlogPosts { get; set; }
 
