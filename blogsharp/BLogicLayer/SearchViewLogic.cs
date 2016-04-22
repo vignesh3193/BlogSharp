@@ -17,11 +17,9 @@ namespace BLogicLayer
 
             using (var context = new BlogPostContext())
             {
-                recentPosts =
-                (from post in context.BlogPosts
-                 orderby post.dateCreated descending
-                 select post).ToList();
-
+                recentPosts = (from post in context.BlogPosts
+                               orderby post.dateCreated descending
+                               select post).ToList();
             };
 
             recentPosts = recentPosts.Take(10);
