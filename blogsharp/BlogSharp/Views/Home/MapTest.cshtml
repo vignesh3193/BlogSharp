@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewBag.Title = "MapTest";
+}
+
+<style>
+    #map {
+        position: relative;
+        width: 500px;
+        height: 500px;
+        border: 0px;
+    }
+</style>
+
+<h2>MapTest</h2>
+
+<script src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0" type="text/javascript"></script>
+<script type="text/javascript" src="~/scripts/jquery-1.10.2.min.js"></script> 
+<div id="map"></div>
+
+<script>
+    function displayMap() {
+        var map = new Microsoft.Maps.Map($("#map")[0],
+            {
+                credentials: "@Environment.GetEnvironmentVariable("BING_MAPS_KEY")",
+                center: new Microsoft.Maps.Location(40.7128, 74.0059),
+                mapTypeId: Microsoft.Maps.MapTypeId.road,
+                zoom: 10
+
+            });
+    }
+
+    displayMap();
+</script>
