@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BlogSharp.Models;
-using DataLayer.Person;
+using DataLayer;
 
 namespace BlogSharp.Controllers
 {
@@ -159,14 +159,14 @@ namespace BlogSharp.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     Person p = new Person();
-                    p.Email = user.Email;
+                    p.Email = model.Email;
                     p.posts = null;
                     p.followers = null;
                     p.following = null;
-                    p.creation = DateTime.Now();
-                    p.birthday = user.DOB;
-                    p.blogName = user.blogTitle;
-                    p.location = user.Address;
+                    p.creation = DateTime.Now;
+                    p.birthday = model.DOB;
+                    p.blogName = model.blogTitle;
+                    p.location = model.Address;
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);

@@ -93,7 +93,7 @@ namespace BLogicLayer
         private String GeocodeAddress(string address)
         {
             string results = "";
-            string key = "insert your Bing Maps key here";
+            string key = Environment.GetEnvironmentVariable("BING_MAPS_KEY");
             GeocodeRequest geocodeRequest = new GeocodeRequest();
 
             // Set the credentials using a valid Bing Maps key
