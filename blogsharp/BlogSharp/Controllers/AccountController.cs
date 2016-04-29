@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BlogSharp.Models;
+using DataLayer.Person;
 
 namespace BlogSharp.Controllers
 {
@@ -157,14 +158,22 @@ namespace BlogSharp.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    Person p = new Person();
+                    p.Email = user.Email;
+                    p.posts = null;
+                    p.followers = null;
+                    p.following = null;
+                    p.creation = DateTime.Now();
+                    p.birthday = user.DOB;
+                    p.blogName = user.blogTitle;
+                    p.location = user.Address;
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");//we'll need to change this to our homepage view once that exists!!
                 }
                 AddErrors(result);
             }

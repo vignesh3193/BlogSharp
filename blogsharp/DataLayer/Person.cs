@@ -13,7 +13,7 @@ namespace DataLayer
     {
         public virtual DbSet<Person> People { get; set; }
 
-        public System.Data.Entity.DbSet<DataLayer.BlogPost> BlogPosts { get; set; }
+        public System.Data.Entity.DbSet<BlogPost> BlogPosts { get; set; }
 
 
     }

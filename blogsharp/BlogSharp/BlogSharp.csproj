@@ -280,6 +280,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BLogicLayer\BLogicLayer.csproj">
+      <Project>{08dfffb0-5586-4f5c-9a47-1f00172b8133}</Project>
+      <Name>BLogicLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataLayer\DataLayer.csproj">
       <Project>{9f858e97-8fad-444d-8ef3-9fad82ce17f5}</Project>
       <Name>DataLayer</Name>
