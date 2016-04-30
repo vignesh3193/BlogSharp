@@ -29,8 +29,6 @@ namespace BlogSharp.Controllers
 
         public ActionResult MapTest()
         {
-            
-            
             return View();
         }
     }

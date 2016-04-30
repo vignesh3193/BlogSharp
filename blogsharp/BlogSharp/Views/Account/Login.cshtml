@@ -61,3 +61,21 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+<script type="text/javascript">
+    $(function () {
+        var loginNotify = $.connection.notificationHub;
+
+        loginNotify.client.notifyUsers = function () {
+            toastr.info('Attempting log in...');
+        };
+
+        $.connection.hub.start().done(function () {
+            $('input.btn.btn-default').click(function () {
+                if ($('#Email').val() != "" && $('#Password').val() != "") {
+                    loginNotify.server.loginProgress();
+                }
+            });
+        });
+    });
+</script>
