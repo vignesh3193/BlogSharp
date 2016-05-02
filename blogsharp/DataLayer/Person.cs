@@ -26,18 +26,16 @@ namespace DataLayer
         [Required]
         public string Email { get; set; }
 
-        [Required]
         public ICollection<BlogPost> posts { get; set; }
 
-        [Required]
         public ICollection<Person> followers { get; set; }
 
-        [Required]
         public ICollection<Person> following { get; set; }
 
         [Required]
         public DateTime creation { get; set; }
         
+        [Required]
         public DateTime birthday { get; set; }
 
         [Required]

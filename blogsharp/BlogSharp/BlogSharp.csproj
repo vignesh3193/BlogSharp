@@ -209,6 +209,19 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604291603043_InitialCreate.cs" />
+    <Compile Include="Migrations\201604291603043_InitialCreate.Designer.cs">
+      <DependentUpon>201604291603043_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605022230417_application context change.cs" />
+    <Compile Include="Migrations\201605022230417_application context change.Designer.cs">
+      <DependentUpon>201605022230417_application context change.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605022236081_removed required fields from posts, followers, and following.cs" />
+    <Compile Include="Migrations\201605022236081_removed required fields from posts, followers, and following.Designer.cs">
+      <DependentUpon>201605022236081_removed required fields from posts, followers, and following.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -306,6 +319,17 @@
       <Project>{9f858e97-8fad-444d-8ef3-9fad82ce17f5}</Project>
       <Name>DataLayer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201604291603043_InitialCreate.resx">
+      <DependentUpon>201604291603043_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605022230417_application context change.resx">
+      <DependentUpon>201605022230417_application context change.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605022236081_removed required fields from posts, followers, and following.resx">
+      <DependentUpon>201605022236081_removed required fields from posts, followers, and following.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

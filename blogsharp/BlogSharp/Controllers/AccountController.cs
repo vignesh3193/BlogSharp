@@ -13,13 +13,14 @@ using DataLayer;
 
 namespace BlogSharp.Controllers
 {
+
     [Authorize]
     public class AccountController : Controller
     {
+        private ApplicationDbContext person_db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         
-
         public AccountController()
         {
         }
@@ -158,15 +159,25 @@ namespace BlogSharp.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+
                     Person p = new Person();
-                    p.Email = model.Email;
-                    p.posts = null;
-                    p.followers = null;
-                    p.following = null;
-                    p.creation = DateTime.Now;
-                    p.birthday = model.DOB;
-                    p.blogName = model.blogTitle;
-                    p.location = model.Address;
+                    using (person_db)
+                    {
+                        p.Email = model.Email;
+                        p.posts = null;
+                        p.followers = null;
+                        p.following = null;
+                        p.creation = DateTime.Now;
+                        p.birthday = model.DOB;
+                        p.blogName = model.blogTitle;
+                        p.location = model.Address;
+                        p.FirstName = model.FirstName;
+                        p.LastName = model.LastName;
+                        p.isPrivate = false;
+                        person_db.People.Add(p);
+                        person_db.SaveChanges();
+                    }
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
