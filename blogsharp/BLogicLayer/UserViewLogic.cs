@@ -8,7 +8,7 @@ using System.Collections;
 
 namespace BLogicLayer
 {
-    class UserViewLogic
+    public class UserViewLogic
     {
         public static void follow(int curruser, int author)
         {

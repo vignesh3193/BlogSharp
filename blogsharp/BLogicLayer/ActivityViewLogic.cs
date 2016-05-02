@@ -8,7 +8,7 @@ using DataLayer;
 
 namespace BLogicLayer
 {
-    class ActivityViewLogic
+    public class ActivityViewLogic
     {
         public static ICollection<String> getTrends()
         {
@@ -51,7 +51,7 @@ namespace BLogicLayer
             return daily_trends;
         } 
 
-        public List<String> retrieveGeoPoints()
+        public static List<String> retrieveGeoPoints()
         {
             // Create list of addresses to geocode
 
@@ -90,7 +90,7 @@ namespace BLogicLayer
 
         // We will soon acquire an API key to be used below
 
-        private String GeocodeAddress(string address)
+        private static String GeocodeAddress(string address)
         {
             string results = "";
             string key = Environment.GetEnvironmentVariable("BING_MAPS_KEY");

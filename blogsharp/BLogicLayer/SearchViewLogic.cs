@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BLogicLayer
 {
-    class SearchViewLogic
+    public class SearchViewLogic
     {
-        public ICollection<BlogPost> retrieveMostPopularPosts()
+        public static ICollection<BlogPost> retrieveMostPopularPosts()
         {
             // First retrieve the 10 most recent blog posts
 

@@ -7,12 +7,12 @@ using DataLayer;
 
 namespace BLogicLayer
 {
-    class BlogViewLogic
+    public class BlogViewLogic
     {
 
         // This method assumes that the Person object is for a logged-in user
         // The blogID is the one that corresponds to the blog which a user is attempting to access
-        public int determineBlogViewCode(Person loggedUser, int blogID)
+        public static int determineBlogViewCode(Person loggedUser, int blogID)
         {
             Person author = null;
 
