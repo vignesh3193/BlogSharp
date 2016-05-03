@@ -54,20 +54,20 @@ namespace BLogicLayer
             return daily_trends;
         } 
 
-        public static List<String> retrieveGeoPoints(List<String> addresses)
+        public static List<Dictionary<string, double>> retrieveGeoPoints(List<String> addresses)
         {
 
             // Now create a list of geopoints, loop through and geocode the addresses,
             // and return the list of geocoded addresses
 
-            List<String> geoPoints = new List<String>();
+            List<Dictionary<string, double>> geoPoints = new List<Dictionary<string, double>>();
 
             foreach (String address in addresses)
             {
-               string geoPoint = GeocodeAddress(address);
+               Dictionary<string, double> geoPoint = GeocodeAddress(address);
                 
                 // only add valid results
-                if (geoPoint != "No Results Found")
+                if (geoPoint != null)
                 {
                     geoPoints.Add(geoPoint);
                 }
@@ -109,7 +109,7 @@ namespace BLogicLayer
         }
 
 
-        private static string GeocodeAddress(String query)
+        private static Dictionary<string, double> GeocodeAddress(String query)
         {
             string key = Environment.GetEnvironmentVariable("BING_MAPS_KEY");
             String geocodeRequest = string.Format("http://dev.virtualearth.net/REST/v1/Locations?q={0}&key={1}", query, key);
@@ -117,15 +117,16 @@ namespace BLogicLayer
 
             if (geocodeResponse == null)
             {
-                return "No Results Found";
+                return null;
             }
             else
             {
                 JSON.Location location = (JSON.Location)geocodeResponse.ResourceSets[0].Resources[0];
 
-                string results = String.Format("{{Latitude: {0}, Longitude: {1}}}",
-                                               location.Point.Coordinates[0],
-                                               location.Point.Coordinates[1]);
+                Dictionary<String, double> results = new Dictionary<string, double>();
+
+                results.Add("Latitude", location.Point.Coordinates[0]);
+                results.Add("Longitude", location.Point.Coordinates[1]);
 
                 return results;
 

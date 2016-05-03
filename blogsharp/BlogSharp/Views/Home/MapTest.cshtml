@@ -19,18 +19,31 @@
 <div id="map"></div>
 
 <script>
-    function displayMap() {
+    function initMap () {
         var map = new Microsoft.Maps.Map($("#map")[0],
             {
                 credentials: "@Environment.GetEnvironmentVariable("BING_MAPS_KEY")",
-                center: new Microsoft.Maps.Location(40.7128, 276),
+                center: new Microsoft.Maps.Location(40.7128, 296),
                 mapTypeId: Microsoft.Maps.MapTypeId.road,
-                zoom: 10
-
+                zoom: 3
             });
-    }
-    alert(@Html.Raw(ViewBag.geocodes));
+        
+        var points = @Html.Raw(ViewBag.geocodes);
 
-    displayMap();
+        for (var i = 0; i < points.length; i++) {
+            // get new lat/long
+            var latitude = points[i].Latitude;
+            var longitude = points[i].Longitude;
+
+            var location = new Microsoft.Maps.Location(latitude, longitude);
+
+            // add pin
+
+            var pin = new Microsoft.Maps.Pushpin(location);
+            map.entities.push(pin);
+        }
+    }
+
+    initMap();
 
 </script>
