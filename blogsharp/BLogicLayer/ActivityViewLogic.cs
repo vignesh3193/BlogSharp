@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using BLogicLayer.GeocodeService;
 using DataLayer;
+using System.Net;
+using System.Runtime.Serialization.Json;
+using BLogicLayer.JSON;
 
 namespace BLogicLayer
 {
@@ -51,17 +54,8 @@ namespace BLogicLayer
             return daily_trends;
         } 
 
-        public static List<String> retrieveGeoPoints()
+        public static List<String> retrieveGeoPoints(List<String> addresses)
         {
-            // Create list of addresses to geocode
-
-            List<String> addresses = new List<String>();
-
-            using (var context = new PersonContext())
-            {
-                addresses = (from blogger in context.People
-                             select blogger.location).ToList();
-            }
 
             // Now create a list of geopoints, loop through and geocode the addresses,
             // and return the list of geocoded addresses
@@ -70,7 +64,7 @@ namespace BLogicLayer
 
             foreach (String address in addresses)
             {
-                string geoPoint = GeocodeAddress(address);
+               string geoPoint = GeocodeAddress(address);
                 
                 // only add valid results
                 if (geoPoint != "No Results Found")
@@ -83,48 +77,60 @@ namespace BLogicLayer
         }
 
 
-        // Note: This method comes from Microsft's developer network.  We are using it as a helper method for
-        // quickly and conveniently getting latitude/longitude information.  The Activity page
-        // will use this information for plotting bloggers' locations on a map.
-        // Source: https://msdn.microsoft.com/en-us/library/dd221354.aspx
+        // The following two methods come from Microsoft's developer network.
+        // The second one, GeocodeAddress(), is adapted from some sample code that was also provided.
+        // First method's link: https://msdn.microsoft.com/en-us/library/dd221354.aspx
+        // Second method's link: https://msdn.microsoft.com/en-us/library/jj819168.aspx
 
-        // We will soon acquire an API key to be used below
-
-        private static String GeocodeAddress(string address)
+        public static Response MakeRequest(string requestUrl)
         {
-            string results = "";
+            try
+            {
+                HttpWebRequest request = WebRequest.Create(requestUrl) as HttpWebRequest;
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
+                        throw new Exception(String.Format(
+                        "Server error (HTTP {0}: {1}).",
+                        response.StatusCode,
+                        response.StatusDescription));
+                    DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(Response));
+                    object objResponse = jsonSerializer.ReadObject(response.GetResponseStream());
+                    Response jsonResponse
+                    = objResponse as Response;
+                    return jsonResponse;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+
+        private static string GeocodeAddress(String query)
+        {
             string key = Environment.GetEnvironmentVariable("BING_MAPS_KEY");
-            GeocodeRequest geocodeRequest = new GeocodeRequest();
+            String geocodeRequest = string.Format("http://dev.virtualearth.net/REST/v1/Locations?q={0}&key={1}", query, key);
+            Response geocodeResponse = MakeRequest(geocodeRequest);
 
-            // Set the credentials using a valid Bing Maps key
-            geocodeRequest.Credentials = new GeocodeService.Credentials();
-            geocodeRequest.Credentials.ApplicationId = key;
-
-            // Set the full address query
-            geocodeRequest.Query = address;
-
-            // Set the options to only return high confidence results 
-            ConfidenceFilter[] filters = new ConfidenceFilter[1];
-            filters[0] = new ConfidenceFilter();
-            filters[0].MinimumConfidence = GeocodeService.Confidence.High;
-
-            // Add the filters to the options
-            GeocodeOptions geocodeOptions = new GeocodeOptions();
-            geocodeOptions.Filters = filters;
-            geocodeRequest.Options = geocodeOptions;
-
-            // Make the geocode request
-            GeocodeServiceClient geocodeService = new GeocodeServiceClient();
-            GeocodeResponse geocodeResponse = geocodeService.Geocode(geocodeRequest);
-
-            if (geocodeResponse.Results.Length > 0)
-                results = String.Format("Latitude: {0}\nLongitude: {1}",
-                  geocodeResponse.Results[0].Locations[0].Latitude,
-                  geocodeResponse.Results[0].Locations[0].Longitude);
+            if (geocodeResponse == null)
+            {
+                return "No Results Found";
+            }
             else
-                results = "No Results Found";
+            {
+                JSON.Location location = (JSON.Location)geocodeResponse.ResourceSets[0].Resources[0];
 
-            return results;
+                string results = String.Format("{{Latitude: {0}, Longitude: {1}}}",
+                                               location.Point.Coordinates[0],
+                                               location.Point.Coordinates[1]);
+
+                return results;
+
+            }
+
         }
     }
 
