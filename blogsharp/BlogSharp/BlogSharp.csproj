@@ -302,6 +302,7 @@
     <Content Include="Views\Blog\Edit.cshtml" />
     <Content Include="Views\Blog\Search.cshtml" />
     <Content Include="Views\Blog\ViewPosts.cshtml" />
+    <Content Include="Views\Blog\Profile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
