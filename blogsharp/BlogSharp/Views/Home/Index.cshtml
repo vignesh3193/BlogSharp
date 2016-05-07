@@ -1,6 +1,45 @@
-﻿@{
+﻿@model IEnumerable<DataLayer.BlogPost>
+@{
     ViewBag.Title = "Home Page";
 }
 
+<style>
+    #wrapper {
+        overflow: auto;
+    }
 
-<div>This is the home page of blog#.  Welcome!</div>
+    #trends {
+        float: right;
+        height: 500px;
+        width: 20%;
+        background-color: Highlight;
+    }
+
+    #trends_label {
+        margin-left: 30%;
+    }
+</style>
+
+<div id="wrapper">
+    <h3> is the home page of blog#.  Welcome!</h3>
+    <h2><span class="label label-default">Todays Blogposts</span></h2>
+    <div id="testlist" style="width:65%; float:left">
+        @foreach (DataLayer.BlogPost temp in Model)
+        {
+            if (temp.dateCreated.Date == DateTime.Today)
+            {
+            <a href="@Url.Action("Details", "Blog", new { id = temp.Id })" class="list-group-item">
+                <h4 class="list-group-item-heading">@Html.DisplayFor(model => temp.title)</h4>
+                <p class="list-group-item-text">Author: @Html.DisplayFor(model => temp.person.FirstName)  @Html.DisplayFor(model => temp.person.LastName)     Blog Name:@Html.DisplayFor(model => temp.person.blogName)</p>
+            </a>
+            }
+
+        }
+            </div>
+    <div id="trends">
+        <h2 id="trends_label">Trends</h2>
+    </div>
+
+
+
+</div>
