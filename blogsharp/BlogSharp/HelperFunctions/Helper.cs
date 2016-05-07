@@ -8,8 +8,7 @@ namespace BlogSharp.HelperFunctions
 {
     public class Helper
     {
-        private static BlogContext blogCtx = new BlogContext();
-        public static Person getLoggedInUser()
+        public static Person getLoggedInUser(BlogContext blogCtx)
         {
             Person thisPerson = (from user in blogCtx.Persons
                                  where user.Email == HttpContext.Current.User.Identity.Name
@@ -18,7 +17,7 @@ namespace BlogSharp.HelperFunctions
 
         }
 
-        public static List<BlogPost> getBlogPosts(Person thisPerson)
+        public static List<BlogPost> getBlogPosts(BlogContext blogCtx, Person thisPerson)
         {
             var blogPosts = (from posts in blogCtx.BlogPosts
                              where posts.PersonId == thisPerson.Id
