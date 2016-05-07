@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "blog# - Activity";
+}
+
+<style>
+    #map {
+        position: relative;
+        width: 500px;
+        height: 500px;
+        border: 0px;
+    }
+</style>
+
+<h2>blog# - Activity</h2>
+<p>Check out where our bloggers are across the world and what they've been up to.</p>
+
+<script src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0" type="text/javascript"></script>
+<script type="text/javascript" src="~/scripts/jquery-1.10.2.min.js"></script> 
+<div id="map"></div>
+
+<script>
+
+    var map = null;
+    var infobox = null;
+
+    function initMap () {
+        var map = new Microsoft.Maps.Map($("#map")[0],
+            {
+                credentials: "@Environment.GetEnvironmentVariable("BING_MAPS_KEY")",
+                center: new Microsoft.Maps.Location(40.7128, 296),
+                mapTypeId: Microsoft.Maps.MapTypeId.road,
+                zoom: 3
+            });
+        
+        var points = @Html.Raw(ViewBag.geocodes);
+        var blogNames = @Html.Raw(ViewBag.blogNames);
+
+        // Thanks to this blogger for providing help/clarification on how to get
+        // pins and infoboxes to work nicely together
+        // https://rbrundritt.wordpress.com/2011/10/13/multiple-pushpins-and-infoboxes-in-bing-maps-v7/
+
+        // create underlying data layers for the pins and the infobox
+        // note that we still use a collection for the infobox even though there will
+        // ultimately be just a single one
+        var pins = new Microsoft.Maps.EntityCollection();
+        var infoboxLayer = new Microsoft.Maps.EntityCollection();
+
+        map.entities.push(pins);
+        map.entities.push(infoboxLayer);
+
+        infobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0,0), {visible:false});
+
+        infoboxLayer.push(infobox);
+
+        for (var i = 0; i < points.length; i++) {
+            // get new lat/long
+            var latitude = points[i].Latitude;
+            var longitude = points[i].Longitude;
+
+            var location = new Microsoft.Maps.Location(latitude, longitude);
+
+            // add pin, supply the blogname as content
+            // add an infobox as well - it will only appear
+            // when the mouse hovers over the pin
+
+            var pin = new Microsoft.Maps.Pushpin(location);
+            pin.Title = blogNames[i];
+            pin.Description = "Last updated: one day ago";
+
+            Microsoft.Maps.Events.addHandler(pin, 'mouseover', showInfobox);
+            Microsoft.Maps.Events.addHandler(pin, 'mouseout', hideInfobox);
+
+            pins.push(pin)
+        }
+    }
+
+    // This is the way Microsoft's documentation does it (as well as some others),
+    // although one could also define these as anonymous functions
+    // in the 'mouseout' and 'mouseover' event constructors
+
+    function showInfobox(e) {
+        if (e.targetType == 'pushpin') {
+            infobox.setLocation(e.target.getLocation());
+            infobox.setOptions({title: e.target.Title, 
+                description: e.target.Description, 
+                visible:true, offset: new Microsoft.Maps.Point(0,25)});
+
+        }
+
+    }
+
+    function hideInfobox(e) {
+        infobox.setOptions({visible:false});
+    }
+
+    initMap();
+
+</script>

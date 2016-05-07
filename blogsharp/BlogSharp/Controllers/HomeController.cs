@@ -34,18 +34,23 @@ namespace BlogSharp.Controllers
             return View();
         }
 
-        public ActionResult MapTest()
+        public ActionResult Activity()
         {
             List<String> addresses = new List<String>();
+            List<String> blogNames = new List<String>();
 
             using (personContext)
             {
                 addresses = (from blogger in personContext.Persons
                              select blogger.location).ToList();
+
+                blogNames = (from blogger in personContext.Persons
+                             select blogger.blogName).ToList();
             }
 
             var jsonMaker = new JavaScriptSerializer();
-            ViewBag.geocodes = jsonMaker.Serialize(ActivityViewLogic.retrieveGeoPoints(addresses));
+            ViewBag.geocodes = jsonMaker.Serialize(ActivityViewLogic.retrieveGeoPoints(addresses, blogNames));
+            ViewBag.blogNames = jsonMaker.Serialize(blogNames);
             return View();
         }
     }
