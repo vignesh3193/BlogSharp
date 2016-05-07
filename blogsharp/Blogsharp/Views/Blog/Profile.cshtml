@@ -1,0 +1,86 @@
+﻿@model DataLayer.Person
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+<style>
+    #banner
+    {
+        background-image:url(http://bgfons.com/upload/light_texture2269.jpg);
+        display:block;
+        
+    }
+    #followers
+    {
+        margin-left:35%;
+    }
+    #bio
+    {
+        max-width:60%;
+        padding-left:35%;
+    }
+    #tags{
+        margin-left:67%;
+    }
+
+    #rating{
+        margin-left:5%;
+    }
+     
+    #follow{
+        margin-left:5%;
+        margin-top:2%;
+
+    }
+
+    #blogs{
+        margin-top:2%;
+    }
+
+</style>
+&nbsp;
+<div id="banner"  >
+
+    <span  id="followers"class="label label-pill label-default">Followers</span>    
+    
+    <img class="img-circle" src="http://s3-us-west-2.amazonaws.com/s.cdpn.io/69263/profile/profile-512_2.jpg" alt="Circle image" style="width:105px;height:105px">
+    <span id="following" class="label label-pill label-default">Following</span>
+    <h3 style="padding-left:39%">@Html.DisplayFor(model =>model.FirstName)</h3>
+    <div id="bio">
+        <p>small bio of the user should be a paragraph, adding text to test allignment yaooo</p>
+    </div>
+   <label id="rating">RATING</label>
+   <label id="tags"> COMMON TAGS</label>   
+</div>
+
+<button type="button" class="btn btn-primary" id="follow">Follow</button>
+
+<div class="list-group" id="blogs">
+
+    <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">Blog Name</h4>
+        <p class="list-group-item-text">Description</p>
+    </a>
+    <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">Blog Name</h4>
+        <p class="list-group-item-text">Description</p>
+    </a>
+    <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">Blog Name</h4>
+        <p class="list-group-item-text">Description</p>
+    </a>
+    <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">Blog Name</h4>
+        <p class="list-group-item-text">Description</p>
+    </a>
+    <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">Blog Name</h4>
+        <p class="list-group-item-text">Description</p>
+    </a>
+    <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">Blog Name</h4>
+        <p class="list-group-item-text">Description</p>
+    </a>
+</div>
+
