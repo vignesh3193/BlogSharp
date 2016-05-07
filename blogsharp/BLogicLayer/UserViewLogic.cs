@@ -12,10 +12,10 @@ namespace BLogicLayer
     {
         public static void follow(int curruser, int author)
         {
-            using (var context = new PersonContext())
+            using (var context = new BlogContext())
             {
-                Person Curruser = context.People.Find(curruser);
-                Person Author = context.People.Find(author);
+                Person Curruser = context.Persons.Find(curruser);
+                Person Author = context.Persons.Find(author);
                 Curruser.following.Add(Author);
                 Author.followers.Add(Curruser);
                 context.SaveChanges();
@@ -27,9 +27,9 @@ namespace BLogicLayer
             double user_rating = 0.0;
             int count = 0;
             
-            using (var context = new PersonContext())
+            using (var context = new BlogContext())
             {
-                Person user = context.People.Find(userid);
+                Person user = context.Persons.Find(userid);
                 ICollection < BlogPost > user_posts= user.posts;
 
                 foreach (BlogPost temp in user_posts)

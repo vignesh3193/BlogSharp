@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace DataLayer
 {
-    public class RatingContext : DbContext
-    {
-        public virtual DbSet<Rating> Ratings { get; set; }
-    }
+  //  public class RatingContext : DbContext
+    //{
+      //  public virtual DbSet<Rating> Ratings { get; set; }
+    //}
 
     public class Rating
     {

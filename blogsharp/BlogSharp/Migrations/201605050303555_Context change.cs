@@ -3,7 +3,7 @@ namespace BlogSharp.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class Contextchange : DbMigration
     {
         public override void Up()
         {

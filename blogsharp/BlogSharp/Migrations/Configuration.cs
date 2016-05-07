@@ -10,7 +10,6 @@ namespace BlogSharp.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "BlogSharp.Models.ApplicationDbContext";
         }
 
         protected override void Seed(BlogSharp.Models.ApplicationDbContext context)

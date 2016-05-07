@@ -7,13 +7,13 @@ namespace BlogSharp.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class applicationcontextchange : IMigrationMetadata
+    public sealed partial class Foreignkeysupdated : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(applicationcontextchange));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Foreignkeysupdated));
         
         string IMigrationMetadata.Id
         {
-            get { return "201605022230417_application context change"; }
+            get { return "201605050328509_Foreign keys updated"; }
         }
         
         string IMigrationMetadata.Source

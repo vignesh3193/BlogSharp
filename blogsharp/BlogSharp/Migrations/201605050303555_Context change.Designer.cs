@@ -7,13 +7,13 @@ namespace BlogSharp.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class InitialCreate : IMigrationMetadata
+    public sealed partial class Contextchange : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Contextchange));
         
         string IMigrationMetadata.Id
         {
-            get { return "201604291603043_InitialCreate"; }
+            get { return "201605050303555_Context change"; }
         }
         
         string IMigrationMetadata.Source

@@ -15,7 +15,7 @@ namespace BLogicLayer
 
             IEnumerable<BlogPost> recentPosts = new List<BlogPost>();
 
-            using (var context = new BlogPostContext())
+            using (var context = new BlogContext())
             {
                 recentPosts = (from post in context.BlogPosts
                                orderby post.dateCreated descending

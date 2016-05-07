@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 namespace DataLayer
 {
 
-    public class CommentContext : DbContext
-    {
-        public virtual DbSet<Comment> Comments { get; set; }
+  //  public class CommentContext : DbContext
+   // {
+   //     public virtual DbSet<Comment> Comments { get; set; }
+    
+       // public System.Data.Entity.DbSet<DataLayer.Person> Users { get; set; }
 
-        public System.Data.Entity.DbSet<DataLayer.Person> Users { get; set; }
-
-        public System.Data.Entity.DbSet<DataLayer.BlogPost> Blogs { get; set; }
+       // public System.Data.Entity.DbSet<DataLayer.BlogPost> Blogs { get; set; }
 
 
-    }
+    //}
     public class Comment
     {
         [Key]

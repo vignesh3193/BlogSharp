@@ -6,12 +6,15 @@ using System.Web.Script.Serialization;
 using System.Web.Mvc;
 using BLogicLayer;
 using BlogSharp.Models;
+using DataLayer;
+using System.Collections.ObjectModel;
 
 namespace BlogSharp.Controllers
 {
     public class HomeController : Controller
     {
-        private ApplicationDbContext person_db = new ApplicationDbContext();
+        //private ApplicationDbContext person_db = new ApplicationDbContext();
+        private BlogContext personContext = new BlogContext();
         public ActionResult Index()
         {
             return View();
@@ -35,9 +38,9 @@ namespace BlogSharp.Controllers
         {
             List<String> addresses = new List<String>();
 
-            using (person_db)
+            using (personContext)
             {
-                addresses = (from blogger in person_db.People
+                addresses = (from blogger in personContext.Persons
                              select blogger.location).ToList();
             }
 

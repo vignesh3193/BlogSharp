@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlogContext.cs" />
     <Compile Include="BlogPost.cs" />
     <Compile Include="Rating.cs" />
     <Compile Include="Comment.cs" />

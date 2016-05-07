@@ -3,7 +3,7 @@ namespace BlogSharp.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class removedrequiredfieldsfrompostsfollowersandfollowing : DbMigration
+    public partial class Foreignkeysupdated : DbMigration
     {
         public override void Up()
         {

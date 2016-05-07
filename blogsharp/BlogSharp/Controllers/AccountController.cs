@@ -18,6 +18,7 @@ namespace BlogSharp.Controllers
     public class AccountController : Controller
     {
         private ApplicationDbContext person_db = new ApplicationDbContext();
+        private BlogContext peopleContext = new BlogContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         
@@ -174,7 +175,11 @@ namespace BlogSharp.Controllers
                         p.FirstName = model.FirstName;
                         p.LastName = model.LastName;
                         p.isPrivate = false;
-                        person_db.People.Add(p);
+                        using (peopleContext)
+                        {
+                            peopleContext.Persons.Add(p);
+                            peopleContext.SaveChanges();
+                        }
                         person_db.SaveChanges();
                     }
 

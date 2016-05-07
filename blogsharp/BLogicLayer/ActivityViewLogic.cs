@@ -19,7 +19,7 @@ namespace BLogicLayer
             Dictionary<String, int> tags=new Dictionary<string, int>();
             
             
-            using (var context = new BlogPostContext())
+            using (var context = new BlogContext())
             {
                 foreach (BlogPost b in context.BlogPosts)
                 {

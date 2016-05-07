@@ -16,9 +16,9 @@ namespace BLogicLayer
         {
             Person author = null;
 
-            using (var context = new PersonContext())
+            using (var context = new BlogContext())
             {
-                author = context.BlogPosts.Find(blogID).user;
+                author = context.BlogPosts.Find(blogID).person;
             }
 
             if (loggedUser.Id == author.Id)
