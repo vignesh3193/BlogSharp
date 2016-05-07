@@ -54,7 +54,7 @@ namespace BLogicLayer
             return daily_trends;
         } 
 
-        public static List<Dictionary<string, double>> retrieveGeoPoints(List<String> addresses)
+        public static List<Dictionary<string, double>> retrieveGeoPoints(List<String> addresses, List<String> blogNames)
         {
 
             // Now create a list of geopoints, loop through and geocode the addresses,
@@ -62,14 +62,26 @@ namespace BLogicLayer
 
             List<Dictionary<string, double>> geoPoints = new List<Dictionary<string, double>>();
 
+            int blogNameCounter = 0;
             foreach (String address in addresses)
             {
+               // the assumption here is that the length of addresses and blogNames is the same
+               // it should be because both fields are required of a user when they register
+
                Dictionary<string, double> geoPoint = GeocodeAddress(address);
                 
                 // only add valid results
                 if (geoPoint != null)
                 {
                     geoPoints.Add(geoPoint);
+                    blogNameCounter++;
+                } else
+                {
+                    // modify the blogNames list and remove the associated blogName
+                    // this will ensure that there's a 1:1 mapping from addresses of a user to their blognames
+
+                    blogNames.RemoveAt(blogNameCounter);
+                    blogNameCounter++;
                 }
             }
 
