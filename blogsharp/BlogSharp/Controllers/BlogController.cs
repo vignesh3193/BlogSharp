@@ -181,6 +181,11 @@ namespace BlogSharp.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Profile()
+        {
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
