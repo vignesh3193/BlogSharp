@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Profile";
+    DataLayer.Person curruser = ViewBag.CurrUser;
 }
 
 <style>
@@ -32,52 +33,49 @@
         margin-top: 2%;
     }
 
+    #unfollow {
+        margin-left: 5%;
+        margin-top: 2%;
+    }
+
     #blogs {
         margin-top: 2%;
     }
 </style>
 &nbsp;
 <div id="banner">
-
-    <span id="followers" class="label label-pill label-default">Followers</span>
+    <span id="followers" class="label label-pill label-default">Followers @Html.DisplayFor(model=> model.followers.Count)</span>
 
     <img class="img-circle" src="http://s3-us-west-2.amazonaws.com/s.cdpn.io/69263/profile/profile-512_2.jpg" alt="Circle image" style="width:105px;height:105px">
-    <span id="following" class="label label-pill label-default">Following</span>
-    <h3 style="padding-left:39%">@Html.DisplayFor(model => model.FirstName)</h3>
+    <span id="following" class="label label-pill label-default">Following @Html.DisplayFor(model=>model.following.Count)</span>
+    <h3 style="padding-left:39%">@Html.DisplayFor(model => model.blogName)</h3>
     <div id="bio">
         <p>small bio of the user should be a paragraph, adding text to test allignment yaooo</p>
     </div>
     <label id="rating">RATING</label>
     <label id="tags"> COMMON TAGS</label>
 </div>
+@if (curruser.following.Contains(Model))
+{
+    <form id="unfoll">
 
-<button type="button" class="btn btn-primary" id="follow">Follow</button>
-
+        <button type="submit" formaction="@Url.Action("UnFollow", new { id = Model.Id })" class="btn btn-primary" id="unfollow">Unfollow</button>
+    </form>
+}
+else
+{
+<form id="foll" >
+    
+    <button type="submit" formaction="@Url.Action("Follow", new { id = Model.Id })" class="btn btn-primary" id="follow">Follow</button>
+</form>
+}
 <div class="list-group" id="blogs">
-
-    <a href="#" class="list-group-item">
-        <h4 class="list-group-item-heading">Blog Name</h4>
-        <p class="list-group-item-text">Description</p>
+    @foreach (var post in Model.posts)
+    {
+    <a href="@Url.Action("Details","Blog", new { id = post.Id })" class="list-group-item">
+        <h4 class="list-group-item-heading">@Html.DisplayFor(model=>post.title)</h4>
+        <p class="list-group-item-text"></p>
     </a>
-    <a href="#" class="list-group-item">
-        <h4 class="list-group-item-heading">Blog Name</h4>
-        <p class="list-group-item-text">Description</p>
-    </a>
-    <a href="#" class="list-group-item">
-        <h4 class="list-group-item-heading">Blog Name</h4>
-        <p class="list-group-item-text">Description</p>
-    </a>
-    <a href="#" class="list-group-item">
-        <h4 class="list-group-item-heading">Blog Name</h4>
-        <p class="list-group-item-text">Description</p>
-    </a>
-    <a href="#" class="list-group-item">
-        <h4 class="list-group-item-heading">Blog Name</h4>
-        <p class="list-group-item-text">Description</p>
-    </a>
-    <a href="#" class="list-group-item">
-        <h4 class="list-group-item-heading">Blog Name</h4>
-        <p class="list-group-item-text">Description</p>
-    </a>
+    }
 </div>
 

@@ -12,8 +12,7 @@ namespace BlogSharp.Controllers
 {
     public class BlogController : Controller
     {
-        private BlogContext db = new BlogContext();
-        
+        private BlogContext db = new BlogContext();   
         // GET: Blog
         public ActionResult Index()
         {
@@ -93,7 +92,7 @@ namespace BlogSharp.Controllers
                 thisPerson.posts.Add(blogPost);
                 db.BlogPosts.Add(blogPost);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Profile",thisPerson.Id);
             }
 
             ViewBag.PersonId = new SelectList(db.Persons, "Id", "Email", blogPost.PersonId);
@@ -181,11 +180,43 @@ namespace BlogSharp.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Profile()
-        {
-            return View();
+        public ActionResult Profile(int id)
+        {   
+            var user = db.Persons.Find(id);
+            //ViewBag.posts = Helper.getBlogPosts(db, user);
+           var curruser = from a in db.Persons where a.Email.Equals(User.Identity.Name) select a;
+            ViewBag.CurrUser = curruser.First();
+            return View(user);
         }
+        
+        public ActionResult Follow(int Id)
+        {
+            using (db)
+            {
+                var curruser = from a in db.Persons where a.Email.Equals(User.Identity.Name) select a;
+                var toFollow = db.Persons.Find(Id);
 
+                curruser.First().following.Add(toFollow);
+                toFollow.followers.Add(curruser.First());
+                db.SaveChanges();
+                return RedirectToAction("Profile", new { id = Id });
+            };
+            
+        }
+    
+        public ActionResult UnFollow(int Id)
+        {
+            using (db)
+            {
+                var curruser = from a in db.Persons where a.Email.Equals(User.Identity.Name) select a;
+                var toUnfollow = db.Persons.Find(Id);
+
+                curruser.First().following.Remove(toUnfollow);
+                toUnfollow.followers.Remove(curruser.First());
+                db.SaveChanges();
+                return RedirectToAction("Profile", new { id = Id });
+            };
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

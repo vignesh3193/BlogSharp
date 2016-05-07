@@ -18,11 +18,11 @@ namespace DataLayer
         [Required]
         public string Email { get; set; }
 
-        public ICollection<BlogPost> posts { get; set; }
+        public virtual ICollection<BlogPost> posts { get; set; }
 
-        public ICollection<Person> followers { get; set; }
+        public virtual ICollection<Person> followers { get; set; }
 
-        public ICollection<Person> following { get; set; }
+        public virtual ICollection<Person> following { get; set; }
 
         [Required]
         public DateTime creation { get; set; }
