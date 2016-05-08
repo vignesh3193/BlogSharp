@@ -42,33 +42,30 @@ namespace BlogSharp.Controllers
         //[HttpPost]
         public ActionResult Search(string s)
         {
+            if(s.Length == 0)
+            {
+                RedirectToAction("Index", "Blog",null);
+            }
             if (User.Identity.IsAuthenticated)
             {
-                List<BlogPost> allPosts = (from p in db.BlogPosts
-                                           select p).ToList();
                 //Syd- come back and add to query to make sure it's either public or someone current user is following
+                //Need to double check this query. I'm not sure if it works -Omer
+                Person thisPerson = Helper.getLoggedInUser(db);
                 List<BlogPost> posts =(from p in db.BlogPosts
-                                       where p.tags.Any(tag => tag.tagName.Equals(s))
+                                       where p.tags.Any(tag => tag.tagName.Equals(s)
+                                       && (!p.person.isPrivate || p.person.followers.Contains(thisPerson)))
                                        select p).ToList();
                 return View(posts.ToList());
             } else
             {
-           
-                ICollection<DataLayer.BlogPost> results = null;
-                ICollection <DataLayer.BlogPost> posts = (ICollection<DataLayer.BlogPost>)(from p in db.BlogPosts where p.tags.Any(tag => tag.tagName.Equals(s)) select p);
-                foreach(DataLayer.BlogPost item in posts){
-                    Person person = Helper.getLoggedInUser(db);
-         
-                    if (!person.isPrivate)
-                    {
-                        results.Add(item);
-                    }
-                  
-                }
-                return View(results.ToList());
+                Person person = Helper.getLoggedInUser(db);
+                List<BlogPost> posts = (from p in db.BlogPosts
+                                        where p.tags.Any(tag => tag.tagName.Equals(s) &&
+                                        !p.person.isPrivate)
+                                        select p).ToList();
+                return View(posts);
                 
             }
-           // return View();
         }
 
 

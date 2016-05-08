@@ -9,14 +9,6 @@ using System.Threading.Tasks;
 
 namespace DataLayer
 {
-    //public class BlogPostContext : DbContext
-    //{
-      //  public virtual DbSet<BlogPost> BlogPosts { get; set; }
-
-       // public DbSet<DataLayer.Person> Users { get; set; }
-       
-    //}
-
     public class BlogPost
     {
         [Key]

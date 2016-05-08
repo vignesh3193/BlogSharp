@@ -16,5 +16,8 @@ namespace DataLayer
 
         [Display(Name ="Tag Name")]
         public string tagName { get; set; }
+
+        public virtual ICollection<BlogPost> posts { get; set; }
+
     }
 }
