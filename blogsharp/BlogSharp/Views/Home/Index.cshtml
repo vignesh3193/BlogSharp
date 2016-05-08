@@ -9,14 +9,21 @@
     }
 
     #trends {
+
         float: right;
         height: 500px;
         width: 20%;
         background-color: Highlight;
     }
 
+    #trend{
+        text-align:center;
+        font-size:large;
+    }
+
     #trends_label {
-        margin-left: 30%;
+        margin-left: 20%;
+        font:bold 200;
     }
 </style>
 
@@ -37,7 +44,13 @@
         }
             </div>
     <div id="trends">
-        <h2 id="trends_label">Trends</h2>
+        <h3 id="trends_label">Daily Trends</h3>
+        @foreach(String trend in ViewBag.trends)
+        {
+
+           <p id="trend"><span class="label label-primary">@trend</span></p>
+
+        }
     </div>
 
 

@@ -23,7 +23,7 @@ namespace BLogicLayer
             {
                 foreach (BlogPost b in context.BlogPosts)
                 {
-                    if(b.dateCreated==DateTime.Today)
+                    if(b.dateCreated.Date==DateTime.Today)
                     { 
                         ICollection<Tag> blog_tags = b.tags;
 
@@ -47,8 +47,8 @@ namespace BLogicLayer
             {
                 while(tags.Count>0)
                 {
-                    daily_trends.Add(tags.Max().Key);
-                    tags.Remove(tags.Max().Key);
+                    daily_trends.Add(tags.FirstOrDefault(x => x.Value == tags.Values.Max()).Key);
+                    tags.Remove(tags.FirstOrDefault(x => x.Value == tags.Values.Max()).Key);
                 }
             }
 

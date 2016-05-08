@@ -6,8 +6,14 @@
     @Html.AntiForgeryToken()
 
     <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+        <li>@using (DataLayer.BlogContext db = new DataLayer.BlogContext())
+        {
+            var user = from p in db.Persons where p.Email.Equals(User.Identity.Name) select p;
+            @Html.ActionLink(@user.First().blogName, "Profile", "Blog", routeValues: new { id = user.First().Id }, htmlAttributes: new { title = "Profile" })
+        }
+        </li>
+        <li>        
+            @Html.ActionLink("Manage Account", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>

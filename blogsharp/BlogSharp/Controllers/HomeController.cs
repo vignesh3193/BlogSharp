@@ -17,6 +17,8 @@ namespace BlogSharp.Controllers
         private BlogContext personContext = new BlogContext();
         public ActionResult Index()
         {
+            ICollection<String> trends = ActivityViewLogic.getTrends();
+            ViewBag.trends = trends;
             return View(personContext.BlogPosts);
         }
 

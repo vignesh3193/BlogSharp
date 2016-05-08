@@ -33,6 +33,11 @@
         margin-top: 2%;
     }
 
+    #Create {
+        margin-left: 5%;
+        margin-top: 2%;
+    }
+
     #unfollow {
         margin-left: 5%;
         margin-top: 2%;
@@ -43,6 +48,7 @@
     }
 </style>
 &nbsp;
+
 <div id="banner">
     <span id="followers" class="label label-pill label-default">Followers @Html.DisplayFor(model=> model.followers.Count)</span>
 
@@ -55,7 +61,15 @@
     <label id="rating">RATING</label>
     <label id="tags"> COMMON TAGS</label>
 </div>
-@if (curruser.following.Contains(Model))
+@if (curruser.Id == Model.Id)
+{
+    <form id="Create">
+
+        <button type="submit" formaction="@Url.Action("Create")" class="btn btn-primary" id="create">New Blog Post</button>
+    </form>
+
+}
+else if (curruser.following.Contains(Model))
 {
     <form id="unfoll">
 
@@ -74,7 +88,7 @@ else
     {
     <a href="@Url.Action("Details","Blog", new { id = post.Id })" class="list-group-item">
         <h4 class="list-group-item-heading">@Html.DisplayFor(model=>post.title)</h4>
-        <p class="list-group-item-text"></p>
+        <p class="list-group-item-text">@Html.Display(post.content.Substring(10))</p>
     </a>
     }
 </div>
