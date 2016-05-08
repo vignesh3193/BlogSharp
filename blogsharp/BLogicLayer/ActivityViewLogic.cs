@@ -25,17 +25,18 @@ namespace BLogicLayer
                 {
                     if(b.dateCreated==DateTime.Today)
                     { 
-                        ICollection<String> blog_tags = b.tags;
+                        ICollection<Tag> blog_tags = b.tags;
 
-                        foreach (String tag in blog_tags)
+                        foreach (Tag tag in blog_tags)
                         {
-                            if (tags.ContainsKey(tag))
+                            string tagName = tag.tagName;
+                            if (tags.ContainsKey(tagName))
                             {
-                                tags[tag] = tags[tag] + 1;
+                                tags[tagName] = tags[tagName] + 1;
                             }
                             else
                             {
-                                tags.Add(tag, 1);
+                                tags.Add(tagName, 1);
                             }
                         }
                     }

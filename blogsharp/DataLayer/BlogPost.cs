@@ -29,19 +29,46 @@ namespace DataLayer
         [ForeignKey("PersonId")]
         public virtual Person person { get; set; }
 
-        public ICollection<Rating> ratings { get; set; }
+        [Display(Name = "Ratings")]
+        public virtual ICollection<Rating> ratings { get; set; }
 
-        public ICollection<Comment> comments { get; set; }
+        [Display(Name ="Comments")]
+        public virtual ICollection<Comment> comments { get; set; }
 
-        public ICollection<string> tags { get; set; }
+        [Display(Name = "Tags")]
+        public virtual ICollection<Tag> tags { get; set; }
 
+        [Display(Name ="Date Created")]
         public DateTime dateCreated { get; set; }
 
+        [Display(Name ="Title")]
         public string title { get; set; }
 
+        [Display(Name ="Content")]
         public string content { get; set; }
-    
-        public ICollection<Person> userRatings { get; set; }
+
+        public virtual ICollection<Person> userRatings { get; set; }
+
+    }
+
+    public class BlogPostCreateViewModel
+    {
+        [Display(AutoGenerateField = false)]
+        public int PersonId { get; set; }
+
+        [Display(Name = "Tags")]
+        [DataType(DataType.MultilineText)]
+        public string tags { get; set; }
+
+        [Display(Name = "Title")]
+        [DataType(DataType.Text)]
+        public string title { get; set; }
+
+        [Display(Name = "Content")]
+        [DataType(DataType.MultilineText)]
+        public string content { get; set; }
+
+
 
     }
 }

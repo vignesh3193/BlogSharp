@@ -11,11 +11,12 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.person.Email)
+            @Html.DisplayNameFor(model => model.person.FirstName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.person.Email)
+            @Html.DisplayNameFor(model => model.person.FirstName)
+            @Html.DisplayNameFor(model => model.person.LastName)
         </dd>
 
         <dt>
@@ -40,6 +41,17 @@
 
         <dd>
             @Html.DisplayFor(model => model.content)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tags)
+        </dt>
+
+        <dd>
+            @foreach(var tag in Model.tags)
+            {
+                @Html.ActionLink(@tag.tagName, "Search", "Blog", new { s = @tag.tagName }, new { @class = "btn-default" })
+            }
         </dd>
 
     </dl>

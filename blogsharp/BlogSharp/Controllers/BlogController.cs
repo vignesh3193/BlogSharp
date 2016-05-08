@@ -19,10 +19,10 @@ namespace BlogSharp.Controllers
             return View();
         }
 
-        public ActionResult Search()
-        {
-            return View();
-        }
+       // public ActionResult Search()
+        //{
+          //  return View();
+ //       }
 
         // GET: BlogPosts/Details/5
         public ActionResult Details(int? id)
@@ -39,19 +39,23 @@ namespace BlogSharp.Controllers
             return View(blogPost);
         }
 
-        [HttpPost]
-        public ActionResult Search([Bind(Include = "KeyWord")] String s)
+        //[HttpPost]
+        public ActionResult Search(string s)
         {
             if (User.Identity.IsAuthenticated)
             {
+                List<BlogPost> allPosts = (from p in db.BlogPosts
+                                           select p).ToList();
                 //Syd- come back and add to query to make sure it's either public or someone current user is following
-                ICollection<DataLayer.BlogPost> posts = (ICollection<DataLayer.BlogPost>) (from p in db.BlogPosts where p.tags.Contains(s) select p);
+                List<BlogPost> posts =(from p in db.BlogPosts
+                                       where p.tags.Any(tag => tag.tagName.Equals(s))
+                                       select p).ToList();
                 return View(posts.ToList());
             } else
             {
            
                 ICollection<DataLayer.BlogPost> results = null;
-                ICollection <DataLayer.BlogPost> posts = (ICollection<DataLayer.BlogPost>)(from p in db.BlogPosts where p.tags.Contains(s) select p);
+                ICollection <DataLayer.BlogPost> posts = (ICollection<DataLayer.BlogPost>)(from p in db.BlogPosts where p.tags.Any(tag => tag.tagName.Equals(s)) select p);
                 foreach(DataLayer.BlogPost item in posts){
                     Person person = Helper.getLoggedInUser(db);
          
@@ -72,33 +76,47 @@ namespace BlogSharp.Controllers
         public ActionResult Create()
         {
             ViewBag.PersonId = new SelectList(db.Persons, "Id", "Email");
+            ViewBag.currentTags = new List<string>();
             return View();
         }
 
         // POST: BlogPosts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "title,content")] BlogPost blogPost)
+        public ActionResult Create([Bind(Include = "title,content,tags")] BlogPostCreateViewModel blogPost)
         {
             if (ModelState.IsValid)
             {
                 Person thisPerson = (from user in db.Persons
                                      where user.Email == User.Identity.Name
                                      select user).FirstOrDefault();
-                blogPost.dateCreated = DateTime.Now;
-                blogPost.PersonId = thisPerson.Id;
+                BlogPost newPost = new BlogPost();
+                newPost.dateCreated = DateTime.Now;
+                newPost.PersonId = thisPerson.Id;
+                newPost.tags = new Collection<Tag>();
+                var allTags = db.Tags.ToList();
+                foreach(var s in blogPost.tags.Split(',')){
+                    Tag thisTag = allTags.Find(tag => tag.tagName.Equals(s));
+                    if(thisTag == null)
+                    {
+                        thisTag = new Tag();
+                        thisTag.tagName = s;
+                        db.Tags.Add(thisTag);
+                    }
+                    newPost.tags.Add(thisTag);
+                }
+                newPost.title = blogPost.title;
+                newPost.content = blogPost.content;
                 if (thisPerson.posts == null)
                     thisPerson.posts = new Collection<BlogPost>();
-                thisPerson.posts.Add(blogPost);
-                db.BlogPosts.Add(blogPost);
+                thisPerson.posts.Add(newPost);
+                db.BlogPosts.Add(newPost);
                 db.SaveChanges();
-                return RedirectToAction("Profile",thisPerson.Id);
+                return RedirectToAction("ViewPosts",thisPerson.Id);
             }
-
-            ViewBag.PersonId = new SelectList(db.Persons, "Id", "Email", blogPost.PersonId);
             return View(blogPost);
         }
-
+        
         // GET: BlogPosts
         public ActionResult ViewPosts()
         {
@@ -114,6 +132,7 @@ namespace BlogSharp.Controllers
                                  select posts).ToList<BlogPost>();
                 if (blogPosts == null)
                     blogPosts = new List<BlogPost>();
+                
                 return View(blogPosts.ToList());
             }
             return View();

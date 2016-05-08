@@ -219,6 +219,10 @@
     <Compile Include="Migrations\201605050328509_Foreign keys updated.Designer.cs">
       <DependentUpon>201605050328509_Foreign keys updated.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605080049013_Tag class created.cs" />
+    <Compile Include="Migrations\201605080049013_Tag class created.Designer.cs">
+      <DependentUpon>201605080049013_Tag class created.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -331,6 +335,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605050328509_Foreign keys updated.resx">
       <DependentUpon>201605050328509_Foreign keys updated.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605080049013_Tag class created.resx">
+      <DependentUpon>201605080049013_Tag class created.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
