@@ -17,7 +17,7 @@ namespace BlogSharp.Controllers
         private BlogContext personContext = new BlogContext();
         public ActionResult Index()
         {
-            return View();
+            return View(personContext.BlogPosts);
         }
 
         public ActionResult About()

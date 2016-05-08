@@ -14,7 +14,7 @@ namespace DataLayer
             return new BlogContext();
         }
         public DbSet<Person> Persons { get; set; }
-        public DbSet<BlogPost> BlogPosts { get; set; }
+        public virtual DbSet<BlogPost> BlogPosts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Tag> Tags { get; set; }

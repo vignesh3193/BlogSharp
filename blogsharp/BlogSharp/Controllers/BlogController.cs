@@ -199,39 +199,42 @@ namespace BlogSharp.Controllers
             return RedirectToAction("Index");
         }
 
+        //displays profile based on user id, still need to add default redirection
         public ActionResult Profile(int id)
         {   
             var user = db.Persons.Find(id);
-            //ViewBag.posts = Helper.getBlogPosts(db, user);
-           var curruser = from a in db.Persons where a.Email.Equals(User.Identity.Name) select a;
-            ViewBag.CurrUser = curruser.First();
+            var curruser = Helper.getLoggedInUser(db);
+            //adding current user to viewbag so we can check in the View if the current user is already following this blog
+            ViewBag.CurrUser = curruser;
             return View(user);
         }
-        
+
+
+        //next 2 functions take in id of the profile being viewed and updates their followers and following tables
         public ActionResult Follow(int Id)
         {
             using (db)
             {
-                var curruser = from a in db.Persons where a.Email.Equals(User.Identity.Name) select a;
+                var curruser = Helper.getLoggedInUser(db);
                 var toFollow = db.Persons.Find(Id);
 
-                curruser.First().following.Add(toFollow);
-                toFollow.followers.Add(curruser.First());
+                curruser.following.Add(toFollow);
+                toFollow.followers.Add(curruser);
                 db.SaveChanges();
                 return RedirectToAction("Profile", new { id = Id });
             };
             
         }
-    
+
         public ActionResult UnFollow(int Id)
         {
             using (db)
             {
-                var curruser = from a in db.Persons where a.Email.Equals(User.Identity.Name) select a;
+                var curruser = Helper.getLoggedInUser(db);
                 var toUnfollow = db.Persons.Find(Id);
 
-                curruser.First().following.Remove(toUnfollow);
-                toUnfollow.followers.Remove(curruser.First());
+                curruser.following.Remove(toUnfollow);
+                toUnfollow.followers.Remove(curruser);
                 db.SaveChanges();
                 return RedirectToAction("Profile", new { id = Id });
             };
