@@ -88,8 +88,14 @@ else
     {
     <a href="@Url.Action("Details","Blog", new { id = post.Id })" class="list-group-item">
         <h4 class="list-group-item-heading">@Html.DisplayFor(model=>post.title)</h4>
-        <p class="list-group-item-text">@Html.Display(post.content.Substring(10))</p>
-    </a>
+        @if (post.content.Length > 10)
+        {
+        <p class="list-group-item-text">@post.content.Substring(0, 10) ......</p>}
+        else
+        {
+            <p class="list-group-item-text"> @post.content</p>
+            }
+</a>
     }
 </div>
 

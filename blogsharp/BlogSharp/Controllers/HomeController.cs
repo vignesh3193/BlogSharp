@@ -19,6 +19,22 @@ namespace BlogSharp.Controllers
         {
             ICollection<String> trends = ActivityViewLogic.getTrends();
             ViewBag.trends = trends;
+            if(Request.IsAuthenticated)
+            {
+                Person currsuer = HelperFunctions.Helper.getLoggedInUser(personContext);
+                List<BlogPost> blogPosts=new List<BlogPost>();
+                foreach(BlogPost p in personContext.BlogPosts)
+                {
+                    if(p.person.followers.Contains(currsuer))
+                    {
+                        blogPosts.Add(p);
+                    }
+                }
+                if (blogPosts.Count > 0)
+                {
+                    return View(blogPosts);
+                } 
+            }
             return View(personContext.BlogPosts);
         }
 
