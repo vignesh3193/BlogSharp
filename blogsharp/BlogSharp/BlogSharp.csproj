@@ -211,19 +211,19 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HelperFunctions\Helper.cs" />
-    <Compile Include="fonts\Migrations\201605050303555_Context change.cs" />
-    <Compile Include="fonts\Migrations\201605050303555_Context change.Designer.cs">
+    <Compile Include="Migrations\201605050303555_Context change.cs" />
+    <Compile Include="Migrations\201605050303555_Context change.Designer.cs">
       <DependentUpon>201605050303555_Context change.cs</DependentUpon>
     </Compile>
-    <Compile Include="fonts\Migrations\201605050328509_Foreign keys updated.cs" />
-    <Compile Include="fonts\Migrations\201605050328509_Foreign keys updated.Designer.cs">
+    <Compile Include="Migrations\201605050328509_Foreign keys updated.cs" />
+    <Compile Include="Migrations\201605050328509_Foreign keys updated.Designer.cs">
       <DependentUpon>201605050328509_Foreign keys updated.cs</DependentUpon>
     </Compile>
-    <Compile Include="fonts\Migrations\201605080049013_Tag class created.cs" />
-    <Compile Include="fonts\Migrations\201605080049013_Tag class created.Designer.cs">
+    <Compile Include="Migrations\201605080049013_Tag class created.cs" />
+    <Compile Include="Migrations\201605080049013_Tag class created.Designer.cs">
       <DependentUpon>201605080049013_Tag class created.cs</DependentUpon>
     </Compile>
-    <Compile Include="fonts\Migrations\Configuration.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -330,13 +330,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="fonts\Migrations\201605050303555_Context change.resx">
+    <EmbeddedResource Include="Migrations\201605050303555_Context change.resx">
       <DependentUpon>201605050303555_Context change.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="fonts\Migrations\201605050328509_Foreign keys updated.resx">
+    <EmbeddedResource Include="Migrations\201605050328509_Foreign keys updated.resx">
       <DependentUpon>201605050328509_Foreign keys updated.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="fonts\Migrations\201605080049013_Tag class created.resx">
+    <EmbeddedResource Include="Migrations\201605080049013_Tag class created.resx">
       <DependentUpon>201605080049013_Tag class created.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
