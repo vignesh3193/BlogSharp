@@ -52,8 +52,7 @@ namespace BlogSharp.Controllers
                 //Need to double check this query. I'm not sure if it works -Omer
                 Person thisPerson = Helper.getLoggedInUser(db);
                 List<BlogPost> posts =(from p in db.BlogPosts
-                                       where p.tags.Any(tag => tag.tagName.Equals(s)
-                                       && (!p.person.isPrivate || p.person.followers.Contains(thisPerson)))
+                                       where p.tags.Any(tag => tag.tagName.Equals(s))
                                        select p).ToList();
                 return View(posts.ToList());
             } else

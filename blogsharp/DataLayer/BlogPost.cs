@@ -33,10 +33,10 @@ namespace DataLayer
         [Display(Name ="Date Created")]
         public DateTime dateCreated { get; set; }
 
-        [Display(Name ="Title")]
+        [Display(Name ="Blog Title")]
         public string title { get; set; }
 
-        [Display(Name ="Content")]
+        [Display(Name ="BLog Content")]
         public string content { get; set; }
 
         public virtual ICollection<Person> userRatings { get; set; }
@@ -49,14 +49,13 @@ namespace DataLayer
         public int PersonId { get; set; }
 
         [Display(Name = "Tags")]
-        [DataType(DataType.MultilineText)]
         public string tags { get; set; }
 
-        [Display(Name = "Title")]
+        [Display(Name = "Blog Title")]
         [DataType(DataType.Text)]
         public string title { get; set; }
 
-        [Display(Name = "Content")]
+        [Display(Name = "Blog Content")]
         [DataType(DataType.MultilineText)]
         public string content { get; set; }
 
