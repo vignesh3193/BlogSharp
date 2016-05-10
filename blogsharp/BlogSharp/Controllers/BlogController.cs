@@ -33,7 +33,7 @@ namespace BlogSharp.Controllers
             }
             return View(blogPost);
         }
-        //Blog/CreateSearch is a form that takes in keywords that will correspond to tags or titles
+        //Blog/CreateSearch is a form that takes in keywords that will correspond to tags, titles, or users
         public ActionResult CreateSearch()
         {
             return View();
@@ -63,7 +63,11 @@ namespace BlogSharp.Controllers
                 List<BlogPost> posts =(from p in db.BlogPosts
                                        where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Equals(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
                                        select p).ToList();
-               
+                List<Person> people = (from u in db.Persons
+                                       where u.FirstName.Equals(s) && (!u.isPrivate || thisPerson.following.Contains(u))
+                                       select u).ToList();
+                ViewBag.posts = posts;
+                ViewBag.people = people;
                 return View(posts.ToList());
             } else //else, show only public posts
             {
@@ -72,6 +76,11 @@ namespace BlogSharp.Controllers
                                         where p.tags.Any(tag => tag.tagName.Equals(s) &&
                                         !p.person.isPrivate) || (p.title.Equals(s) && !p.person.isPrivate)
                                         select p).ToList();
+                List<Person> people = (from u in db.Persons
+                                       where u.FirstName.Equals(s) && (!u.isPrivate || thisPerson.following.Contains(u))
+                                       select u).ToList();
+                ViewBag.posts = posts;
+                ViewBag.people = people;
                 return View(posts.ToList());
                 
             }
