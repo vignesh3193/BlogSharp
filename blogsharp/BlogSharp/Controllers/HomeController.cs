@@ -19,23 +19,34 @@ namespace BlogSharp.Controllers
         {
             ICollection<String> trends = ActivityViewLogic.getTrends();
             ViewBag.trends = trends;
-            if(Request.IsAuthenticated)
+            //if user is logged in see public and followings posts
+            if (Request.IsAuthenticated)
             {
                 Person currsuer = HelperFunctions.Helper.getLoggedInUser(personContext);
-                List<BlogPost> blogPosts=new List<BlogPost>();
-                foreach(BlogPost p in personContext.BlogPosts)
+                List<BlogPost> blogPosts = new List<BlogPost>();
+                foreach (BlogPost p in personContext.BlogPosts)
                 {
-                    if(p.person.followers.Contains(currsuer))
+                    if (p.person.followers.Contains(currsuer) || !p.person.isPrivate)
                     {
                         blogPosts.Add(p);
                     }
                 }
-                if (blogPosts.Count > 0)
+                return View(blogPosts);
+            
+            } else
+            {
+                //if user is not logged in, only see public posts
+                List<BlogPost> blogPosts = new List<BlogPost>();
+                foreach (BlogPost p in personContext.BlogPosts)
                 {
-                    return View(blogPosts);
-                } 
+                    if(!p.person.isPrivate)
+                    {
+                        blogPosts.Add(p);
+                    }
+                }
+                return View(blogPosts);
             }
-            return View(personContext.BlogPosts);
+           
         }
 
         public ActionResult About()

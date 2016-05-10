@@ -50,7 +50,7 @@
         <dd>
             @foreach(var tag in Model.tags)
             {
-                @Html.ActionLink(@tag.tagName, "Search", "Blog", new { s = @tag.tagName }, new { @class = "btn-default" })
+                @Html.ActionLink(@tag.tagName, "Search", "Blog", new { s = @tag.tagName }, new { @class = "btn-default" }), " "
             }
         </dd>
 
