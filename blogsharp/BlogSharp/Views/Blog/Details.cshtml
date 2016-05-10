@@ -5,15 +5,15 @@
 }
 
 <style>
-    #contentContainer{
-        border-style:groove;
+    #contentContainer {
+        border-style: groove;
     }
 </style>
 
 
 <h2>@Html.DisplayFor(model => model.title)</h2>
 <div>
-    <h4>by @Html.ActionLink(Html.DisplayFor(model => model.person.FirstName)+" "+Html.DisplayFor(model => model.person.LastName), "Profile", "Blog", new { id = Model.person.Id }, new { @class = "btn-default" })</h4>
+    <h4>by @Html.ActionLink(Html.DisplayFor(model => model.person.FirstName) + " " + Html.DisplayFor(model => model.person.LastName), "Profile", "Blog", new { id = Model.person.Id }, new { @class = "btn-default" })</h4>
     <h7>on @Html.DisplayFor(model => model.dateCreated)</h7>
     <hr />
     <dl class="dl-horizontal">
@@ -26,10 +26,11 @@
         </dt>
 
         <dd>
-            @foreach(var tag in Model.tags)
+            @foreach (var tag in Model.tags)
             {
                 @Html.ActionLink(@tag.tagName, "Search", "Blog", new { s = @tag.tagName }, new { @class = "btn-default" })
                 <b> </b>
+                @Html.ActionLink(@tag.tagName, "Search", "Blog", new { s = @tag.tagName }, new { @class = "btn-default" }), " "
             }
         </dd>
 

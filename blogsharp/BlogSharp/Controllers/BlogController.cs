@@ -33,45 +33,52 @@ namespace BlogSharp.Controllers
             }
             return View(blogPost);
         }
-
+        //Blog/CreateSearch is a form that takes in keywords that will correspond to tags or titles
         public ActionResult CreateSearch()
         {
             return View();
         }
+
+        //pass the words from the form to the search method and return results
         [HttpPost]
         public ActionResult CreateSearch([Bind(Include = "title,tags")] BlogPostCreateViewModel blogPost)
         {
-            if(blogPost.title.Length > 0)
-            {
-                RedirectToAction("Search", "Blog", blogPost.title);
-            }
-            
-            return View();
+           
+            return RedirectToAction("Search", "Blog", new {s = blogPost.title.ToString()});
         }
-        //[HttpPost]
+        
         public ActionResult Search(string s)
         {
-            if(s.Length == 0)
+            //if no search words redirect to create search form
+            if(s == null)
             {
-                RedirectToAction("Index", "Blog",null);
+                return RedirectToAction("CreateSearch", "Blog");
             }
+            //if user is logged in, show posts that have either tags or titles containing the search param
+            //and only of authors that are not private, or that the current user is following.
             if (User.Identity.IsAuthenticated)
             {
+<<<<<<< HEAD
                 //Syd- come back and add to query to make sure it's either public or someone current user is following
                 //Need to double check this query. I'm not sure if it works -Omer
                 Person thisPerson = GeneralLogic.getLoggedInUser(db);
+=======
+              
+                Person thisPerson = Helper.getLoggedInUser(db);
+>>>>>>> 9e9c939c59027d3e010a8bcac0387182e4f20c02
                 List<BlogPost> posts =(from p in db.BlogPosts
-                                       where p.tags.Any(tag => tag.tagName.Equals(s))
+                                       where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Equals(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
                                        select p).ToList();
+               
                 return View(posts.ToList());
-            } else
+            } else //else, show only public posts
             {
                 Person person = GeneralLogic.getLoggedInUser(db);
                 List<BlogPost> posts = (from p in db.BlogPosts
                                         where p.tags.Any(tag => tag.tagName.Equals(s) &&
-                                        !p.person.isPrivate)
+                                        !p.person.isPrivate) || (p.title.Equals(s) && !p.person.isPrivate)
                                         select p).ToList();
-                return View(posts);
+                return View(posts.ToList());
                 
             }
         }
