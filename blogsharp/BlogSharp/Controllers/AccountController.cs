@@ -174,7 +174,7 @@ namespace BlogSharp.Controllers
                         p.location = model.Address;
                         p.FirstName = model.FirstName;
                         p.LastName = model.LastName;
-                        p.isPrivate = false;
+                        p.isPrivate = model.isPrivate;
                         using (peopleContext)
                         {
                             peopleContext.Persons.Add(p);
