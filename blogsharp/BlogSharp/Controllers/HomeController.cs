@@ -21,7 +21,7 @@ namespace BlogSharp.Controllers
             ViewBag.trends = trends;
             if(Request.IsAuthenticated)
             {
-                Person currsuer = HelperFunctions.Helper.getLoggedInUser(personContext);
+                Person currsuer = GeneralLogic.getLoggedInUser(personContext);
                 List<BlogPost> blogPosts=new List<BlogPost>();
                 foreach(BlogPost p in personContext.BlogPosts)
                 {

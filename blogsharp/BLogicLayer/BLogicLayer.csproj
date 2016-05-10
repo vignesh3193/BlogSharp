@@ -35,6 +35,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ActivityViewLogic.cs" />
     <Compile Include="BlogViewLogic.cs" />
+    <Compile Include="GeneralLogic.cs" />
     <Compile Include="JSONDataContracts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchViewLogic.cs" />

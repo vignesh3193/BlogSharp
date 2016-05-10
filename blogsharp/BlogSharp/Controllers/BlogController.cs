@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using BlogSharp.HelperFunctions;
+using BLogicLayer;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 
@@ -50,14 +50,14 @@ namespace BlogSharp.Controllers
             {
                 //Syd- come back and add to query to make sure it's either public or someone current user is following
                 //Need to double check this query. I'm not sure if it works -Omer
-                Person thisPerson = Helper.getLoggedInUser(db);
+                Person thisPerson = GeneralLogic.getLoggedInUser(db);
                 List<BlogPost> posts =(from p in db.BlogPosts
                                        where p.tags.Any(tag => tag.tagName.Equals(s))
                                        select p).ToList();
                 return View(posts.ToList());
             } else
             {
-                Person person = Helper.getLoggedInUser(db);
+                Person person = GeneralLogic.getLoggedInUser(db);
                 List<BlogPost> posts = (from p in db.BlogPosts
                                         where p.tags.Any(tag => tag.tagName.Equals(s) &&
                                         !p.person.isPrivate)
@@ -72,7 +72,7 @@ namespace BlogSharp.Controllers
         public ActionResult Create()
         {
             ViewBag.PersonId = new SelectList(db.Persons, "Id", "Email");
-            ViewBag.currentTags = new List<string>();
+            //ViewBag.currentTags = new List<string>();
             return View();
         }
 
@@ -119,7 +119,7 @@ namespace BlogSharp.Controllers
             if (!User.Identity.IsAuthenticated) // If not logged in
                 RedirectToAction("Account", "Login", "BlogPosts/Index");
 
-            Person thisPerson = Helper.getLoggedInUser(db);
+            Person thisPerson = GeneralLogic.getLoggedInUser(db);
 
             if (thisPerson != null) // 
             {
@@ -142,8 +142,8 @@ namespace BlogSharp.Controllers
             {
                 RedirectToAction("Home", "Index");
             }
-            Person thisPerson = Helper.getLoggedInUser(db);
-            BlogPost blogPost = Helper.getBlogPosts(db, thisPerson).Find(post => post.Id == id);
+            Person thisPerson = GeneralLogic.getLoggedInUser(db);
+            BlogPost blogPost = GeneralLogic.getBlogPosts(db, thisPerson).Find(post => post.Id == id);
             if (blogPost == null)
             {
                 return HttpNotFound();
@@ -199,7 +199,7 @@ namespace BlogSharp.Controllers
         public ActionResult Profile(int id)
         {   
             var user = db.Persons.Find(id);
-            var curruser = Helper.getLoggedInUser(db);
+            var curruser = GeneralLogic.getLoggedInUser(db);
             //adding current user to viewbag so we can check in the View if the current user is already following this blog
             ViewBag.CurrUser = curruser;
             return View(user);
@@ -211,7 +211,7 @@ namespace BlogSharp.Controllers
         {
             using (db)
             {
-                var curruser = Helper.getLoggedInUser(db);
+                var curruser = GeneralLogic.getLoggedInUser(db);
                 var toFollow = db.Persons.Find(Id);
 
                 curruser.following.Add(toFollow);
@@ -226,7 +226,7 @@ namespace BlogSharp.Controllers
         {
             using (db)
             {
-                var curruser = Helper.getLoggedInUser(db);
+                var curruser = GeneralLogic.getLoggedInUser(db);
                 var toUnfollow = db.Persons.Find(Id);
 
                 curruser.following.Remove(toUnfollow);

@@ -210,7 +210,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HelperFunctions\Helper.cs" />
     <Compile Include="Migrations\201605050303555_Context change.cs" />
     <Compile Include="Migrations\201605050303555_Context change.Designer.cs">
       <DependentUpon>201605050303555_Context change.cs</DependentUpon>
