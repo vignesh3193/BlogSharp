@@ -41,19 +41,15 @@ namespace BlogSharp.Controllers
         [HttpPost]
         public ActionResult CreateSearch([Bind(Include = "title,tags")] BlogPostCreateViewModel blogPost)
         {
-            if(blogPost.title.Length > 0)
-            {
-                RedirectToAction("Search", "Blog", blogPost.title);
-            }
-            
-            return View();
+           
+            return RedirectToAction("Search", "Blog", new {s = blogPost.title.ToString()});
         }
-        //[HttpPost]
+        
         public ActionResult Search(string s)
         {
-            if(s.Length == 0)
+            if(s == null)
             {
-                RedirectToAction("Index", "Blog",null);
+                return RedirectToAction("CreateSearch", "Blog");
             }
             if (User.Identity.IsAuthenticated)
             {
@@ -61,7 +57,7 @@ namespace BlogSharp.Controllers
                 //Need to double check this query. I'm not sure if it works -Omer
                 Person thisPerson = Helper.getLoggedInUser(db);
                 List<BlogPost> posts =(from p in db.BlogPosts
-                                       where p.tags.Any(tag => tag.tagName.Equals(s))
+                                       where p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Equals(s))
                                        select p).ToList();
                 return View(posts.ToList());
             } else
@@ -69,9 +65,9 @@ namespace BlogSharp.Controllers
                 Person person = Helper.getLoggedInUser(db);
                 List<BlogPost> posts = (from p in db.BlogPosts
                                         where p.tags.Any(tag => tag.tagName.Equals(s) &&
-                                        !p.person.isPrivate)
+                                        !p.person.isPrivate) || (p.title.Equals(s) && !p.person.isPrivate)
                                         select p).ToList();
-                return View(posts);
+                return View(posts.ToList());
                 
             }
         }
