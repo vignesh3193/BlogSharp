@@ -304,7 +304,6 @@
     <Content Include="Views\Blog\Details.cshtml" />
     <Content Include="Views\Blog\Edit.cshtml" />
     <Content Include="Views\Blog\Search.cshtml" />
-    <Content Include="Views\Blog\ViewPosts.cshtml" />
     <Content Include="Views\Blog\Profile.cshtml" />
     <Content Include="Views\Blog\CreateSearch.cshtml" />
   </ItemGroup>

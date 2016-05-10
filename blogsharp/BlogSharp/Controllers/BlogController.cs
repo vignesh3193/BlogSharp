@@ -24,7 +24,7 @@ namespace BlogSharp.Controllers
         {
             if (id == null)
             {
-                RedirectToAction("Home" , "Index");
+                return RedirectToAction("Index" , "Home");
             }
             BlogPost blogPost = db.BlogPosts.Find(id);
             if (blogPost == null)
@@ -101,11 +101,12 @@ namespace BlogSharp.Controllers
                 newPost.tags = new Collection<Tag>();
                 var allTags = db.Tags.ToList();
                 foreach(var s in blogPost.tags.Split(',')){
-                    Tag thisTag = allTags.Find(tag => tag.tagName.Equals(s));
+                    string trimmed = s.Trim();
+                    Tag thisTag = allTags.Find(tag => tag.tagName.Equals(trimmed));
                     if(thisTag == null)
                     {
                         thisTag = new Tag();
-                        thisTag.tagName = s;
+                        thisTag.tagName = trimmed;
                         db.Tags.Add(thisTag);
                     }
                     newPost.tags.Add(thisTag);
@@ -117,31 +118,9 @@ namespace BlogSharp.Controllers
                 thisPerson.posts.Add(newPost);
                 db.BlogPosts.Add(newPost);
                 db.SaveChanges();
-                return RedirectToAction("ViewPosts",thisPerson.Id);
+                return RedirectToAction("Blog","Details",new { id = newPost.Id });
             }
             return View(blogPost);
-        }
-        
-        // GET: BlogPosts
-        public ActionResult ViewPosts()
-        {
-            if (!User.Identity.IsAuthenticated) // If not logged in
-                RedirectToAction("Account", "Login", "BlogPosts/Index");
-
-            Person thisPerson = GeneralLogic.getLoggedInUser(db);
-
-            if (thisPerson != null) // 
-            {
-                var blogPosts = (from posts in db.BlogPosts
-                                 where posts.PersonId == thisPerson.Id
-                                 select posts).ToList<BlogPost>();
-                if (blogPosts == null)
-                    blogPosts = new List<BlogPost>();
-                
-                return View(blogPosts.ToList());
-            }
-            return View();
-
         }
 
         // GET: BlogPosts/Edit/5
@@ -149,7 +128,7 @@ namespace BlogSharp.Controllers
         {
             if (id == null)
             {
-                RedirectToAction("Home", "Index");
+                return RedirectToAction("Home", "Index");
             }
             Person thisPerson = GeneralLogic.getLoggedInUser(db);
             BlogPost blogPost = GeneralLogic.getBlogPosts(db, thisPerson).Find(post => post.Id == id);

@@ -4,15 +4,12 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
-
-
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>BlogPost</h4>
+        <h4>Create a new blog post</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.PersonId)
@@ -32,17 +29,23 @@
                 @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
             </div>
         </div>
-        <i>Separate different tags by , (comma)</i>
-        <div class="form-group">
+
+        <div id="tagDescription" class="form-group">
             @Html.LabelFor(model => model.tags, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.tags, new { htmlAttributes = new { @class = "form-control" } })
+                <i class="col-md-10">Separate different tags by , (comma)</i>
                 @Html.ValidationMessageFor(model => model.tags, "", new { @class = "text-danger" })
+                
             </div>
-        </div>
+                <div class="col-md-10">
+                    
+                </div>
+            </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
+                @Html.ActionLink("Cancel", "Index", "Home", null, new { @class = "btn btn-default" })
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
@@ -50,7 +53,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+
 </div>
 
 @section Scripts {

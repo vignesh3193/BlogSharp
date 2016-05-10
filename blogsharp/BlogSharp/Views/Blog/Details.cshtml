@@ -4,43 +4,21 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<style>
+    #contentContainer{
+        border-style:groove;
+    }
+</style>
 
+
+<h2>@Html.DisplayFor(model => model.title)</h2>
 <div>
-    <h4>BlogPost</h4>
+    <h4>by @Html.ActionLink(Html.DisplayFor(model => model.person.FirstName)+" "+Html.DisplayFor(model => model.person.LastName), "Profile", "Blog", new { id = Model.person.Id }, new { @class = "btn-default" })</h4>
+    <h7>on @Html.DisplayFor(model => model.dateCreated)</h7>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.person.FirstName)
-        </dt>
-
-        <dd>
-            @Html.DisplayNameFor(model => model.person.FirstName)
-            @Html.DisplayNameFor(model => model.person.LastName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.dateCreated)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.dateCreated)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.content)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.content)
+        <dd id="contentContainer">
+            @Html.DisplayFor(model => model.content, new { cols = 100, @rows = 50 })
         </dd>
 
         <dt>
@@ -51,6 +29,7 @@
             @foreach(var tag in Model.tags)
             {
                 @Html.ActionLink(@tag.tagName, "Search", "Blog", new { s = @tag.tagName }, new { @class = "btn-default" })
+                <b> </b>
             }
         </dd>
 

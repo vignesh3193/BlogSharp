@@ -30,13 +30,15 @@ namespace DataLayer
         [Display(Name = "Tags")]
         public virtual ICollection<Tag> tags { get; set; }
 
+        [DataType(DataType.Date)]
         [Display(Name ="Date Created")]
         public DateTime dateCreated { get; set; }
 
         [Display(Name ="Blog Title")]
         public string title { get; set; }
 
-        [Display(Name ="BLog Content")]
+        [Display(Name ="Blog Content")]
+        [DataType(DataType.MultilineText)]
         public string content { get; set; }
 
         public virtual ICollection<Person> userRatings { get; set; }
