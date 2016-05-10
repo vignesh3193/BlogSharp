@@ -19,11 +19,6 @@ namespace BlogSharp.Controllers
             return View();
         }
 
-       // public ActionResult Search()
-        //{
-          //  return View();
- //       }
-
         // GET: BlogPosts/Details/5
         public ActionResult Details(int? id)
         {
@@ -39,6 +34,20 @@ namespace BlogSharp.Controllers
             return View(blogPost);
         }
 
+        public ActionResult CreateSearch()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CreateSearch([Bind(Include = "title,tags")] BlogPostCreateViewModel blogPost)
+        {
+            if(blogPost.title.Length > 0)
+            {
+                RedirectToAction("Search", "Blog", blogPost.title);
+            }
+            
+            return View();
+        }
         //[HttpPost]
         public ActionResult Search(string s)
         {
