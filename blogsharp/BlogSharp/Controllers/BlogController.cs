@@ -58,14 +58,9 @@ namespace BlogSharp.Controllers
             //and only of authors that are not private, or that the current user is following.
             if (User.Identity.IsAuthenticated)
             {
-<<<<<<< HEAD
-                //Syd- come back and add to query to make sure it's either public or someone current user is following
-                //Need to double check this query. I'm not sure if it works -Omer
-                Person thisPerson = GeneralLogic.getLoggedInUser(db);
-=======
-              
-                Person thisPerson = Helper.getLoggedInUser(db);
->>>>>>> 9e9c939c59027d3e010a8bcac0387182e4f20c02
+                
+               Person thisPerson = GeneralLogic.getLoggedInUser(db);
+
                 List<BlogPost> posts =(from p in db.BlogPosts
                                        where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Equals(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
                                        select p).ToList();
@@ -77,13 +72,13 @@ namespace BlogSharp.Controllers
                 return View(posts.ToList());
             } else //else, show only public posts
             {
-                Person person = GeneralLogic.getLoggedInUser(db);
+               
                 List<BlogPost> posts = (from p in db.BlogPosts
                                         where p.tags.Any(tag => tag.tagName.Equals(s) &&
                                         !p.person.isPrivate) || (p.title.Equals(s) && !p.person.isPrivate)
                                         select p).ToList();
                 List<Person> people = (from u in db.Persons
-                                       where u.FirstName.Equals(s) && (!u.isPrivate || thisPerson.following.Contains(u))
+                                       where u.FirstName.Equals(s) && (!u.isPrivate)
                                        select u).ToList();
                 ViewBag.posts = posts;
                 ViewBag.people = people;
