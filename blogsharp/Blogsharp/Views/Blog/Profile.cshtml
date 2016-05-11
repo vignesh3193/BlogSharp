@@ -5,6 +5,14 @@
     DataLayer.Person curruser = ViewBag.CurrUser;
 }
 
+<script>
+    $(function () {
+        $('[data-toggle="popover"]').popover({ html: true, content: function() {
+            return $(this).next('.popper-content').html();
+        } })
+    });
+   
+</script>
 <style>
     #banner {
         background-image: url(http://bgfons.com/upload/light_texture2269.jpg);
@@ -13,6 +21,7 @@
 
     #followers {
         margin-left: 35%;
+        overflow-y:auto;
     }
 
     #bio {
@@ -46,14 +55,42 @@
     #blogs {
         margin-top: 2%;
     }
+    
 </style>
 &nbsp;
 
 <div id="banner">
-    <span id="followers" class="label label-pill label-default">Followers @Html.DisplayFor(model=> model.followers.Count)</span>
+    <div id="followers" class="label label-pill label-default" data-container="body"
+        data-toggle="popover" title="Followers" data-placement="bottom">Followers @Html.DisplayFor(model=> model.followers.Count)</div>
+    <div class="popper-content hide" id="follower_popover_content_wrapper" style="display: none;height:50px;overflow:scroll;">
+        <div>
+            <ul>
+                @foreach (DataLayer.Person p in Model.followers)
+                {
+                <li><a href="@Url.Action("Profile","Blog", new { id = p.Id })">@(p.FirstName+" "+p.LastName) </a> </li>
+
+                }
+            </ul>
+        </div>
+    </div>
+     
 
     <img class="img-circle" src="http://s3-us-west-2.amazonaws.com/s.cdpn.io/69263/profile/profile-512_2.jpg" alt="Circle image" style="width:105px;height:105px">
-    <span id="following" class="label label-pill label-default">Following @Html.DisplayFor(model=>model.following.Count)</span>
+   
+    <span id="following" class="label label-pill label-default"  data-container="body"
+        data-toggle="popover" title="Followers" data-placement="bottom">Following @Html.DisplayFor(model=>model.following.Count)</span>
+    <div class="popper-content hide" id="follower_popover_content_wrapper" style="display: none;height:50px;overflow:scroll;">
+        <div>
+            <ul>
+                @foreach (DataLayer.Person p in Model.following)
+                {
+                    <li><a href="@Url.Action("Profile","Blog", new { id = p.Id })">@(p.FirstName + " " + p.LastName) </a> </li>
+
+                }
+            </ul>
+        </div>
+    </div>
+
     <h3 style="padding-left:39%">@Html.DisplayFor(model => model.blogName)</h3>
     <div id="bio">
         <p>small bio of the user should be a paragraph, adding text to test allignment yaooo</p>
@@ -97,5 +134,7 @@ else
             }
 </a>
     }
+
+
 </div>
 
