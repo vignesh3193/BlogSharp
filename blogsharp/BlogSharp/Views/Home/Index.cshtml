@@ -48,7 +48,7 @@
         @foreach(String trend in ViewBag.trends)
         {
 
-           <p id="trend"><span class="label label-primary">@trend</span></p>
+           <p id="trend"><span class="label label-primary"><a style="color:aliceblue" href="@Url.Action("Search","Blog",new { s = trend })">@trend</a></span></p>
 
         }
     </div>
