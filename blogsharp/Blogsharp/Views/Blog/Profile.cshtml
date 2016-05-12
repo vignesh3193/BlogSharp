@@ -13,6 +13,12 @@
     });
    
 </script>
+
+<script>
+    function updateBio(newInfo) {
+
+    }
+</script>
 <style>
     #banner {
         background-image: url(http://bgfons.com/upload/light_texture2269.jpg);
@@ -55,6 +61,25 @@
     #blogs {
         margin-top: 2%;
     }
+
+    #bloggerOptions {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+    }
+
+    #Create {
+        display: inline-block;
+        float:left;
+    }
+
+    #EditBio {
+        display: inline-block;
+        float: right;
+        padding-top: 12px;
+        padding-right: 28px;
+    }
+
     
 </style>
 &nbsp;
@@ -93,19 +118,28 @@
 
     <h3 style="padding-left:39%">@Html.DisplayFor(model => model.blogName)</h3>
     <div id="bio">
-        <p>small bio of the user should be a paragraph, adding text to test allignment yaooo</p>
+        <p>@Model.bio</p>
     </div>
+
+    <br />
     <label id="rating">RATING</label>
     <label id="tags"> COMMON TAGS</label>
 </div>
 @if (curruser.Id == Model.Id)
 {
-    <form id="Create">
+    <div id="bloggerOptions">
 
-        <button type="submit" formaction="@Url.Action("Create")" class="btn btn-primary" id="create">New Blog Post</button>
-    </form>
+        <form id="Create">
+            <button type="submit" formaction="@Url.Action("Create")" class="btn btn-primary" id="create">New Blog Post</button>
+        </form>
+
+        <form id="EditBio">
+            <button class="btn btn-primary" formaction="@Url.Action("EditBio", new { id = Model.Id })" id="editbio">Edit bio</button>
+        </form>
+    </div>
 
 }
+
 else if (curruser.following.Contains(Model))
 {
     <form id="unfoll">

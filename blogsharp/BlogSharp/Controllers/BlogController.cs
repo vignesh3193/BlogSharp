@@ -12,7 +12,7 @@ namespace BlogSharp.Controllers
 {
     public class BlogController : Controller
     {
-        private BlogContext db = new BlogContext();   
+        private BlogContext db = new BlogContext();
         // GET: Blog
         public ActionResult Index()
         {
@@ -24,7 +24,7 @@ namespace BlogSharp.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction("Index" , "Home");
+                return RedirectToAction("Index", "Home");
             }
             BlogPost blogPost = db.BlogPosts.Find(id);
             if (blogPost == null)
@@ -43,14 +43,14 @@ namespace BlogSharp.Controllers
         [HttpPost]
         public ActionResult CreateSearch([Bind(Include = "title,tags")] BlogPostCreateViewModel blogPost)
         {
-           
-            return RedirectToAction("Search", "Blog", new {s = blogPost.title.ToString()});
+
+            return RedirectToAction("Search", "Blog", new { s = blogPost.title.ToString() });
         }
-        
+
         public ActionResult Search(string s)
         {
             //if no search words redirect to create search form
-            if(s == null)
+            if (s == null)
             {
                 return RedirectToAction("CreateSearch", "Blog");
             }
@@ -58,21 +58,22 @@ namespace BlogSharp.Controllers
             //and only of authors that are not private, or that the current user is following.
             if (User.Identity.IsAuthenticated)
             {
-                
-               Person thisPerson = GeneralLogic.getLoggedInUser(db);
 
-                List<BlogPost> posts =(from p in db.BlogPosts
-                                       where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Equals(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
-                                       select p).ToList();
+                Person thisPerson = GeneralLogic.getLoggedInUser(db);
+
+                List<BlogPost> posts = (from p in db.BlogPosts
+                                        where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Equals(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
+                                        select p).ToList();
                 List<Person> people = (from u in db.Persons
                                        where u.FirstName.Equals(s) && (!u.isPrivate || thisPerson.following.Contains(u))
                                        select u).ToList();
                 ViewBag.posts = posts;
                 ViewBag.people = people;
                 return View(posts.ToList());
-            } else //else, show only public posts
+            }
+            else //else, show only public posts
             {
-               
+
                 List<BlogPost> posts = (from p in db.BlogPosts
                                         where p.tags.Any(tag => tag.tagName.Equals(s) &&
                                         !p.person.isPrivate) || (p.title.Equals(s) && !p.person.isPrivate)
@@ -83,7 +84,7 @@ namespace BlogSharp.Controllers
                 ViewBag.posts = posts;
                 ViewBag.people = people;
                 return View(posts.ToList());
-                
+
             }
         }
 
@@ -111,10 +112,11 @@ namespace BlogSharp.Controllers
                 newPost.PersonId = thisPerson.Id;
                 newPost.tags = new Collection<Tag>();
                 var allTags = db.Tags.ToList();
-                foreach(var s in blogPost.tags.Split(',')){
+                foreach (var s in blogPost.tags.Split(','))
+                {
                     string trimmed = s.Trim();
                     Tag thisTag = allTags.Find(tag => tag.tagName.Equals(trimmed));
-                    if(thisTag == null)
+                    if (thisTag == null)
                     {
                         thisTag = new Tag();
                         thisTag.tagName = trimmed;
@@ -129,7 +131,7 @@ namespace BlogSharp.Controllers
                 thisPerson.posts.Add(newPost);
                 db.BlogPosts.Add(newPost);
                 db.SaveChanges();
-                return RedirectToAction("Blog","Details",new { id = newPost.Id });
+                return RedirectToAction("Blog", "Details", new { id = newPost.Id });
             }
             return View(blogPost);
         }
@@ -168,79 +170,95 @@ namespace BlogSharp.Controllers
             return View(blogPost);
         }
 
-        // GET: BlogPosts/Delete/5
-        public ActionResult Delete(int? id)
+        [HttpGet]
+        public ActionResult EditBio(int? id)
         {
             if (id == null)
             {
-                RedirectToAction("Home", "Index");
+                return RedirectToAction("Index", "Home");
             }
-            BlogPost blogPost = db.BlogPosts.Find(id);
-            if (blogPost == null)
+            Person user = db.Persons.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(blogPost);
-        }
-
-        // POST: BlogPosts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            BlogPost blogPost = db.BlogPosts.Find(id);
-            db.BlogPosts.Remove(blogPost);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        //displays profile based on user id, still need to add default redirection
-        public ActionResult Profile(int id)
-        {   
-            var user = db.Persons.Find(id);
-            var curruser = GeneralLogic.getLoggedInUser(db);
-            //adding current user to viewbag so we can check in the View if the current user is already following this blog
-            ViewBag.CurrUser = curruser;
             return View(user);
         }
 
 
-        //next 2 functions take in id of the profile being viewed and updates their followers and following tables
-        public ActionResult Follow(int Id)
+    // GET: BlogPosts/Delete/5
+    public ActionResult Delete(int? id)
+    {
+        if (id == null)
         {
-            using (db)
-            {
-                var curruser = GeneralLogic.getLoggedInUser(db);
-                var toFollow = db.Persons.Find(Id);
-
-                curruser.following.Add(toFollow);
-                toFollow.followers.Add(curruser);
-                db.SaveChanges();
-                return RedirectToAction("Profile", new { id = Id });
-            };
-            
+            RedirectToAction("Home", "Index");
         }
-
-        public ActionResult UnFollow(int Id)
+        BlogPost blogPost = db.BlogPosts.Find(id);
+        if (blogPost == null)
         {
-            using (db)
-            {
-                var curruser = GeneralLogic.getLoggedInUser(db);
-                var toUnfollow = db.Persons.Find(Id);
-
-                curruser.following.Remove(toUnfollow);
-                toUnfollow.followers.Remove(curruser);
-                db.SaveChanges();
-                return RedirectToAction("Profile", new { id = Id });
-            };
+            return HttpNotFound();
         }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        return View(blogPost);
     }
+
+    // POST: BlogPosts/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public ActionResult DeleteConfirmed(int id)
+    {
+        BlogPost blogPost = db.BlogPosts.Find(id);
+        db.BlogPosts.Remove(blogPost);
+        db.SaveChanges();
+        return RedirectToAction("Index");
+    }
+
+    //displays profile based on user id, still need to add default redirection
+    public ActionResult Profile(int id)
+    {
+        var user = db.Persons.Find(id);
+        var curruser = GeneralLogic.getLoggedInUser(db);
+        //adding current user to viewbag so we can check in the View if the current user is already following this blog
+        ViewBag.CurrUser = curruser;
+        return View(user);
+    }
+
+
+    //next 2 functions take in id of the profile being viewed and updates their followers and following tables
+    public ActionResult Follow(int Id)
+    {
+        using (db)
+        {
+            var curruser = GeneralLogic.getLoggedInUser(db);
+            var toFollow = db.Persons.Find(Id);
+
+            curruser.following.Add(toFollow);
+            toFollow.followers.Add(curruser);
+            db.SaveChanges();
+            return RedirectToAction("Profile", new { id = Id });
+        };
+
+    }
+
+    public ActionResult UnFollow(int Id)
+    {
+        using (db)
+        {
+            var curruser = GeneralLogic.getLoggedInUser(db);
+            var toUnfollow = db.Persons.Find(Id);
+
+            curruser.following.Remove(toUnfollow);
+            toUnfollow.followers.Remove(curruser);
+            db.SaveChanges();
+            return RedirectToAction("Profile", new { id = Id });
+        };
+    }
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            db.Dispose();
+        }
+        base.Dispose(disposing);
+    }
+}
 }

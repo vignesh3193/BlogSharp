@@ -44,5 +44,9 @@ namespace DataLayer
 
         [Required]
         public Boolean isPrivate { get; set; }
+
+        [Required]
+        [DataType(DataType.MultilineText)]
+        public string bio { get; set; }
     }
 }

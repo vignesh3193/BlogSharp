@@ -175,6 +175,7 @@ namespace BlogSharp.Controllers
                         p.FirstName = model.FirstName;
                         p.LastName = model.LastName;
                         p.isPrivate = model.isPrivate;
+                        p.bio = "My blog# bio";
                         using (peopleContext)
                         {
                             peopleContext.Persons.Add(p);

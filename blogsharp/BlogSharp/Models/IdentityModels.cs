@@ -30,6 +30,8 @@ namespace BlogSharp.Models
             return new ApplicationDbContext();
         }
 
+        public System.Data.Entity.DbSet<DataLayer.Person> People { get; set; }
+
         //public System.Data.Entity.DbSet<DataLayer.Person> People { get; set; }
         //public System.Data.Entity.DbSet<DataLayer.BlogPost> BlogPosts { get; set; }
     }
