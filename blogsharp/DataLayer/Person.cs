@@ -49,4 +49,11 @@ namespace DataLayer
         [DataType(DataType.MultilineText)]
         public string bio { get; set; }
     }
+
+    public class BioViewModel
+    {
+        [Display(Name = "Your bio")]
+        [DataType(DataType.MultilineText)]
+        public string bio { get; set; }
+    }
 }

@@ -248,6 +248,7 @@
     </Content>
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
+    <None Include="Properties\PublishProfiles\BlogSharp - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -306,6 +307,7 @@
     <Content Include="Views\Blog\Search.cshtml" />
     <Content Include="Views\Blog\Profile.cshtml" />
     <Content Include="Views\Blog\CreateSearch.cshtml" />
+    <Content Include="Views\Blog\Error.cshtml" />
     <Content Include="Views\Blog\EditBio.cshtml" />
   </ItemGroup>
   <ItemGroup>

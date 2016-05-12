@@ -173,21 +173,48 @@ namespace BlogSharp.Controllers
         [HttpGet]
         public ActionResult EditBio(int? id)
         {
-            if (id == null)
+            Person checkPerson = db.Persons.Find(id);
+
+            if (checkPerson.Email == User.Identity.Name)
             {
-                return RedirectToAction("Index", "Home");
+                ViewBag.editID = id;
+                BioViewModel userBio = new BioViewModel();
+                userBio.bio = checkPerson.bio;
+                return View(userBio);
             }
-            Person user = db.Persons.Find(id);
-            if (user == null)
+            else
             {
-                return HttpNotFound();
+               return RedirectToAction("Error", "Blog");
             }
-            return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult EditBio(BioViewModel editedBio)
+        {
+            if (ModelState.IsValid)
+            {
+                using (db)
+                {
+                    Person userToEdit = (from person in db.Persons
+                                         where person.Email == User.Identity.Name
+                                         select person).FirstOrDefault();
+                    userToEdit.bio = editedBio.bio;
+                    db.SaveChanges();
+                }
+
+                return View(editedBio);
+            }
+            else
+            {
+                ViewBag.errorMsg = "An error occurred when trying to update your bio.  Please try again in a few moments.";
+                return View(editedBio);
+            }
+
         }
 
 
-    // GET: BlogPosts/Delete/5
-    public ActionResult Delete(int? id)
+        // GET: BlogPosts/Delete/5
+        public ActionResult Delete(int? id)
     {
         if (id == null)
         {
@@ -252,6 +279,12 @@ namespace BlogSharp.Controllers
             return RedirectToAction("Profile", new { id = Id });
         };
     }
+
+    public ActionResult Error()
+        {
+            return View();
+        }
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)
