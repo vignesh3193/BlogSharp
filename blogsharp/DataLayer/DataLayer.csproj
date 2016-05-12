@@ -68,10 +68,6 @@
     <Compile Include="Migrations\201605120012130_add bio.Designer.cs">
       <DependentUpon>201605120012130_add bio.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201605121555025_add bioviewmodel.cs" />
-    <Compile Include="Migrations\201605121555025_add bioviewmodel.Designer.cs">
-      <DependentUpon>201605121555025_add bioviewmodel.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Rating.cs" />
     <Compile Include="Comment.cs" />
@@ -95,9 +91,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605120012130_add bio.resx">
       <DependentUpon>201605120012130_add bio.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605121555025_add bioviewmodel.resx">
-      <DependentUpon>201605121555025_add bioviewmodel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
