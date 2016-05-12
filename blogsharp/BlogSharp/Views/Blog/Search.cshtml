@@ -8,64 +8,30 @@
 
 
 
-    <h3>Posts: </h3>
+    
     @if (ViewBag.posts != null)
     {
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.person.FirstName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.dateCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.title)
-                </th>
-
-                <th></th>
-            </tr>
-            </table>
+        <h3>Posts: </h3>
         foreach (DataLayer.BlogPost item in ViewBag.posts)
         {
-            <table>
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.person.FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.dateCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.title)
-                    </td>
-
-                    <td>
-                        @Html.ActionLink("Details", "Blog", new { id = item.Id })
-                    </td>
-                </tr>
-            </table>
+            <a href="@Url.Action("Details", "Blog", new { id = item.Id })" class="list-group-item">
+                <h4 class="list-group-item-heading">@Html.DisplayFor(model => item.title)</h4>
+                <p class="list-group-item-text">Author: @Html.DisplayFor(model => item.person.FirstName)  @Html.DisplayFor(model => item.person.LastName)     Blog Name:@Html.DisplayFor(model => item.person.blogName)</p>
+            </a>
+           
         }
     }
-            <h3>People: </h3>
+            
             @if (ViewBag.people != null)
             {
-                <table class="table">
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.person.FirstName)
-                        </th>
-                       </tr>
-                    </table>
+                <h3>People: </h3>
+                
                    foreach (DataLayer.Person person in ViewBag.people)
                     {
-                    <table>
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => person.FirstName)
-                        </td>
-                    </tr>
-                        </table>
+                    <a href="@Url.Action("Profile", "Blog", new {id = person.Id})" class="list-group-item">
+                        <p class="list-group-item-text">@Html.DisplayFor(model => person.FirstName)  @Html.DisplayFor(model => person.LastName)     Blog Name:@Html.DisplayFor(model => person.blogName)</p>
+
+                    </a>
                     }
                     }
 

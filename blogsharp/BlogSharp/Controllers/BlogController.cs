@@ -58,11 +58,12 @@ namespace BlogSharp.Controllers
             //and only of authors that are not private, or that the current user is following.
             if (User.Identity.IsAuthenticated)
             {
-
+                //Person user = User.Identity;
+                
                 Person thisPerson = GeneralLogic.getLoggedInUser(db);
 
                 List<BlogPost> posts = (from p in db.BlogPosts
-                                        where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Equals(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
+                                        where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Contains(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
                                         select p).ToList();
                 List<Person> people = (from u in db.Persons
                                        where u.FirstName.Equals(s) && (!u.isPrivate || thisPerson.following.Contains(u))
@@ -75,8 +76,8 @@ namespace BlogSharp.Controllers
             {
 
                 List<BlogPost> posts = (from p in db.BlogPosts
-                                        where p.tags.Any(tag => tag.tagName.Equals(s) &&
-                                        !p.person.isPrivate) || (p.title.Equals(s) && !p.person.isPrivate)
+                                        where (p.tags.Any(tag => tag.tagName.Equals(s) || p.title.Contains(s)) &&
+                                        !p.person.isPrivate)
                                         select p).ToList();
                 List<Person> people = (from u in db.Persons
                                        where u.FirstName.Equals(s) && (!u.isPrivate)
