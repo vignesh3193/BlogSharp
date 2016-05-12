@@ -52,22 +52,6 @@
   <ItemGroup>
     <Compile Include="BlogContext.cs" />
     <Compile Include="BlogPost.cs" />
-    <Compile Include="Migrations\201605050330472_InitialCreate.cs" />
-    <Compile Include="Migrations\201605050330472_InitialCreate.Designer.cs">
-      <DependentUpon>201605050330472_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605080053443_Tag class added.cs" />
-    <Compile Include="Migrations\201605080053443_Tag class added.Designer.cs">
-      <DependentUpon>201605080053443_Tag class added.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605081700594_Tag-Blog changed to Many-to-Many.cs" />
-    <Compile Include="Migrations\201605081700594_Tag-Blog changed to Many-to-Many.Designer.cs">
-      <DependentUpon>201605081700594_Tag-Blog changed to Many-to-Many.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605120012130_add bio.cs" />
-    <Compile Include="Migrations\201605120012130_add bio.Designer.cs">
-      <DependentUpon>201605120012130_add bio.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Rating.cs" />
     <Compile Include="Comment.cs" />
@@ -78,20 +62,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201605050330472_InitialCreate.resx">
-      <DependentUpon>201605050330472_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605080053443_Tag class added.resx">
-      <DependentUpon>201605080053443_Tag class added.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605081700594_Tag-Blog changed to Many-to-Many.resx">
-      <DependentUpon>201605081700594_Tag-Blog changed to Many-to-Many.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605120012130_add bio.resx">
-      <DependentUpon>201605120012130_add bio.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

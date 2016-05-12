@@ -210,17 +210,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201605050303555_Context change.cs" />
-    <Compile Include="Migrations\201605050303555_Context change.Designer.cs">
-      <DependentUpon>201605050303555_Context change.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605050328509_Foreign keys updated.cs" />
-    <Compile Include="Migrations\201605050328509_Foreign keys updated.Designer.cs">
-      <DependentUpon>201605050328509_Foreign keys updated.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605080049013_Tag class created.cs" />
-    <Compile Include="Migrations\201605080049013_Tag class created.Designer.cs">
-      <DependentUpon>201605080049013_Tag class created.cs</DependentUpon>
+    <Compile Include="Migrations\201605120402301_Initial.cs" />
+    <Compile Include="Migrations\201605120402301_Initial.Designer.cs">
+      <DependentUpon>201605120402301_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -248,6 +240,7 @@
     </Content>
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
+    <None Include="Properties\PublishProfiles\blogsharpnyu - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -264,14 +257,18 @@
     <Content Include="Scripts\toastr.js" />
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -330,14 +327,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201605050303555_Context change.resx">
-      <DependentUpon>201605050303555_Context change.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605050328509_Foreign keys updated.resx">
-      <DependentUpon>201605050328509_Foreign keys updated.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605080049013_Tag class created.resx">
-      <DependentUpon>201605080049013_Tag class created.cs</DependentUpon>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201605120402301_Initial.resx">
+      <DependentUpon>201605120402301_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
