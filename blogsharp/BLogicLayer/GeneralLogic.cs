@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Data.Entity;
 
 namespace BLogicLayer
 {
@@ -77,7 +78,7 @@ namespace BLogicLayer
                 for(int j = 0; j < tagLength; j++)
                 {
                     string s = text[rnd.Next() % (text.Length)];
-                    //Tag thisTag = blogCtx.Tags.Find(tag => tag.tagName == "");
+                    //Tag thisTag = blogCtx.Tags.Find(tag => tag.tagName.Equals(""));
                     //if (thisTag == null)
                     //{
                     //    thisTag = new Tag();
