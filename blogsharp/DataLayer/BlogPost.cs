@@ -90,6 +90,10 @@ namespace DataLayer
         [DataType(DataType.MultilineText)]
         public ICollection<Comment> comments { get; set; }
 
+        [DataType(DataType.MultilineText)]
+        public string newComment { get; set; }
+
+        public ICollection<Rating> ratings { get; set; }
 
     }
 }

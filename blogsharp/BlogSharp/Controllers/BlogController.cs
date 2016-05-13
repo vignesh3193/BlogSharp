@@ -20,19 +20,41 @@ namespace BlogSharp.Controllers
         }
 
         [HttpPost]
-        public ActionResult makeComment([Bind(Include ="Comment")] BlogPostDetailsViewModel comments)
+        public ActionResult Details([Bind(Include ="Comment")] BlogPostDetailsViewModel comments, string ratings)
         {
+            int rating = Int32.Parse(ratings);
+            if(ratings != null)
+            {
+                using (db)
+                {
+                    BlogPost b = db.BlogPosts.Find();
+                    Rating r = new Rating();
+                    r.blogPost = b;
+                    r.BlogPostId = b.Id;
+                    r.ratingNumber = rating;
+                    r.username = User.Identity.Name;
+                    b.ratings.Add(r);
+                    db.SaveChanges();
+
+                    return Redirect("/");
+                }
+            }
+
             Person currUser = GeneralLogic.getLoggedInUser(db);
             BlogPost blogPost = (from b in db.BlogPosts
                                  where (comments.blogID == b.Id)
-                                 select b).First();
+                                 select b).FirstOrDefault();
             Comment c = new Comment();
             c.Author = currUser.FirstName + " "+currUser.LastName;
             c.blogPost = blogPost;
-            c.contents = comments.content;
+            c.contents = comments.newComment;
             c.dateCreated = DateTime.Now;
-            
+            if (blogPost.comments == null)
+            {
+                blogPost.comments = new Collection<Comment>();
+            }
             blogPost.comments.Add(c);
+            db.SaveChanges();
             return RedirectToAction("Details", "Blog", comments.blogID);
         }
 
@@ -47,12 +69,17 @@ namespace BlogSharp.Controllers
             BlogPost blogPost = db.BlogPosts.Find(id);
             BlogPostDetailsViewModel details = new BlogPostDetailsViewModel();
             details.author = blogPost.person;
-            details.blogID = blogPost.Id;
+            details.blogID = id.Value;
             details.comments = blogPost.comments;
             details.content = blogPost.content;
             details.date = blogPost.dateCreated;
             details.tags = blogPost.tags;
             details.title = blogPost.title;
+            details.ratings = blogPost.ratings;
+            if(details.ratings == null)
+            {
+                details.ratings = new Collection<Rating>();
+            }
 
             if(details.comments == null)
             {
@@ -65,9 +92,20 @@ namespace BlogSharp.Controllers
             {
                 return HttpNotFound();
             }
+            double avgrating = 0.0; ;
+            foreach(Rating r in blogPost.ratings)
+            {
+                avgrating += r.ratingNumber;
+            }
+            avgrating = avgrating / blogPost.ratings.Count;
+            ViewBag.avgRating = avgrating;
+
+            //return View(blogPost);
+            
             ViewBag.userID = thisPerson.Id;
             return View(details);
         }
+
         //Blog/CreateSearch is a form that takes in keywords that will correspond to tags, titles, or users
         public ActionResult CreateSearch()
         {
