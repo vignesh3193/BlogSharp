@@ -31,7 +31,35 @@ namespace BlogSharp.Controllers
             {
                 return HttpNotFound();
             }
+            double avgrating = 0.0; ;
+            foreach(Rating r in blogPost.ratings)
+            {
+                avgrating += r.ratingNumber;
+            }
+            avgrating = avgrating / blogPost.ratings.Count;
+            ViewBag.avgRating = avgrating;
+
             return View(blogPost);
+        }
+
+        [HttpPost]
+        public ActionResult Details(String ratings)
+        {
+            int rating = Int32.Parse(ratings);
+            
+            using (db)
+            {
+                BlogPost b = db.BlogPosts.Find();
+                Rating r = new Rating();
+                r.blogPost = b;
+                r.BlogPostId = b.Id;
+                r.ratingNumber = rating;
+                r.username = User.Identity.Name;
+                b.ratings.Add(r);
+                db.SaveChanges();
+
+                return Redirect("/");
+            }
         }
         //Blog/CreateSearch is a form that takes in keywords that will correspond to tags, titles, or users
         public ActionResult CreateSearch()

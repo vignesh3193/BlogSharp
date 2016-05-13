@@ -2,19 +2,57 @@
 
 @{
     ViewBag.Title = "Details";
+    ViewBag.id = Model.Id;
 }
 
 <style>
     #contentContainer {
         border-style: groove;
     }
+
+    span.stars, span.stars span {
+        display: block;
+        background: url(stars.png) 0 -16px repeat-x;
+        width: 80px;
+        height: 16px;
+    }
+
+    span.stars span {
+        background-position: 0 0;
+    }
 </style>
+
+<script>
+    $.fn.stars = function() {
+    return $(this).each(function() {
+        // Get the value
+        var val = parseFloat($(this).html());
+        // Make sure that the value is in 0 - 5 range, multiply to get width
+        val = Math.round(val * 2) / 2;
+        var size = Math.max(0, (Math.min(5, val))) * 16;
+        // Create stars holder
+        var $span = $('<span />').width(size);
+        // Replace the numerical value with stars
+        $(this).html($span);
+    });
+    }
+    
+    $(function () {
+        $('span.stars').stars();
+    });
+</script>
 
 
 <h2>@Html.DisplayFor(model => model.title)</h2>
 <div>
     <h4>by @Html.ActionLink(Html.DisplayFor(model => model.person.FirstName) + " " + Html.DisplayFor(model => model.person.LastName), "Profile", "Blog", new { id = Model.person.Id }, new { @class = "btn-default" })</h4>
     <h7>on @Html.DisplayFor(model => model.dateCreated)</h7>
+    <h7>
+    @if (Model.ratings.Count > 0)
+    {
+        <span class="stars">@ViewBag.avgrating</span>
+    }
+    </h7>
     <hr />
     <dl class="dl-horizontal">
         <dd id="contentContainer">
@@ -36,7 +74,12 @@
 
     </dl>
 </div>
-<p>
+<div>
     @Html.ActionLink("Edit", "Edit", "Blog", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index", "Home")
-</p>
+    @using (Html.BeginForm())
+    {
+        <div class="editor_field"> @Html.TextBoxFor(model=>Model.ratings.First())</div>
+        <input type="submit" />     
+    }
+</div>
