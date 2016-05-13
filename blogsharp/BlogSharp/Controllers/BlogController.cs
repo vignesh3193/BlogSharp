@@ -20,9 +20,10 @@ namespace BlogSharp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Details([Bind(Include ="Comment")] BlogPostDetailsViewModel comments, string ratings)
+        public ActionResult Details([Bind(Include ="author,date,tags,title,blogID,content,comments,newComment,ratings")] BlogPostDetailsViewModel model, string ratings)
         {
-            int rating = Int32.Parse(ratings);
+            //   int rating = Int32.Parse(ratings);
+            int rating = 0;
             if(ratings != null)
             {
                 using (db)
@@ -42,20 +43,25 @@ namespace BlogSharp.Controllers
 
             Person currUser = GeneralLogic.getLoggedInUser(db);
             BlogPost blogPost = (from b in db.BlogPosts
-                                 where (comments.blogID == b.Id)
+                                 where (model.blogID == b.Id)
                                  select b).FirstOrDefault();
             Comment c = new Comment();
             c.Author = currUser.FirstName + " "+currUser.LastName;
             c.blogPost = blogPost;
-            c.contents = comments.newComment;
+            c.contents = model.newComment;
             c.dateCreated = DateTime.Now;
+            
             if (blogPost.comments == null)
             {
                 blogPost.comments = new Collection<Comment>();
+                blogPost.comments.Add(c);
+            } else
+            {
+                blogPost.comments.Add(c);
             }
-            blogPost.comments.Add(c);
+           
             db.SaveChanges();
-            return RedirectToAction("Details", "Blog", comments.blogID);
+            return RedirectToAction("Details", "Blog", model.blogID);
         }
 
         // GET: BlogPosts/Details/5
@@ -101,8 +107,14 @@ namespace BlogSharp.Controllers
             ViewBag.avgRating = avgrating;
 
             //return View(blogPost);
-            
-            ViewBag.userID = thisPerson.Id;
+            if (thisPerson != null)
+            {
+                ViewBag.userID = thisPerson.Id;
+            }else
+            {
+                ViewBag.userID = null;
+            }
+            //ViewBag.userID = thisPerson.Id;
             return View(details);
         }
 
