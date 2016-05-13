@@ -9,7 +9,7 @@ namespace BlogSharp.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(BlogSharp.Models.ApplicationDbContext context)

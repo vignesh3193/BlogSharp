@@ -19,18 +19,53 @@ namespace BlogSharp.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult makeComment([Bind(Include ="Comment")] BlogPostDetailsViewModel comments)
+        {
+            Person currUser = GeneralLogic.getLoggedInUser(db);
+            BlogPost blogPost = (from b in db.BlogPosts
+                                 where (comments.blogID == b.Id)
+                                 select b).First();
+            Comment c = new Comment();
+            c.Author = currUser.FirstName + " "+currUser.LastName;
+            c.blogPost = blogPost;
+            c.contents = comments.content;
+            c.dateCreated = DateTime.Now;
+            
+            blogPost.comments.Add(c);
+            return RedirectToAction("Details", "Blog", comments.blogID);
+        }
+
         // GET: BlogPosts/Details/5
         public ActionResult Details(int? id)
         {
+            Person thisPerson = GeneralLogic.getLoggedInUser(db);
             if (id == null)
             {
                 return RedirectToAction("Index", "Home");
             }
             BlogPost blogPost = db.BlogPosts.Find(id);
+            BlogPostDetailsViewModel details = new BlogPostDetailsViewModel();
+            details.author = blogPost.person;
+            details.blogID = blogPost.Id;
+            details.comments = blogPost.comments;
+            details.content = blogPost.content;
+            details.date = blogPost.dateCreated;
+            details.tags = blogPost.tags;
+            details.title = blogPost.title;
+
+            if(details.comments == null)
+            {
+                details.comments = new Collection<Comment>();
+                blogPost.comments = new Collection<Comment>();
+            }
+           
+
             if (blogPost == null)
             {
                 return HttpNotFound();
             }
+<<<<<<< HEAD
             double avgrating = 0.0; ;
             foreach(Rating r in blogPost.ratings)
             {
@@ -40,6 +75,10 @@ namespace BlogSharp.Controllers
             ViewBag.avgRating = avgrating;
 
             return View(blogPost);
+=======
+            ViewBag.userID = thisPerson.Id;
+            return View(details);
+>>>>>>> 8fec8d4cda896447a171eab9313a6b684d0732c6
         }
 
         [HttpPost]
@@ -160,7 +199,7 @@ namespace BlogSharp.Controllers
                 thisPerson.posts.Add(newPost);
                 db.BlogPosts.Add(newPost);
                 db.SaveChanges();
-                return RedirectToAction("Blog", "Details", new { id = newPost.Id });
+                return RedirectToAction("Details", "Blog", new { id = newPost.Id });
             }
             return View(blogPost);
         }
@@ -170,7 +209,7 @@ namespace BlogSharp.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction("Home", "Index");
+                return RedirectToAction("Index", "Home");
             }
             Person thisPerson = GeneralLogic.getLoggedInUser(db);
             BlogPost blogPost = GeneralLogic.getBlogPosts(db, thisPerson).Find(post => post.Id == id);
@@ -247,7 +286,7 @@ namespace BlogSharp.Controllers
     {
         if (id == null)
         {
-            RedirectToAction("Home", "Index");
+            RedirectToAction("Index", "Home");
         }
         BlogPost blogPost = db.BlogPosts.Find(id);
         if (blogPost == null)
