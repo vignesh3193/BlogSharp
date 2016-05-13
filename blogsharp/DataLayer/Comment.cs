@@ -25,6 +25,7 @@ namespace DataLayer
         public string Author { get; set; }
 
         [Required]
+        [DataType(DataType.MultilineText)]
         public string contents { get; set; }
 
         [Required]

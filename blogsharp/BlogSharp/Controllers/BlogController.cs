@@ -19,6 +19,23 @@ namespace BlogSharp.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult makeComment([Bind(Include ="Comment")] BlogPostDetailsViewModel comments)
+        {
+            Person currUser = GeneralLogic.getLoggedInUser(db);
+            BlogPost blogPost = (from b in db.BlogPosts
+                                 where (comments.blogID == b.Id)
+                                 select b).First();
+            Comment c = new Comment();
+            c.Author = currUser.FirstName + " "+currUser.LastName;
+            c.blogPost = blogPost;
+            c.contents = comments.content;
+            c.dateCreated = DateTime.Now;
+            
+            blogPost.comments.Add(c);
+            return RedirectToAction("Details", "Blog", comments.blogID);
+        }
+
         // GET: BlogPosts/Details/5
         public ActionResult Details(int? id)
         {
@@ -28,12 +45,28 @@ namespace BlogSharp.Controllers
                 return RedirectToAction("Index", "Home");
             }
             BlogPost blogPost = db.BlogPosts.Find(id);
+            BlogPostDetailsViewModel details = new BlogPostDetailsViewModel();
+            details.author = blogPost.person;
+            details.blogID = blogPost.Id;
+            details.comments = blogPost.comments;
+            details.content = blogPost.content;
+            details.date = blogPost.dateCreated;
+            details.tags = blogPost.tags;
+            details.title = blogPost.title;
+
+            if(details.comments == null)
+            {
+                details.comments = new Collection<Comment>();
+                blogPost.comments = new Collection<Comment>();
+            }
+           
+
             if (blogPost == null)
             {
                 return HttpNotFound();
             }
             ViewBag.userID = thisPerson.Id;
-            return View(blogPost);
+            return View(details);
         }
         //Blog/CreateSearch is a form that takes in keywords that will correspond to tags, titles, or users
         public ActionResult CreateSearch()
