@@ -13,12 +13,12 @@ namespace BlogSharp.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201605120402301_Initial"; }
+            get { return "201605131701280_Initial"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return null; }
+            get { return Resources.GetString("Source"); }
         }
         
         string IMigrationMetadata.Target
