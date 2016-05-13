@@ -24,7 +24,8 @@ namespace BlogSharp.Controllers
             {
                 Person currsuer = GeneralLogic.getLoggedInUser(personContext);
                 List<BlogPost> blogPosts=new List<BlogPost>();
-                foreach(BlogPost p in personContext.BlogPosts)
+                List<BlogPost> blogList = personContext.BlogPosts.OrderByDescending(blog => blog.dateCreated).ToList();
+                foreach (BlogPost p in blogList)
                 {
                     if (p.person.followers.Contains(currsuer) || !p.person.isPrivate)
                     {

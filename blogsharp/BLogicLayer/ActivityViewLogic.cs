@@ -21,7 +21,8 @@ namespace BLogicLayer
             
             using (var context = new BlogContext())
             {
-                foreach (BlogPost b in context.BlogPosts)
+                List<BlogPost> blogList = context.BlogPosts.OrderByDescending(blog => blog.dateCreated).ToList();
+                foreach (BlogPost b in blogList)
                 {
                     if(b.dateCreated.Date==DateTime.Today)
                     { 
