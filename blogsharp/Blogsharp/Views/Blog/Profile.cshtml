@@ -125,7 +125,35 @@
     <label id="rating">RATING</label>
     <label id="tags"> COMMON TAGS</label>
 </div>
-@if (curruser.Id == Model.Id)
+@if (curruser == null)
+{
+    if (!Model.isPrivate)
+    {
+    <div class="list-group" id="blogs">
+        @foreach (var post in Model.posts)
+        {
+            <a href="@Url.Action("Details", "Blog", new { id = post.Id })" class="list-group-item">
+                <h4 class="list-group-item-heading">@Html.DisplayFor(model => post.title)</h4>
+                @if (post.content.Length > 10)
+                {
+                    <p class="list-group-item-text">@post.content.Substring(0, 10) ......</p>}
+                else
+                {
+                    <p class="list-group-item-text"> @post.content</p>
+                }
+            </a>
+        }
+        
+
+
+    </div>
+    } else
+    {
+        <p> This User is Private. Please log in and follow them to view their posts. </p>
+    }
+    }
+else {
+if (curruser.Id == Model.Id)
 {
     <div id="bloggerOptions">
 
@@ -154,21 +182,28 @@ else
     <button type="submit" formaction="@Url.Action("Follow", new { id = Model.Id })" class="btn btn-primary" id="follow">Follow</button>
 </form>
 }
+if (Model.isPrivate)
+{
+    <p> This user is private. Please follow them to view their posts. </p>
+}
+else {
 <div class="list-group" id="blogs">
     @foreach (var post in Model.posts)
     {
-    <a href="@Url.Action("Details","Blog", new { id = post.Id })" class="list-group-item">
-        <h4 class="list-group-item-heading">@Html.DisplayFor(model=>post.title)</h4>
+    <a href="@Url.Action("Details", "Blog", new { id = post.Id })" class="list-group-item">
+        <h4 class="list-group-item-heading">@Html.DisplayFor(model => post.title)</h4>
         @if (post.content.Length > 10)
         {
         <p class="list-group-item-text">@post.content.Substring(0, 10) ......</p>}
         else
         {
             <p class="list-group-item-text"> @post.content</p>
-            }
+        }
 </a>
     }
 
 
 </div>
+}
+}
 
