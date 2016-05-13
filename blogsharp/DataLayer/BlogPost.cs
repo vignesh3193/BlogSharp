@@ -87,7 +87,6 @@ namespace DataLayer
         public string content { get; set; }
 
         [Display(Name ="Comments")]
-        [DataType(DataType.MultilineText)]
         public ICollection<Comment> comments { get; set; }
 
         [DataType(DataType.MultilineText)]
