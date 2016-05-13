@@ -80,7 +80,7 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        if (ViewBag.userID != null)
+        if (ViewBag.userID != null && Model.ratings != null)
         {
         <div class="editor_field"> @Html.TextBoxFor(model => Model.ratings.First())</div>
         <input type="submit" />
