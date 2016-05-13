@@ -20,12 +20,11 @@ namespace BlogSharp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Details([Bind(Include ="author,date,tags,title,blogID,content,comments,newComment,ratings")] BlogPostDetailsViewModel model, string ratings)
+        public ActionResult Details(BlogPostDetailsViewModel model, string ratings)
         {
-            //   int rating = Int32.Parse(ratings);
-            int rating = 0;
             if(ratings != null)
-            {
+ { 
+                int rating = Int32.Parse(ratings);
                 using (db)
                 {
                     BlogPost b = db.BlogPosts.Find();

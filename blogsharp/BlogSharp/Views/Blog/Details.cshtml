@@ -76,21 +76,26 @@
     {
         @Html.ActionLink("Edit", "Edit", "Blog", new { id = Model.blogID })
     }
-<!--
-   //using (Html.BeginForm())
-    //{
-        //Html.AntiForgeryToken()
-        //if (ViewBag.userID != null && Model.ratings != null)
-        //{
-        <div class="editor_field"> //Html.TextBoxFor(model => Model.ratings.First())</div>
-        <input type="submit" />
-       // }
-    }
--->
+
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
+        if (ViewBag.userID != null && Model.ratings != null)
+        {
+        <div class="editor_field"> @Html.TextBoxFor(model => Model.ratings)</div>
+        <input type="submit" />
+        }
+    }
 
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.blogID)
+        @Html.HiddenFor(model =>model.author)
+        @Html.HiddenFor(model => model.date)
+        @Html.HiddenFor(model => model.ratings)
+        @Html.HiddenFor(model => model.tags)
+        @Html.HiddenFor(model => model.title)
 
         if (ViewBag.userID != null)
         {
