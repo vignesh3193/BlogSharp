@@ -182,7 +182,7 @@ else
     <button type="submit" formaction="@Url.Action("Follow", new { id = Model.Id })" class="btn btn-primary" id="follow">Follow</button>
 </form>
 }
-if (Model.isPrivate && !curruser.following.Contains(Model))
+if (Model.isPrivate && !curruser.following.Contains(Model) && curruser.Id != Model.Id)
 {
     <p> This user is private. Please follow them to view their posts. </p>
 }
