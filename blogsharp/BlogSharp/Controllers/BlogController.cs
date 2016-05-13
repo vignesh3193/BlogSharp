@@ -20,10 +20,10 @@ namespace BlogSharp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Details(BlogPostDetailsViewModel comments, string ratings)
+        public ActionResult Details(BlogPostDetailsViewModel model, string ratings)
         {
-            if(ratings != null && false)
-            {
+            if(ratings != null)
+ { 
                 int rating = Int32.Parse(ratings);
                 using (db)
                 {
@@ -42,20 +42,25 @@ namespace BlogSharp.Controllers
 
             Person currUser = GeneralLogic.getLoggedInUser(db);
             BlogPost blogPost = (from b in db.BlogPosts
-                                 where (comments.blogID == b.Id)
+                                 where (model.blogID == b.Id)
                                  select b).FirstOrDefault();
             Comment c = new Comment();
             c.Author = currUser.FirstName + " "+currUser.LastName;
             c.blogPost = blogPost;
-            c.contents = comments.newComment;
+            c.contents = model.newComment;
             c.dateCreated = DateTime.Now;
+            
             if (blogPost.comments == null)
             {
                 blogPost.comments = new Collection<Comment>();
+                blogPost.comments.Add(c);
+            } else
+            {
+                blogPost.comments.Add(c);
             }
-            blogPost.comments.Add(c);
+           
             db.SaveChanges();
-            return RedirectToAction("Details", "Blog", comments.blogID);
+            return RedirectToAction("Details", "Blog", model.blogID);
         }
 
         // GET: BlogPosts/Details/5
@@ -101,8 +106,14 @@ namespace BlogSharp.Controllers
             ViewBag.avgRating = avgrating;
 
             //return View(blogPost);
-            
-            ViewBag.userID = thisPerson.Id;
+            if (thisPerson != null)
+            {
+                ViewBag.userID = thisPerson.Id;
+            }else
+            {
+                ViewBag.userID = null;
+            }
+            //ViewBag.userID = thisPerson.Id;
             return View(details);
         }
 
@@ -114,13 +125,13 @@ namespace BlogSharp.Controllers
 
         //pass the words from the form to the search method and return results
         [HttpPost]
-        public ActionResult CreateSearch([Bind(Include = "title,tags")] BlogPostCreateViewModel blogPost)
+        public ActionResult CreateSearch([Bind(Include = "title,dateCreated")] BlogPostCreateViewModel blogPost)
         {
 
-            return RedirectToAction("Search", "Blog", new { s = blogPost.title.ToString() });
+            return RedirectToAction("Search", "Blog", new { s = blogPost.title.ToString(), date = DateTime.Now, rating = 0 });
         }
 
-        public ActionResult Search(string s)
+        public ActionResult Search(string s, DateTime? date, int rating = 0)
         {
             //if no search words redirect to create search form
             if (s == null)
@@ -245,9 +256,25 @@ namespace BlogSharp.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditBio(int? id)
+        public ActionResult EditBio(string id)
         {
-            Person checkPerson = db.Persons.Find(id);
+            Person checkPerson = null;
+            if (Type.GetTypeCode(id.GetType()) == TypeCode.Int32)
+            {
+                int numeric_id = int.Parse(id);
+                checkPerson = db.Persons.Find(numeric_id);
+            }
+            else
+            {
+                checkPerson = (from person in db.Persons
+                               where person.blogName == id
+                               select person).FirstOrDefault();
+            }
+           
+            if (checkPerson == null)
+            {
+                return RedirectToAction("Error", "Blog");
+            }
 
             if (checkPerson.Email == User.Identity.Name)
             {
@@ -313,14 +340,31 @@ namespace BlogSharp.Controllers
         return RedirectToAction("Index");
     }
 
-    //displays profile based on user id, still need to add default redirection
-    public ActionResult Profile(int id)
+
+    public ActionResult Profile(string id)
     {
-        var user = db.Persons.Find(id);
+        Person checkPerson = null;
+        if (Type.GetTypeCode(id.GetType()) == TypeCode.Int32)
+        {
+            int numeric_id = int.Parse(id);
+            checkPerson = db.Persons.Find(numeric_id);
+        }
+        else
+        {
+            checkPerson = (from person in db.Persons
+                           where person.blogName == id
+                           select person).FirstOrDefault();
+        }
+
+        if (checkPerson == null)
+        {
+                return RedirectToAction("Error", "Blog");
+        }
+
         var curruser = GeneralLogic.getLoggedInUser(db);
         //adding current user to viewbag so we can check in the View if the current user is already following this blog
         ViewBag.CurrUser = curruser;
-        return View(user);
+        return View(checkPerson);
     }
 
 

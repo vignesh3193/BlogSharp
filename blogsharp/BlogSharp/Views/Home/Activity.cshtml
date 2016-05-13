@@ -66,10 +66,11 @@
 
             var pin = new Microsoft.Maps.Pushpin(location);
             pin.Title = blogNames[i];
-            pin.Description = "Last updated: one day ago";
+            pin.Description = "<p>Last updated: one day ago</p><br />" +
+                              "<a href=\"../Blog/Profile/" + blogNames[i] + "\">Check out their blog</a>";
 
             Microsoft.Maps.Events.addHandler(pin, 'mouseover', showInfobox);
-            Microsoft.Maps.Events.addHandler(pin, 'mouseout', hideInfobox);
+           // Microsoft.Maps.Events.addHandler(pin, 'mouseout', hideInfobox);
 
             pins.push(pin)
         }
