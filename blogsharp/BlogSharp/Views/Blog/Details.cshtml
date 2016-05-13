@@ -1,4 +1,4 @@
-﻿@model DataLayer.BlogPost
+﻿@model DataLayer.BlogPostDetailsViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -13,8 +13,8 @@
 
 <h2>@Html.DisplayFor(model => model.title)</h2>
 <div>
-    <h4>by @Html.ActionLink(Html.DisplayFor(model => model.person.FirstName) + " " + Html.DisplayFor(model => model.person.LastName), "Profile", "Blog", new { id = Model.person.Id }, new { @class = "btn-default" })</h4>
-    <h7>on @Html.DisplayFor(model => model.dateCreated)</h7>
+    <h4>by @Html.ActionLink(Html.DisplayFor(model => model.author.FirstName) + " " + Html.DisplayFor(model => model.person.LastName), "Profile", "Blog", new { id = Model.person.Id }, new { @class = "btn-default" })</h4>
+    <h7>on @Html.DisplayFor(model => model.date)</h7>
     <hr />
     <dl class="dl-horizontal">
         <dd id="contentContainer">
@@ -36,8 +36,30 @@
     </dl>
 </div>
 <p>
-    @if (ViewBag.userID == Model.PersonId)
+    @if (ViewBag.userID == Model.author.Id)
     {
-        @Html.ActionLink("Edit", "Edit", "Blog", new { id = Model.Id })
+        @Html.ActionLink("Edit", "Edit", "Blog", new { id = Model.blogID })
     }
+
+    @if (ViewBag.userID != null)
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.comments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.comments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+
+    @foreach (var comment in Model.comments)
+    {
+        <h4 class="list-group-item-heading">@Html.DisplayFor(model => comment.Author)</h4>
+    <p class="list-group-item-text">Author: @Html.DisplayFor(model => comment.contents)  @Html.DisplayFor(model => comment.dateCreated) </p>
+
+    }
+
+
+
+
 </p>

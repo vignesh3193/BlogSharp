@@ -64,4 +64,32 @@ namespace DataLayer
 
 
     }
+
+    public class BlogPostDetailsViewModel
+    {
+        [Display(Name = "Author")]
+        public Person author { get; set; }
+
+        [Display(Name = "Date Created")]
+        public DateTime date { get; set; }
+
+        [Display(Name = "Tags")]
+        public ICollection<Tag> tags { get; set; }
+
+        [Display(Name = "Blog Title")]
+        [DataType(DataType.Text)]
+        public string title { get; set; }
+
+        public int blogID { get; set; }
+
+        [Display(Name = "Blog Content")]
+        [DataType(DataType.MultilineText)]
+        public string content { get; set; }
+
+        [Display(Name ="Comments")]
+        [DataType(DataType.MultilineText)]
+        public ICollection<Comment> comments { get; set; }
+
+
+    }
 }
