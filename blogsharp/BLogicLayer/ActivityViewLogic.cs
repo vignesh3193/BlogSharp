@@ -83,7 +83,6 @@ namespace BLogicLayer
                     // this will ensure that there's a 1:1 mapping from addresses of a user to their blognames
 
                     blogNames.RemoveAt(blogNameCounter);
-                    blogNameCounter++;
                 }
             }
 
