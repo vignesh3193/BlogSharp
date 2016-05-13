@@ -7,6 +7,7 @@ using DataLayer;
 
 namespace BLogicLayer
 {
+
     public class BlogViewLogic
     {
 
@@ -32,6 +33,27 @@ namespace BLogicLayer
                 // the view should only present standard logged-in privileges
                 return 2;
             }
+        }
+
+        public static Person validateRouteID(string id, Person checkPerson, BlogContext db)
+        {
+            // This method will check to see if the user info should be
+            // obtained through using a blogName or the int id for the blogger's database entry
+
+            int parsedInt = 0;
+
+            if (int.TryParse(id, out parsedInt) == true)
+            {
+                checkPerson = db.Persons.Find(parsedInt);
+            }
+            else
+            {
+                checkPerson = (from person in db.Persons
+                               where person.blogName == id
+                               select person).FirstOrDefault();
+            }
+
+            return checkPerson;
         }
     }
 }

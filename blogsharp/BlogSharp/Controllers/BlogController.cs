@@ -260,18 +260,8 @@ namespace BlogSharp.Controllers
         public ActionResult EditBio(string id)
         {
             Person checkPerson = null;
-            if (Type.GetTypeCode(id.GetType()) == TypeCode.Int32)
-            {
-                int numeric_id = int.Parse(id);
-                checkPerson = db.Persons.Find(numeric_id);
-            }
-            else
-            {
-                checkPerson = (from person in db.Persons
-                               where person.blogName == id
-                               select person).FirstOrDefault();
-            }
-           
+            checkPerson = BlogViewLogic.validateRouteID(id, checkPerson, db);
+
             if (checkPerson == null)
             {
                 return RedirectToAction("Error", "Blog");
@@ -345,17 +335,7 @@ namespace BlogSharp.Controllers
     public ActionResult Profile(string id)
     {
         Person checkPerson = null;
-        if (Type.GetTypeCode(id.GetType()) == TypeCode.Int32)
-        {
-            int numeric_id = int.Parse(id);
-            checkPerson = db.Persons.Find(numeric_id);
-        }
-        else
-        {
-            checkPerson = (from person in db.Persons
-                           where person.blogName == id
-                           select person).FirstOrDefault();
-        }
+        checkPerson = BlogViewLogic.validateRouteID(id, checkPerson, db);
 
         if (checkPerson == null)
         {
@@ -412,5 +392,6 @@ namespace BlogSharp.Controllers
         }
         base.Dispose(disposing);
     }
+
 }
 }
