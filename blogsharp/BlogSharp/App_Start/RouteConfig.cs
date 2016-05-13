@@ -18,6 +18,12 @@ namespace BlogSharp
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "EditBio",
+                url: "{controller}/{action}/{blogName}",
+                defaults: new { controller = "Blog", action = "EditBio", blogName = "" }
+            );
         }
     }
 }

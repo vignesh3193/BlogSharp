@@ -9,7 +9,7 @@ namespace DataLayer.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             ContextKey = "DataLayer.BlogContext";
         }
 
