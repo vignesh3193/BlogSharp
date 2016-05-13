@@ -30,13 +30,14 @@
             {
                 @Html.ActionLink(@tag.tagName, "Search", "Blog", new { s = @tag.tagName }, new { @class = "btn-default" })
                 <b> </b>
-                @Html.ActionLink(@tag.tagName, "Search", "Blog", new { s = @tag.tagName }, new { @class = "btn-default" })
             }
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", "Blog", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index", "Home")
+    @if (ViewBag.userID == Model.Id)
+    {
+        @Html.ActionLink("Edit", "Edit", "Blog", new { id = Model.Id })
+    }
 </p>

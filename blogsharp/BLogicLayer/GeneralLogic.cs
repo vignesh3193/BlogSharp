@@ -76,8 +76,8 @@ namespace BLogicLayer
                 
                 for(int j = 0; j < tagLength; j++)
                 {
-                    //string s = text[rnd.Next() % (text.Length)];
-                    //Tag thisTag = blogCtx.Tags.Find(Tag[] tag => tag.tagN)
+                    string s = text[rnd.Next() % (text.Length)];
+                    //Tag thisTag = blogCtx.Tags.Find(tag => tag.tagName == "");
                     //if (thisTag == null)
                     //{
                     //    thisTag = new Tag();

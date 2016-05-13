@@ -22,6 +22,7 @@ namespace BlogSharp.Controllers
         // GET: BlogPosts/Details/5
         public ActionResult Details(int? id)
         {
+            Person thisPerson = GeneralLogic.getLoggedInUser(db);
             if (id == null)
             {
                 return RedirectToAction("Index", "Home");
@@ -31,6 +32,7 @@ namespace BlogSharp.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.userID = thisPerson.Id;
             return View(blogPost);
         }
         //Blog/CreateSearch is a form that takes in keywords that will correspond to tags, titles, or users
@@ -132,7 +134,7 @@ namespace BlogSharp.Controllers
                 thisPerson.posts.Add(newPost);
                 db.BlogPosts.Add(newPost);
                 db.SaveChanges();
-                return RedirectToAction("Blog", "Details", new { id = newPost.Id });
+                return RedirectToAction("Details", "Blog", new { id = newPost.Id });
             }
             return View(blogPost);
         }
@@ -142,7 +144,7 @@ namespace BlogSharp.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction("Home", "Index");
+                return RedirectToAction("Index", "Home");
             }
             Person thisPerson = GeneralLogic.getLoggedInUser(db);
             BlogPost blogPost = GeneralLogic.getBlogPosts(db, thisPerson).Find(post => post.Id == id);
@@ -219,7 +221,7 @@ namespace BlogSharp.Controllers
     {
         if (id == null)
         {
-            RedirectToAction("Home", "Index");
+            RedirectToAction("Index", "Home");
         }
         BlogPost blogPost = db.BlogPosts.Find(id);
         if (blogPost == null)
