@@ -36,7 +36,7 @@
     </dl>
 </div>
 <p>
-    @if (ViewBag.userID == Model.Id)
+    @if (ViewBag.userID == Model.PersonId)
     {
         @Html.ActionLink("Edit", "Edit", "Blog", new { id = Model.Id })
     }
