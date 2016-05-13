@@ -75,6 +75,11 @@ namespace BlogSharp.Controllers
             details.date = blogPost.dateCreated;
             details.tags = blogPost.tags;
             details.title = blogPost.title;
+            details.ratings = blogPost.ratings;
+            if(details.ratings == null)
+            {
+                details.ratings = new Collection<Rating>();
+            }
 
             if(details.comments == null)
             {
