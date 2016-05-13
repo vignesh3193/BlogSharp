@@ -66,7 +66,7 @@ namespace BlogSharp.Controllers
                                         where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Contains(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
                                         select p).ToList();
                 List<Person> people = (from u in db.Persons
-                                       where u.FirstName.Equals(s) && (!u.isPrivate || thisPerson.following.Contains(u))
+                                       where u.FirstName.Equals(s)
                                        select u).ToList();
                 ViewBag.posts = posts;
                 ViewBag.people = people;
