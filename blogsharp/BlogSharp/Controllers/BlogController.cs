@@ -76,13 +76,13 @@ namespace BlogSharp.Controllers
 
         //pass the words from the form to the search method and return results
         [HttpPost]
-        public ActionResult CreateSearch([Bind(Include = "title,tags")] BlogPostCreateViewModel blogPost)
+        public ActionResult CreateSearch([Bind(Include = "title,dateCreated")] BlogPostCreateViewModel blogPost)
         {
 
             return RedirectToAction("Search", "Blog", new { s = blogPost.title.ToString() });
         }
 
-        public ActionResult Search(string s)
+        public ActionResult Search(string s, DateTime date, Rating rating)
         {
             //if no search words redirect to create search form
             if (s == null)
