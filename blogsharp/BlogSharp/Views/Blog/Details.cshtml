@@ -13,7 +13,7 @@
 
 <h2>@Html.DisplayFor(model => model.title)</h2>
 <div>
-    <h4>by @Html.ActionLink(Html.DisplayFor(model => model.author.FirstName) + " " + Html.DisplayFor(model => model.person.LastName), "Profile", "Blog", new { id = Model.person.Id }, new { @class = "btn-default" })</h4>
+    <h4>by @Html.ActionLink(Html.DisplayFor(model => model.author.FirstName) + " " + Html.DisplayFor(model => model.author.LastName), "Profile", "Blog", new { id = Model.author.Id }, new { @class = "btn-default" })</h4>
     <h7>on @Html.DisplayFor(model => model.date)</h7>
     <hr />
     <dl class="dl-horizontal">
