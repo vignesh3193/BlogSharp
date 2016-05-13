@@ -245,9 +245,25 @@ namespace BlogSharp.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditBio(int? id)
+        public ActionResult EditBio(string id)
         {
-            Person checkPerson = db.Persons.Find(id);
+            Person checkPerson = null;
+            if (Type.GetTypeCode(id.GetType()) == TypeCode.Int32)
+            {
+                int numeric_id = int.Parse(id);
+                checkPerson = db.Persons.Find(numeric_id);
+            }
+            else
+            {
+                checkPerson = (from person in db.Persons
+                               where person.blogName == id
+                               select person).FirstOrDefault();
+            }
+           
+            if (checkPerson == null)
+            {
+                return RedirectToAction("Error", "Blog");
+            }
 
             if (checkPerson.Email == User.Identity.Name)
             {
@@ -313,14 +329,31 @@ namespace BlogSharp.Controllers
         return RedirectToAction("Index");
     }
 
-    //displays profile based on user id, still need to add default redirection
-    public ActionResult Profile(int id)
+
+    public ActionResult Profile(string id)
     {
-        var user = db.Persons.Find(id);
+        Person checkPerson = null;
+        if (Type.GetTypeCode(id.GetType()) == TypeCode.Int32)
+        {
+            int numeric_id = int.Parse(id);
+            checkPerson = db.Persons.Find(numeric_id);
+        }
+        else
+        {
+            checkPerson = (from person in db.Persons
+                           where person.blogName == id
+                           select person).FirstOrDefault();
+        }
+
+        if (checkPerson == null)
+        {
+                return RedirectToAction("Error", "Blog");
+        }
+
         var curruser = GeneralLogic.getLoggedInUser(db);
         //adding current user to viewbag so we can check in the View if the current user is already following this blog
         ViewBag.CurrUser = curruser;
-        return View(user);
+        return View(checkPerson);
     }
 
 
