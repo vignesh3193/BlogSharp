@@ -20,19 +20,23 @@ namespace BlogSharp.Controllers
         }
 
         [HttpPost]
-        public ActionResult makeComment([Bind(Include ="Comment")] BlogPostDetailsViewModel comments)
+        public ActionResult Details([Bind(Include ="Comment")] BlogPostDetailsViewModel comments)
         {
             Person currUser = GeneralLogic.getLoggedInUser(db);
             BlogPost blogPost = (from b in db.BlogPosts
                                  where (comments.blogID == b.Id)
-                                 select b).First();
+                                 select b).FirstOrDefault();
             Comment c = new Comment();
             c.Author = currUser.FirstName + " "+currUser.LastName;
             c.blogPost = blogPost;
-            c.contents = comments.content;
+            c.contents = comments.newComment;
             c.dateCreated = DateTime.Now;
-            
+            if (blogPost.comments == null)
+            {
+                blogPost.comments = new Collection<Comment>();
+            }
             blogPost.comments.Add(c);
+            db.SaveChanges();
             return RedirectToAction("Details", "Blog", comments.blogID);
         }
 
@@ -47,7 +51,7 @@ namespace BlogSharp.Controllers
             BlogPost blogPost = db.BlogPosts.Find(id);
             BlogPostDetailsViewModel details = new BlogPostDetailsViewModel();
             details.author = blogPost.person;
-            details.blogID = blogPost.Id;
+            details.blogID = id.Value;
             details.comments = blogPost.comments;
             details.content = blogPost.content;
             details.date = blogPost.dateCreated;
