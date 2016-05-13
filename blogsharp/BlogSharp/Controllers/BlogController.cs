@@ -117,10 +117,10 @@ namespace BlogSharp.Controllers
         public ActionResult CreateSearch([Bind(Include = "title,dateCreated")] BlogPostCreateViewModel blogPost)
         {
 
-            return RedirectToAction("Search", "Blog", new { s = blogPost.title.ToString() });
+            return RedirectToAction("Search", "Blog", new { s = blogPost.title.ToString(), date = DateTime.Now, rating = 0 });
         }
 
-        public ActionResult Search(string s, DateTime date, Rating rating)
+        public ActionResult Search(string s, DateTime? date, int rating = 0)
         {
             //if no search words redirect to create search form
             if (s == null)
