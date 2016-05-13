@@ -60,7 +60,7 @@ namespace BlogSharp.Controllers
             {
                 //Person user = User.Identity;
                 
-                Person thisPerson = GeneralLogic.getLoggedInUser(db);
+                var thisPerson = GeneralLogic.getLoggedInUser(db);
 
                 List<BlogPost> posts = (from p in db.BlogPosts
                                         where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Contains(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
