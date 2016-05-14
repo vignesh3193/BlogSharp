@@ -20,46 +20,47 @@ namespace BlogSharp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Details(BlogPostDetailsViewModel model, string ratings)
+        public ActionResult Details(BlogPostDetailsViewModel model)
         {
-            if(ratings != null)
- { 
-                int rating = Int32.Parse(ratings);
-                using (db)
-                {
-                    BlogPost b = db.BlogPosts.Find();
-                    Rating r = new Rating();
-                    r.blogPost = b;
-                    r.BlogPostId = b.Id;
-                    r.ratingNumber = rating;
-                    r.username = User.Identity.Name;
-                    b.ratings.Add(r);
-                    db.SaveChanges();
-
-                    return Redirect("/");
-                }
-            }
-
             Person currUser = GeneralLogic.getLoggedInUser(db);
             BlogPost blogPost = (from b in db.BlogPosts
                                  where (model.blogID == b.Id)
                                  select b).FirstOrDefault();
-            Comment c = new Comment();
-            c.Author = currUser.FirstName + " "+currUser.LastName;
-            c.blogPost = blogPost;
-            c.contents = model.newComment;
-            c.dateCreated = DateTime.Now;
-            
-            if (blogPost.comments == null)
+
+            if (model.newRating != null)
             {
-                blogPost.comments = new Collection<Comment>();
-                blogPost.comments.Add(c);
-            } else
-            {
-                blogPost.comments.Add(c);
+                using (db)
+                {
+                    Rating r = new Rating();
+                    r.blogPost = blogPost;
+                    r.BlogPostId = blogPost.Id;
+                    r.ratingNumber = (int)model.newRating;
+                    r.username = User.Identity.Name;
+                    blogPost.ratings.Add(r);
+                    db.SaveChanges();
+                }
             }
-           
-            db.SaveChanges();
+
+            if (model.newComment != null)
+            {
+                Comment c = new Comment();
+                c.Author = currUser.FirstName + " " + currUser.LastName;
+                c.blogPost = blogPost;
+                c.contents = model.newComment;
+                c.dateCreated = DateTime.Now;
+
+                if (blogPost.comments == null)
+                {
+                    blogPost.comments = new Collection<Comment>();
+                    blogPost.comments.Add(c);
+                }
+                else
+                {
+                    blogPost.comments.Add(c);
+                }
+
+                db.SaveChanges();
+            }
             return RedirectToAction("Details", "Blog", model.blogID);
         }
 
@@ -81,24 +82,24 @@ namespace BlogSharp.Controllers
             details.tags = blogPost.tags;
             details.title = blogPost.title;
             details.ratings = blogPost.ratings;
-            if(details.ratings == null)
+            if (details.ratings == null)
             {
                 details.ratings = new Collection<Rating>();
             }
 
-            if(details.comments == null)
+            if (details.comments == null)
             {
                 details.comments = new Collection<Comment>();
                 blogPost.comments = new Collection<Comment>();
             }
-           
+
 
             if (blogPost == null)
             {
                 return HttpNotFound();
             }
             double avgrating = 0.0; ;
-            foreach(Rating r in blogPost.ratings)
+            foreach (Rating r in blogPost.ratings)
             {
                 avgrating += r.ratingNumber;
             }
@@ -109,7 +110,8 @@ namespace BlogSharp.Controllers
             if (thisPerson != null)
             {
                 ViewBag.userID = thisPerson.Id;
-            }else
+            }
+            else
             {
                 ViewBag.userID = null;
             }
@@ -143,7 +145,7 @@ namespace BlogSharp.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 //Person user = User.Identity;
-                
+
                 var thisPerson = GeneralLogic.getLoggedInUser(db);
 
                 List<BlogPost> posts = (from p in db.BlogPosts
@@ -275,7 +277,7 @@ namespace BlogSharp.Controllers
             }
             else
             {
-               return RedirectToAction("Error", "Blog");
+                return RedirectToAction("Error", "Blog");
             }
         }
 
@@ -306,91 +308,97 @@ namespace BlogSharp.Controllers
 
         // GET: BlogPosts/Delete/5
         public ActionResult Delete(int? id)
-    {
-        if (id == null)
         {
-            RedirectToAction("Index", "Home");
+            if (id == null)
+            {
+                RedirectToAction("Index", "Home");
+            }
+            BlogPost blogPost = db.BlogPosts.Find(id);
+            if (blogPost == null)
+            {
+                return HttpNotFound();
+            }
+            return View(blogPost);
         }
-        BlogPost blogPost = db.BlogPosts.Find(id);
-        if (blogPost == null)
+
+        // POST: BlogPosts/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
         {
-            return HttpNotFound();
+            BlogPost blogPost = db.BlogPosts.Find(id);
+            db.BlogPosts.Remove(blogPost);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
-        return View(blogPost);
-    }
-
-    // POST: BlogPosts/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public ActionResult DeleteConfirmed(int id)
-    {
-        BlogPost blogPost = db.BlogPosts.Find(id);
-        db.BlogPosts.Remove(blogPost);
-        db.SaveChanges();
-        return RedirectToAction("Index");
-    }
 
 
-    public ActionResult Profile(string id)
-    {
-        Person checkPerson = null;
-        checkPerson = BlogViewLogic.validateRouteID(id, checkPerson, db);
-
-        if (checkPerson == null)
+        public ActionResult Profile(string id)
         {
+
+            Person checkPerson = null;
+            checkPerson = BlogViewLogic.validateRouteID(id, checkPerson, db);
+
+            if (checkPerson == null)
+            {
                 return RedirectToAction("Error", "Blog");
-        }
+            }
 
         var curruser = GeneralLogic.getLoggedInUser(db);
         //adding current user to viewbag so we can check in the View if the current user is already following this blog
         ViewBag.CurrUser = curruser;
-        return View(checkPerson);
+
+            double AvgRating = UserViewLogic.getUserRating(checkPerson.Id);
+            ICollection<String> CommonTags = UserViewLogic.getCommonTags(checkPerson);
+            ViewBag.AvgRating = AvgRating;
+            ViewBag.cTags = CommonTags;
+            return View(checkPerson);
     }
 
 
-    //next 2 functions take in id of the profile being viewed and updates their followers and following tables
-    public ActionResult Follow(int Id)
-    {
-        using (db)
+        //next 2 functions take in id of the profile being viewed and updates their followers and following tables
+        public ActionResult Follow(int Id)
         {
-            var curruser = GeneralLogic.getLoggedInUser(db);
-            var toFollow = db.Persons.Find(Id);
+            using (db)
+            {
+                var curruser = GeneralLogic.getLoggedInUser(db);
+                var toFollow = db.Persons.Find(Id);
 
-            curruser.following.Add(toFollow);
-            toFollow.followers.Add(curruser);
-            db.SaveChanges();
-            return RedirectToAction("Profile", new { id = Id });
-        };
+                curruser.following.Add(toFollow);
+                toFollow.followers.Add(curruser);
+                db.SaveChanges();
+                return RedirectToAction("Profile", new { id = Id });
+            };
 
-    }
+        }
 
-    public ActionResult UnFollow(int Id)
-    {
-        using (db)
+        public ActionResult UnFollow(int Id)
         {
-            var curruser = GeneralLogic.getLoggedInUser(db);
-            var toUnfollow = db.Persons.Find(Id);
+            using (db)
+            {
+                var curruser = GeneralLogic.getLoggedInUser(db);
+                var toUnfollow = db.Persons.Find(Id);
 
-            curruser.following.Remove(toUnfollow);
-            toUnfollow.followers.Remove(curruser);
-            db.SaveChanges();
-            return RedirectToAction("Profile", new { id = Id });
-        };
-    }
+                curruser.following.Remove(toUnfollow);
+                toUnfollow.followers.Remove(curruser);
+                db.SaveChanges();
+                return RedirectToAction("Profile", new { id = Id });
+            };
+        }
 
-    public ActionResult Error()
+        public ActionResult Error()
         {
             return View();
         }
 
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
+        protected override void Dispose(bool disposing)
         {
-            db.Dispose();
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
-        base.Dispose(disposing);
-    }
 
-}
+    }
 }

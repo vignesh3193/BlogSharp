@@ -91,6 +91,8 @@ namespace DataLayer
 
         [DataType(DataType.MultilineText)]
         public string newComment { get; set; }
+        
+        public int? newRating { get; set; }
 
         public ICollection<Rating> ratings { get; set; }
 

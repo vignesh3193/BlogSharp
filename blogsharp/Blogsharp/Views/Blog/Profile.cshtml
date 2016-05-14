@@ -123,8 +123,8 @@
     </div>
 
     <br />
-    <label id="rating">RATING</label>
-    <label id="tags"> COMMON TAGS</label>
+    <label id="rating">RATING @ViewBag.AvgRating</label>
+    <label id="tags"> COMMON TAGS: @foreach (String tag in ViewBag.cTags) {@(tag+", ");}</label>
 </div>
 @if (curruser == null)
 {

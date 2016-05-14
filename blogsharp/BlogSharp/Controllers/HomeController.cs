@@ -17,17 +17,20 @@ namespace BlogSharp.Controllers
         private BlogContext personContext = new BlogContext();
         public ActionResult Index()
         {
-            ICollection<String> trends = ActivityViewLogic.getTrends();
+            List<String> trends = ActivityViewLogic.getTrends();
             ViewBag.trends = trends;
             //if user is logged in see public and followings posts
             if (Request.IsAuthenticated)
             {
-                Person currsuer = GeneralLogic.getLoggedInUser(personContext);
+                Person currUser = GeneralLogic.getLoggedInUser(personContext);
+                List<KeyValuePair<int, string>> recommendations = new List<KeyValuePair<int, string>>();
+                GeneralLogic.getRecommendedPeopleFor(personContext, currUser).ForEach(person => recommendations.Add(new KeyValuePair<int, string>(person.Id, person.FirstName + " " + person.LastName)));
+                ViewBag.recommendations = recommendations;
                 List<BlogPost> blogPosts=new List<BlogPost>();
                 List<BlogPost> blogList = personContext.BlogPosts.OrderByDescending(blog => blog.dateCreated).ToList();
                 foreach (BlogPost p in blogList)
                 {
-                    if (p.person.followers.Contains(currsuer) || !p.person.isPrivate)
+                    if (p.person.followers.Contains(currUser) || !p.person.isPrivate)
                     {
                         blogPosts.Add(p);
                     }
