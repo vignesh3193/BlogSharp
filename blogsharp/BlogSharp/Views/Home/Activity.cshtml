@@ -16,7 +16,7 @@
 <p>Check out where our bloggers are across the world and what they've been up to.</p>
 
 <script src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0" type="text/javascript"></script>
-<script type="text/javascript" src="~/scripts/jquery-1.10.2.min.js"></script> 
+<script type="text/javascript" src="~/scripts/jquery-1.10.2.min.js"></script>
 <div id="map"></div>
 
 <script>
@@ -32,7 +32,7 @@
                 mapTypeId: Microsoft.Maps.MapTypeId.road,
                 zoom: 3
             });
-        
+
         var points = @Html.Raw(ViewBag.geocodes);
         var blogNames = @Html.Raw(ViewBag.blogNames);
 
@@ -70,7 +70,7 @@
                               "<a href=\"../Blog/Profile/" + blogNames[i] + "\">Check out their blog</a>";
 
             Microsoft.Maps.Events.addHandler(pin, 'mouseover', showInfobox);
-           // Microsoft.Maps.Events.addHandler(pin, 'mouseout', hideInfobox);
+            // Microsoft.Maps.Events.addHandler(pin, 'mouseout', hideInfobox);
 
             pins.push(pin)
         }
@@ -83,8 +83,8 @@
     function showInfobox(e) {
         if (e.targetType == 'pushpin') {
             infobox.setLocation(e.target.getLocation());
-            infobox.setOptions({title: e.target.Title, 
-                description: e.target.Description, 
+            infobox.setOptions({title: e.target.Title,
+                description: e.target.Description,
                 visible:true, offset: new Microsoft.Maps.Point(0,25)});
 
         }
@@ -99,60 +99,44 @@
 
 </script>
 
-<p>Check out our tag graph too!</p>
-<button id="queryTest" style="height:200px;width:200px"></button>
-
-<script>
-    $("#queryTest").click(function() {
-        $.ajax({
-            type: "POST",
-            url: "../Blog/GetTopBloggers",
-            data: {},
-            success: function (result) {
-                alert(JSON.parse(result).Labels);
-
-            },
-            error: function() {
-                alert("Query failed");
-            }
-        });
-    });
-</script>
-
+<p>See who the most prolific bloggers are</p>
 
 <canvas id="bloggerChart" width="720" height="200"></canvas>
+<br />
+
+
 
 <script>
-    
+
     $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "../Blog/GetTopBloggers",
             data: {},
             success: function (result, topBloggerLabels, topBloggerPostCounts) {
-               var topBloggerLabels = JSON.parse(result).Labels;
-               var topBloggerPostCounts = JSON.parse(result).postCount;
-               var topBloggersData = {
-                   labels: topBloggerLabels,
-                   datasets: [{
-                       label: 'Top bloggers',
-                       data: topBloggerPostCounts,
-                   }],
-                   options: {
-                       scales: {
-                           yAxes: [{
-                               ticks: {
-                                   beginAtZero:true
-                               }
-                           }]
-                       }
-                   }
-               };
+                var topBloggerLabels = JSON.parse(result).Labels;
+                var topBloggerPostCounts = JSON.parse(result).postCount;
+                var topBloggersData = {
+                    labels: topBloggerLabels,
+                    datasets: [{
+                        label: 'Top bloggers',
+                        data: topBloggerPostCounts,
+                    }],
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                };
 
-               var chartContext = document.getElementById("bloggerChart").getContext("2d");
+                var chartContext = document.getElementById("bloggerChart").getContext("2d");
 
-               var chart = new Chart(chartContext, {type: 'bar', data: topBloggersData});;
-                
+                var chart = new Chart(chartContext, {type: 'bar', data: topBloggersData});;
+
             },
             error: function() {
                 alert("Query failed, could not load top blogger graph");
@@ -160,19 +144,63 @@
         });
     });
 
-    function getTopBloggerData(topBloggerLabels, topBloggerPostCounts) {
-        $.ajax({
-            type: "POST",
-            url: "../Blog/GetTopBloggers",
-            data: {},
-            success: function (result, topBloggerLabels, topBloggerPostCounts) {
-                topBloggerLabels = JSON.parse(result).Labels;
-                topBloggerPostCounts = JSON.parse(result).postCount;
-            },
-            error: function() {
-                alert("Query failed");
+</script>
+
+<p>Curious about tag use?  Compare two tags to see how their popularity has fared over time!</p>
+
+<div class="form-horizontal">
+    <p><b>Tag 1:</b></p>
+    <input type="text" id="tag1" placeholder="(type in tag 1)" />
+    <p><b>Tag 2:</b></p>
+    <input type="text" id="tag2" placeholder="(type in tag 2)" />
+</div>
+<br />
+<button id="tagSubmit"style="height:35px;width:100px">Compare!</button>
+
+<script>
+    $("#tagSubmit").click(function() {
+        alert($("#tag1").val());
+        alert($("#tag2").val());
+
+        // clear both boxes
+        $("#tag1").val("");
+        $("#tag2").val("");
+    });
+</script>
+<canvas id="tagChart" width="720" height="200"></canvas>
+
+<script>
+    // generate generic chart on the page load; populate it later when the user supplies two tags
+    $(document).ready(function() {
+        var tagData = {
+            labels: ["April", "May", "June"],
+            datasets: [{
+                label: 'Tag 1',
+                backgroundColor: 'rgba(40, 70, 161, 0.6)',
+                borderColor: 'rgba(40, 70, 161, 1)',
+                data: [0, 100, 50]
+            },{
+                label: 'Tag 2',
+                backgroundColor: 'rgba(40, 195, 103, 0.6)',
+                borderColor: 'rgba(40, 195, 103, 1)',
+                data: [25, 50, 200]
+            }],
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
             }
-        });
-    }
+        };
+
+        var chartContext = document.getElementById("tagChart").getContext("2d");
+
+        var chart = new Chart(chartContext, {type: 'line', data: tagData});
+    });
+
+
 
 </script>
