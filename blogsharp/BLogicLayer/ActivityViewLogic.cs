@@ -13,11 +13,10 @@ namespace BLogicLayer
 {
     public class ActivityViewLogic
     {
-        public static ICollection<String> getTrends()
+        public static List<string> getTrends()
         {
-            ICollection<String> daily_trends = new List<String>();
-            Dictionary<String, int> tags=new Dictionary<string, int>();
-            
+            List<string> daily_trends = new List<string>();
+            Dictionary<string, int> tags=new Dictionary<string, int>();
             
             using (var context = new BlogContext())
             {
@@ -46,7 +45,7 @@ namespace BLogicLayer
 
             for(int i=0;i<15;i++)
             {
-                while(tags.Count>0)
+                if(tags.Count>0)
                 {
                     daily_trends.Add(tags.FirstOrDefault(x => x.Value == tags.Values.Max()).Key);
                     tags.Remove(tags.FirstOrDefault(x => x.Value == tags.Values.Max()).Key);

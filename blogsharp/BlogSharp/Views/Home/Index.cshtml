@@ -9,11 +9,11 @@
     }
 
     #trends {
-
-        float: right;
-        height: 500px;
-        width: 20%;
+        margin-right: 5%;
+        height: 750px;
+        width: 15%;
         background-color: Highlight;
+        float:right;
     }
 
     #trend{
@@ -22,9 +22,20 @@
     }
 
     #trends_label {
-        margin-left: 20%;
+        margin-left: 10%;
+        margin-right:10%;
         font:bold 200;
     }
+
+    #recommendations{
+        margin-right: 5%;
+        float:right;
+        height: 750px;
+        width: 10%;
+        background-color: Highlight;
+    }
+
+
 </style>
 
 <div id="wrapper">
@@ -45,14 +56,23 @@
             </div>
     <div id="trends">
         <h3 id="trends_label">Daily Trends</h3>
-        @foreach(String trend in ViewBag.trends)
+        @foreach(string trend in ViewBag.trends)
         {
 
            <p id="trend"><span class="label label-primary"><a style="color:aliceblue" href="@Url.Action("Search","Blog",new { s = trend })">@trend</a></span></p>
 
         }
     </div>
-
-
-
+    
+    @if (ViewBag.recommendations != null)
+    {
+        <div id="recommendations">
+            <h3 id="recommendations_label">People to Follow</h3>
+            @foreach (KeyValuePair<int, string> person in ViewBag.recommendations)
+            {
+                <p id="person"><span class="label label-primary"><a style="color:ghostwhite" href="@Url.Action("Profile","Blog",new { id = person.Key })">@person.Value</a></span></p>
+            }
+        </div>
+    }
+    
 </div>

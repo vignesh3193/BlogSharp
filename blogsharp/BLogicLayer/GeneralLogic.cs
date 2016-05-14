@@ -32,7 +32,8 @@ namespace BLogicLayer
         public static double getRatingOPost(BlogPost post)
         {
             double res = 0.0;
-            foreach(Rating r in post.ratings){
+            foreach (Rating r in post.ratings)
+            {
                 res += r.ratingNumber;
             }
             if (post.ratings != null && post.ratings.Count != 0)
@@ -43,9 +44,10 @@ namespace BLogicLayer
 
         public static void createRandomBlogPosts(BlogContext blogCtx, int numPosts)
         {
+            // Only for debug purposes. Just to populate database to create some data.
             //Thanks to http://randomtextgenerator.com
             string wallOfText = "Sitting mistake towards his few country ask. You delighted two rapturous six depending objection happiness something the. Off nay impossible dispatched partiality unaffected. Norland adapted put ham cordial. Ladies talked may shy basket narrow see. Him she distrusts questions sportsmen. Tolerably pretended neglected on my earnestly by. Sex scale sir style truth ought.";
-            wallOfText = wallOfText.Replace(".","");
+            wallOfText = wallOfText.Replace(".", "");
             string[] text = wallOfText.Split(' ');
             Random rnd = new Random();
             List<int> userIDs = (from user in blogCtx.Persons
@@ -57,37 +59,65 @@ namespace BLogicLayer
                 post.PersonId = userIDs.ElementAt(rnd.Next(userIDs.Count));
                 post.title = "";
                 int titleLength = rnd.Next(10);
-                for(int j = 0; j < titleLength; j++)
+                for (int j = 0; j < titleLength; j++)
                 {
-                    post.title += text[rnd.Next()%(text.Length)] + " ";
+                    post.title += text[rnd.Next() % (text.Length)];
+                    if (j < titleLength - 1)
+                        post.title += " ";
+
                 }
-                post.title.Remove(post.title.Length - 1, 1);
 
                 int contentLength = rnd.Next(30);
                 post.content = "";
                 for (int j = 0; j < contentLength; j++)
                 {
-                    post.content += text[rnd.Next() % (text.Length)] + " ";
+                    post.content += text[rnd.Next() % (text.Length)];
+                    if (j < contentLength - 1)
+                        post.content += " ";
+
                 }
-                post.content.Remove(post.title.Length - 1, 1);
 
                 int tagLength = rnd.Next(5);
                 if (post.tags == null)
                     post.tags = new Collection<Tag>();
-                
-                for(int j = 0; j < tagLength; j++)
+
+                for (int j = 0; j < tagLength; j++)
                 {
                     string s = text[rnd.Next() % (text.Length)];
-                    //Tag thisTag = blogCtx.Tags.Find(tag => tag.tagName.Equals(""));
-                    //if (thisTag == null)
-                    //{
-                    //    thisTag = new Tag();
-                    //    thisTag.tagName = s;
-                    //    blogCtx.Tags.Add(thisTag);
-                    //}
+                    Tag thisTag = blogCtx.Tags.ToList().Find(tag => tag.tagName.Equals(s));
+                    if (thisTag == null)
+                    {
+                        thisTag = new Tag();
+                        thisTag.tagName = s;
+                        blogCtx.Tags.Add(thisTag);
+                    }
+                    if(post.tags.ToList().Find(tag => tag.tagName.Equals(thisTag.tagName)) == null)
+                    {
+                        post.tags.Add(thisTag);
+                    }
                 }
-                
+                blogCtx.Persons.ToList().Find(person => person.Id == post.PersonId).posts.Add(post);
+                blogCtx.BlogPosts.Add(post);
+                blogCtx.SaveChanges();
+            }
+        }
+            
+        public static List<Person> getRecommendedPeopleFor(BlogContext blogCtx, Person person)
+        {
+            if (person == null)
+            {
+                return new List<Person>();
+            }
 
+            if (person.following.Count == 0) // Dumb search
+            {
+                return blogCtx.Persons.ToList().FindAll(p => p.isPrivate == false).Take(15).ToList();
+            }
+
+            else // Get all 2nd degree connections
+            {
+                List<Person> following = person.following.ToList();
+                return (following.FindAll(p => !person.following.Contains(p)).Take(15).ToList());
             }
         }
     }
