@@ -145,6 +145,68 @@ namespace BLogicLayer
             }
 
         }
+
+        public static string getTopBloggers()
+        {
+            // Create a list of lists where the first list is the list of blogger names
+            // and the second list is their corresponding blog post counts
+            IEnumerable<Person> topTenBloggers = null;
+            List<List<String>> bloggerRankings = new List<List<string>>();
+            bloggerRankings.Add(new List<String>());
+            bloggerRankings.Add(new List<String>());
+
+            using (var context = new BlogContext())
+            {
+                topTenBloggers = context.Persons.OrderByDescending(blogPosts => blogPosts.posts.Count).ToList();
+                topTenBloggers = topTenBloggers.Take(10);
+
+                foreach (Person blogger in topTenBloggers)
+                {
+                    bloggerRankings.ElementAt(0).Add(blogger.blogName);
+                    bloggerRankings.ElementAt(1).Add(blogger.posts.Count.ToString());
+                }
+
+            }
+
+            // manually put together the string that will represent the data
+
+            string results = "[[";
+
+            foreach (string element in bloggerRankings.ElementAt(0))
+            {
+                if (element.Equals(bloggerRankings.ElementAt(0).Last())) {
+                    // don't add an extra comma
+                    results += element;
+                }
+                else
+                {
+                    results += element + ",";
+                }
+               
+                
+            }
+
+            results += "],[";
+
+            foreach (string element in bloggerRankings.ElementAt(1))
+            {
+                if (element.Equals(bloggerRankings.ElementAt(1).Last()))
+                {
+                    // don't add an extra comma
+                    results += element;
+                }
+                else
+                {
+                    results += element + ",";
+                }
+            }
+
+            results += "]]";
+
+
+
+            return results;
+        }
     }
 
 }

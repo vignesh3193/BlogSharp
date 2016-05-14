@@ -98,3 +98,53 @@
     initMap();
 
 </script>
+
+<p>Check out our tag graph too!</p>
+<button id="queryTest" style="height:200px;width:200px"></button>
+
+<script>
+    $("#queryTest").click(function() {
+        $.ajax({
+            type: "POST",
+            url: "../Blog/GetTopBloggers",
+            data: {},
+            success: function (result) {
+                alert(result);
+            },
+            error: function() {
+                alert("Query failed");
+            }
+        });
+    });
+</script>
+
+
+<canvas id="tagChart" width="720" height="200"></canvas>
+
+<script>
+    var data = {
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3]
+        }],
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    };
+
+
+
+
+
+    var chartContext = document.getElementById("tagChart").getContext("2d");
+
+    var chart = new Chart(chartContext, {type: 'line', data: data});;
+
+</script>
