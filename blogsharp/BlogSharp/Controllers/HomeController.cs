@@ -82,7 +82,7 @@ namespace BlogSharp.Controllers
             }
 
             var jsonMaker = new JavaScriptSerializer();
-            ViewBag.geocodes = jsonMaker.Serialize(ActivityViewLogic.retrieveGeoPoints(addresses, blogNames));
+           // ViewBag.geocodes = jsonMaker.Serialize(ActivityViewLogic.retrieveGeoPoints(addresses, blogNames));
             ViewBag.blogNames = jsonMaker.Serialize(blogNames);
             return View();
         }
