@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using BLogicLayer;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
+using System.Web.Script.Serialization;
 
 namespace BlogSharp.Controllers
 {
@@ -394,7 +395,9 @@ namespace BlogSharp.Controllers
         // methods for AJAX
         public string GetTopBloggers()
         {
-            return ActivityViewLogic.getTopBloggers();
+            var jsonMaker = new JavaScriptSerializer();
+
+            return jsonMaker.Serialize(ActivityViewLogic.getTopBloggers());
         }
 
         protected override void Dispose(bool disposing)
