@@ -10,47 +10,20 @@
         border-style: groove;
     }
 
-    span.stars, span.stars span {
-        display: block;
-        background: url(stars.png) 0 -16px repeat-x;
-        width: 80px;
-        height: 16px;
-    }
-
-    span.stars span {
-        background-position: 0 0;
-    }
+   
 </style>
 
-<script>
-    $.fn.stars = function() {
-    return $(this).each(function() {
-        // Get the value
-        var val = parseFloat($(this).html());
-        // Make sure that the value is in 0 - 5 range, multiply to get width
-        val = Math.round(val * 2) / 2;
-        var size = Math.max(0, (Math.min(5, val))) * 16;
-        // Create stars holder
-        var $span = $('<span />').width(size);
-        // Replace the numerical value with stars
-        $(this).html($span);
-    });
-    }
-    
-    $(function () {
-        $('span.stars').stars();
-    });
-</script>
 
 
 <h2>@Html.DisplayFor(model => model.title)</h2>
-<div>
+<div id="test">
     <h4>by @Html.ActionLink(Html.DisplayFor(model => model.author.FirstName) + " " + Html.DisplayFor(model => model.author.LastName), "Profile", "Blog", new { id = Model.author.Id }, new { @class = "btn-default" })</h4>
     <h7>on @Html.DisplayFor(model => model.date)</h7>
     @if (Model.ratings.Count > 0)
     {
-        <span class="stars">@ViewBag.avgrating</span>
+        <h7>AVERAGE RATING @ViewBag.avgrating</h7>
     }
+
     <hr />
     <dl class="dl-horizontal">
         <dd id="contentContainer">
@@ -79,11 +52,12 @@
 
     @using (Html.BeginForm())
     {
+        @Html.HiddenFor(model => model.blogID)
         @Html.AntiForgeryToken()
         if (ViewBag.userID != null && Model.ratings != null)
         {
-        <div class="editor_field"> @Html.TextBoxFor(model => Model.ratings)</div>
-        <input type="submit" />
+        <div class="editor_field"> @Html.EditorFor(model=>model.newRating)</div>
+        <input type="submit" value="Rate" class="btn btn-default"/>
         }
     }
 

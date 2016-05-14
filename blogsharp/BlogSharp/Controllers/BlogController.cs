@@ -20,46 +20,50 @@ namespace BlogSharp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Details(BlogPostDetailsViewModel model, string ratings)
+        public ActionResult Details(BlogPostDetailsViewModel model)
         {
-            if(ratings != null)
- { 
-                int rating = Int32.Parse(ratings);
-                using (db)
-                {
-                    BlogPost b = db.BlogPosts.Find();
-                    Rating r = new Rating();
-                    r.blogPost = b;
-                    r.BlogPostId = b.Id;
-                    r.ratingNumber = rating;
-                    r.username = User.Identity.Name;
-                    b.ratings.Add(r);
-                    db.SaveChanges();
-
-                    return Redirect("/");
-                }
-            }
+          
+            
 
             Person currUser = GeneralLogic.getLoggedInUser(db);
             BlogPost blogPost = (from b in db.BlogPosts
                                  where (model.blogID == b.Id)
                                  select b).FirstOrDefault();
-            Comment c = new Comment();
-            c.Author = currUser.FirstName + " "+currUser.LastName;
-            c.blogPost = blogPost;
-            c.contents = model.newComment;
-            c.dateCreated = DateTime.Now;
-            
-            if (blogPost.comments == null)
+
+            if (model.newRating != null)
             {
-                blogPost.comments = new Collection<Comment>();
-                blogPost.comments.Add(c);
-            } else
-            {
-                blogPost.comments.Add(c);
+                using (db)
+                {
+                    Rating r = new Rating();
+                    r.blogPost = blogPost;
+                    r.BlogPostId = blogPost.Id;
+                    r.ratingNumber = (int)model.newRating;
+                    r.username = User.Identity.Name;
+                    blogPost.ratings.Add(r);
+                    db.SaveChanges();
+                }
             }
-           
-            db.SaveChanges();
+
+            if (model.newComment != null)
+            {
+                Comment c = new Comment();
+                c.Author = currUser.FirstName + " " + currUser.LastName;
+                c.blogPost = blogPost;
+                c.contents = model.newComment;
+                c.dateCreated = DateTime.Now;
+
+                if (blogPost.comments == null)
+                {
+                    blogPost.comments = new Collection<Comment>();
+                    blogPost.comments.Add(c);
+                }
+                else
+                {
+                    blogPost.comments.Add(c);
+                }
+
+                db.SaveChanges();
+            }
             return RedirectToAction("Details", "Blog", model.blogID);
         }
 
@@ -344,7 +348,12 @@ namespace BlogSharp.Controllers
         var curruser = GeneralLogic.getLoggedInUser(db);
         //adding current user to viewbag so we can check in the View if the current user is already following this blog
         ViewBag.CurrUser = curruser;
-        return View(checkPerson);
+
+            double AvgRating = UserViewLogic.getUserRating(checkPerson.Id);
+            ICollection<String> CommonTags = UserViewLogic.getCommonTags(checkPerson);
+            ViewBag.AvgRating = AvgRating;
+            ViewBag.cTags = CommonTags;
+            return View(checkPerson);
     }
 
 
