@@ -391,6 +391,12 @@ namespace BlogSharp.Controllers
             return View();
         }
 
+        // methods for AJAX
+        public string GetTopBloggers()
+        {
+            return ActivityViewLogic.getTopBloggers();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
