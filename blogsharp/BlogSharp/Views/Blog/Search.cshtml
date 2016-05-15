@@ -40,7 +40,7 @@
     foreach (DataLayer.Person item in ViewBag.blogs)
     {
         <a href="@Url.Action("Profile", "Blog", new { id = item.Id })" class="list-group-item">
-            <p class="list-group-item-text">Author: @Html.DisplayFor(model => item.blogName)  </p>
+            <p class="list-group-item-text"> @Html.DisplayFor(model => item.blogName)  </p>
         </a>
 
     }
