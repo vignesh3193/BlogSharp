@@ -166,6 +166,10 @@ if (curruser.Id == Model.Id)
         <form id="EditBio">
             <button class="btn btn-primary" formaction="@Url.Action("EditBio", new { id = Model.Id })" id="editbio">Edit bio</button>
         </form>
+
+        <form id="requests">
+            <button type="submit" formaction="@Url.Action("FollowRequests", null, null)" class="btn btn-primary" id="followReqs"> @curruser.notifications.Count Follow Requests</button>
+        </form>
     </div>
 
 }

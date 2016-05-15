@@ -43,6 +43,8 @@ namespace DataLayer
 
         public virtual ICollection<Person> userRatings { get; set; }
 
+        public List<int> report { get; set; }
+
     }
 
     public class BlogPostCreateViewModel

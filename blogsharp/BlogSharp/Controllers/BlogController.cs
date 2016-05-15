@@ -45,6 +45,7 @@ namespace BlogSharp.Controllers
             if (model.newComment != null)
             {
                 Comment c = new Comment();
+                c.theAuthorID = currUser.Id;
                 c.Author = currUser.FirstName + " " + currUser.LastName;
                 c.blogPost = blogPost;
                 c.contents = model.newComment;
@@ -364,13 +365,25 @@ namespace BlogSharp.Controllers
             {
                 var curruser = GeneralLogic.getLoggedInUser(db);
                 var toFollow = db.Persons.Find(Id);
+                if (toFollow.isPrivate) // If trying to follow a private person
+                {
+                    if (toFollow.notifications == null)
+                        toFollow.notifications = new List<Person>();
 
-                curruser.following.Add(toFollow);
-                toFollow.followers.Add(curruser);
-                db.SaveChanges();
-                return RedirectToAction("Profile", new { id = Id });
+                    if (!toFollow.notifications.Contains(curruser)) // If not already requested
+                    {
+                        toFollow.notifications.Add(curruser);
+                        db.SaveChanges();
+                    }
+                }
+                else // If not private, just grant automatically.
+                {
+                    curruser.following.Add(toFollow);
+                    toFollow.followers.Add(curruser);
+                    db.SaveChanges();
+                }
             };
-
+            return RedirectToAction("Profile", new { id = Id });
         }
 
         public ActionResult UnFollow(int Id)
@@ -385,6 +398,39 @@ namespace BlogSharp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Profile", new { id = Id });
             };
+        }
+
+        public ActionResult FollowRequests ()
+        {
+            Person currUser = GeneralLogic.getLoggedInUser(db);
+            return View(currUser.notifications);
+        }
+
+        public ActionResult Approve(int Id)
+        {
+            Person currUser = GeneralLogic.getLoggedInUser(db);
+            using (db)
+            {
+                Person follower = db.Persons.ToList().Find(p => p.Id == Id);
+                currUser.notifications.Remove(follower);
+                currUser.followers.Add(follower);
+                follower.following.Add(currUser);
+
+                db.SaveChanges();
+            }
+            return RedirectToAction("FollowRequests");
+        }
+
+        public ActionResult Reject(int Id)
+        {
+            Person currUser = GeneralLogic.getLoggedInUser(db);
+            using (db)
+            {
+                Person follower = db.Persons.ToList().Find(p => p.Id == Id);
+                currUser.notifications.Remove(follower);
+                db.SaveChanges();
+            }
+            return RedirectToAction("FollowRequests");
         }
 
         public ActionResult Error()
