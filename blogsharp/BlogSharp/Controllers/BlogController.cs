@@ -182,7 +182,7 @@ namespace BlogSharp.Controllers
                     }
                 }
                 List<Person> people = (from u in db.Persons
-                                       where u.FirstName.Equals(s)
+                                       where u.FirstName.Contains(s) || u.LastName.Contains(s)
                                        select u).ToList();
                 List<Person> blogs = (from b in db.Persons
                                       where b.blogName.Equals(s)
@@ -228,7 +228,7 @@ namespace BlogSharp.Controllers
                     }
                 }
                 List<Person> people = (from u in db.Persons
-                                       where u.FirstName.Equals(s) && (!u.isPrivate)
+                                       where (u.FirstName.Contains(s) || u.LastName.Contains(s)) && (!u.isPrivate)
                                        select u).ToList();
                 List<Person> blogs = (from b in db.Persons
                                       where b.blogName.Equals(s) && (!b.isPrivate)
