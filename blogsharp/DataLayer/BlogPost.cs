@@ -43,6 +43,8 @@ namespace DataLayer
 
         public virtual ICollection<Person> userRatings { get; set; }
 
+        public List<int> report { get; set; }
+
     }
 
     public class BlogPostCreateViewModel
@@ -71,6 +73,7 @@ namespace DataLayer
         public Person author { get; set; }
 
         [Display(Name = "Date Created")]
+        [DataType(DataType.Date)]
         public DateTime date { get; set; }
 
         [Display(Name = "Tags")]

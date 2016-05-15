@@ -111,13 +111,23 @@ namespace BLogicLayer
 
             if (person.following.Count == 0) // Dumb search
             {
-                return blogCtx.Persons.ToList().FindAll(p => p.isPrivate == false).Take(15).ToList();
+                return blogCtx.Persons.ToList().FindAll(p => p.isPrivate == false && p.Id != person.Id).Take(15).ToList();
             }
 
             else // Get all 2nd degree connections
             {
-                List<Person> following = person.following.ToList();
-                return (following.FindAll(p => !person.following.Contains(p)).Take(15).ToList());
+                List<Person> result = new List<Person>();
+                foreach(Person p in person.following)
+                {
+                    foreach (Person candidate in p.following)
+                    {
+                        if (!result.Contains(candidate) && person.Id != candidate.Id)
+                        {
+                            result.Add(candidate);
+                        }
+                    }
+                }
+                return result;
             }
         }
     }

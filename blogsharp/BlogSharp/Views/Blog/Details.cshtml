@@ -83,12 +83,18 @@
                 <input type="submit" value="Comment" class="btn btn-default" />
             </div>
         }
-
+        
         foreach (var comment in Model.comments)
         {
+            
             <h4 class="list-group-item-heading">@Html.DisplayFor(model => comment.contents)  
-                   
-             
+                    @if (comment.theAuthorID == ViewBag.CurrUserID)
+                    {
+                        <form>
+                            <input class="btn btn-default" value="Delete Comment" formaction="@Url.Action("DeleteComment", new { id = comment.Id, blogId=Model.blogID })"/>
+                        </form>
+                    }
+
 
                         </h4> 
             <p class="list-group-item-text">@Html.DisplayFor(model => comment.Author) @Html.DisplayFor(model => comment.dateCreated) </p>
