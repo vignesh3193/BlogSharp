@@ -148,7 +148,7 @@ namespace BlogSharp.Controllers
                
 
                 var thisPerson = GeneralLogic.getLoggedInUser(db);
-                //get posts by tag, title or users
+                //get posts by tag, title
                 List<BlogPost> posts = (from p in db.BlogPosts
                                         where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Contains(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
                                         select p).ToList();
@@ -184,8 +184,12 @@ namespace BlogSharp.Controllers
                 List<Person> people = (from u in db.Persons
                                        where u.FirstName.Equals(s)
                                        select u).ToList();
+                List<Person> blogs = (from b in db.Persons
+                                      where b.blogName.Equals(s)
+                                      select b).ToList();
                 ViewBag.posts = posts;
                 ViewBag.people = people;
+                ViewBag.blogs = blogs;
                 return View(posts.ToList());
             }
             else //else, show only public posts
@@ -226,8 +230,12 @@ namespace BlogSharp.Controllers
                 List<Person> people = (from u in db.Persons
                                        where u.FirstName.Equals(s) && (!u.isPrivate)
                                        select u).ToList();
+                List<Person> blogs = (from b in db.Persons
+                                      where b.blogName.Equals(s) && (!b.isPrivate)
+                                      select b).ToList();
                 ViewBag.posts = results;
                 ViewBag.people = people;
+                ViewBag.blogs = blogs;
                 return View(posts.ToList());
 
             }
