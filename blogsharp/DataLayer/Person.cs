@@ -23,6 +23,7 @@ namespace DataLayer
         public virtual ICollection<Person> followers { get; set; }
 
         public virtual ICollection<Person> following { get; set; }
+        public virtual ICollection<Person> notifications { get; set; }
 
         [Required]
         public DateTime creation { get; set; }
