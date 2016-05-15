@@ -92,6 +92,7 @@ namespace DataLayer
         [DataType(DataType.MultilineText)]
         public string newComment { get; set; }
         
+        [Range(minimum:0, maximum:5, ErrorMessage ="Must be between 0 and 5")]
         public int? newRating { get; set; }
 
         public ICollection<Rating> ratings { get; set; }

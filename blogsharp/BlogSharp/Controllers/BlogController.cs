@@ -120,6 +120,22 @@ namespace BlogSharp.Controllers
             return View(details);
         }
 
+        public ActionResult DeleteComment(int id)
+        {
+            using (db)
+            {
+                foreach(Comment c in db.Comments)
+                {
+                    if(c.Id==id)
+                    {
+                        db.Comments.Remove(c);
+                        db.SaveChanges();
+                    }
+                }
+
+            }
+        }
+
         //Blog/CreateSearch is a form that takes in keywords that will correspond to tags, titles, or users
         public ActionResult CreateSearch()
         {
@@ -385,6 +401,11 @@ namespace BlogSharp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Profile", new { id = Id });
             };
+        }
+
+        public ActionResult Report(int id)
+        {
+            
         }
 
         public ActionResult Error()
