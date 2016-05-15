@@ -71,6 +71,7 @@ namespace DataLayer
         public Person author { get; set; }
 
         [Display(Name = "Date Created")]
+        [DataType(DataType.Date)]
         public DateTime date { get; set; }
 
         [Display(Name = "Tags")]

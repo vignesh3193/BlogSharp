@@ -128,13 +128,13 @@ namespace BlogSharp.Controllers
 
         //pass the words from the form to the search method and return results
         [HttpPost]
-        public ActionResult CreateSearch([Bind(Include = "title,dateCreated")] BlogPostCreateViewModel blogPost)
+        public ActionResult CreateSearch([Bind(Include = "title,date,newRating")] BlogPostDetailsViewModel blogPost)
         {
 
-            return RedirectToAction("Search", "Blog", new { s = blogPost.title.ToString(), date = DateTime.Now, rating = 0 });
+            return RedirectToAction("Search", "Blog", new { s = blogPost.title.ToString(), date = blogPost.date, rating = blogPost.newRating });
         }
 
-        public ActionResult Search(string s, DateTime? date, int rating = 0)
+        public ActionResult Search(string s, DateTime? date, int? rating)
         {
             //if no search words redirect to create search form
             if (s == null)
@@ -145,13 +145,42 @@ namespace BlogSharp.Controllers
             //and only of authors that are not private, or that the current user is following.
             if (User.Identity.IsAuthenticated)
             {
-                //Person user = User.Identity;
+               
 
                 var thisPerson = GeneralLogic.getLoggedInUser(db);
-
+                //get posts by tag, title or users
                 List<BlogPost> posts = (from p in db.BlogPosts
                                         where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Contains(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
                                         select p).ToList();
+                List<BlogPost> results = new List<BlogPost>();
+                foreach (BlogPost p in posts)
+                {
+                    results.Add(p);
+                }
+                if (date != DateTime.Now)
+                {
+
+                    //remove posts that were created earlier than the specified date from the collection of results
+                    foreach (BlogPost p in posts)
+                    {
+                        if (p.dateCreated.CompareTo(date) < 0)
+                        {
+                            results.Remove(p);
+                        }
+                    }
+                    if (rating != null && posts.Count > 0)
+                    {
+                        foreach (BlogPost p in posts)
+                        {
+                            //get the average rating and compare to the parameter rating
+                            double avg = GeneralLogic.getRatingOPost(p);
+                            if ((avg <= (double)rating) && results.Contains(p))
+                            {
+                                results.Remove(p);
+                            }
+                        }
+                    }
+                }
                 List<Person> people = (from u in db.Persons
                                        where u.FirstName.Equals(s)
                                        select u).ToList();
@@ -166,10 +195,38 @@ namespace BlogSharp.Controllers
                                         where (p.tags.Any(tag => tag.tagName.Equals(s) || p.title.Contains(s)) &&
                                         !p.person.isPrivate)
                                         select p).ToList();
+                List<BlogPost> results = new List<BlogPost>();
+                foreach(BlogPost p in posts)
+                {
+                    results.Add(p);
+                }
+                if (date != DateTime.Now)
+                {
+                   
+                    
+                    foreach(BlogPost p in posts)
+                    {
+                        if(p.dateCreated.CompareTo(date) < 0)
+                        {
+                            results.Remove(p);
+                        }
+                    }
+                    if(rating != null && posts.Count > 0)
+                    {
+                        foreach(BlogPost p in posts)
+                        {
+                            double avg = GeneralLogic.getRatingOPost(p);
+                            if((avg <= (double)rating) && results.Contains(p))
+                            {
+                                results.Remove(p);
+                            }
+                        }
+                    }
+                }
                 List<Person> people = (from u in db.Persons
                                        where u.FirstName.Equals(s) && (!u.isPrivate)
                                        select u).ToList();
-                ViewBag.posts = posts;
+                ViewBag.posts = results;
                 ViewBag.people = people;
                 return View(posts.ToList());
 
