@@ -149,7 +149,7 @@ namespace BlogSharp.Controllers
                
 
                 var thisPerson = GeneralLogic.getLoggedInUser(db);
-                //get posts by tag, title
+                //get posts by tag, title or users
                 List<BlogPost> posts = (from p in db.BlogPosts
                                         where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Contains(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
                                         select p).ToList();
@@ -185,8 +185,9 @@ namespace BlogSharp.Controllers
                 List<Person> people = (from u in db.Persons
                                        where u.FirstName.Contains(s) || u.LastName.Contains(s)
                                        select u).ToList();
+
                 List<Person> blogs = (from b in db.Persons
-                                      where b.blogName.Equals(s)
+                                      where b.blogName.Contains(s)
                                       select b).ToList();
                 ViewBag.posts = posts;
                 ViewBag.people = people;
@@ -232,7 +233,7 @@ namespace BlogSharp.Controllers
                                        where (u.FirstName.Contains(s) || u.LastName.Contains(s)) && (!u.isPrivate)
                                        select u).ToList();
                 List<Person> blogs = (from b in db.Persons
-                                      where b.blogName.Equals(s) && (!b.isPrivate)
+                                      where (b.blogName.Contains(s)) && !b.isPrivate
                                       select b).ToList();
                 ViewBag.posts = results;
                 ViewBag.people = people;

@@ -304,6 +304,7 @@
     <Content Include="Views\Blog\Error.cshtml" />
     <Content Include="Views\Blog\EditBio.cshtml" />
     <Content Include="Views\Blog\FollowRequests.cshtml" />
+    <Content Include="Views\Manage\ChangePrivacy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
