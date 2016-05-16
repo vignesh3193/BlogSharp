@@ -133,7 +133,11 @@ namespace BLogicLayer
             Response geocodeResponse = MakeRequest(geocodeRequest);
 
             // If there was any error in making the request, return nothing; else, process the results
-            if (geocodeResponse.StatusCode != 200)
+            if (geocodeRequest == null)
+            {
+                return null;
+            }
+            else if (geocodeResponse.StatusCode != 200)
             {
                 return null;
             }
@@ -150,7 +154,7 @@ namespace BLogicLayer
                     return results;
 
                 }
-                catch (System.IndexOutOfRangeException arrayError) {
+                catch (System.IndexOutOfRangeException indexError) {
                     // If the results were not complete, this error might occur
                     // return null since the results are only partial
 
