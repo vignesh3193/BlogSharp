@@ -35,6 +35,8 @@
 
         var points = @Html.Raw(ViewBag.geocodes);
         var blogNames = @Html.Raw(ViewBag.blogNames);
+        var ids = @Html.Raw(ViewBag.ids);
+        var postDates = @Html.Raw(ViewBag.postDates);
 
         // Thanks to this blogger for providing help/clarification on how to get
         // pins and infoboxes to work nicely together
@@ -66,8 +68,8 @@
 
             var pin = new Microsoft.Maps.Pushpin(location);
             pin.Title = blogNames[i];
-            pin.Description = "<p>Last updated: one day ago</p><br />" +
-                              "<a href=\"../Blog/Profile/" + blogNames[i] + "\">Check out their blog</a>";
+            pin.Description = "<p>Last updated: " + postDates[i] + "</p><br />" +
+                              "<a href=\"../Blog/Profile/" + ids[i] + "\">Check out their blog</a>";
 
             Microsoft.Maps.Events.addHandler(pin, 'mouseover', showInfobox);
             // Microsoft.Maps.Events.addHandler(pin, 'mouseout', hideInfobox);

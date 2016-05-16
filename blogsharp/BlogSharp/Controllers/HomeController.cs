@@ -71,6 +71,8 @@ namespace BlogSharp.Controllers
         {
             List<String> addresses = new List<String>();
             List<String> blogNames = new List<String>();
+            List<String> ids = new List<String>();
+            List<String> mostRecentPostDates = new List<String>();
 
             using (personContext)
             {
@@ -79,11 +81,30 @@ namespace BlogSharp.Controllers
 
                 blogNames = (from blogger in personContext.Persons
                              select blogger.blogName).ToList();
+
+                ids = (from blogger in personContext.Persons
+                       select blogger.Id.ToString()).ToList();
+
+
+
+                foreach (String id in ids)
+                {
+                    int id_number = int.Parse(id);
+                    ICollection<BlogPost> blogPosts = (from person in personContext.Persons
+                                                       where person.Id == id_number
+                                                       select person.posts).FirstOrDefault();
+
+                    blogPosts.OrderBy(x => x.dateCreated);
+                    mostRecentPostDates.Add(blogPosts.ElementAt(0).dateCreated.ToString());
+                }
+
             }
 
             var jsonMaker = new JavaScriptSerializer();
-           // ViewBag.geocodes = jsonMaker.Serialize(ActivityViewLogic.retrieveGeoPoints(addresses, blogNames));
+            ViewBag.geocodes = jsonMaker.Serialize(ActivityViewLogic.retrieveGeoPoints(addresses, blogNames, ids, mostRecentPostDates));
             ViewBag.blogNames = jsonMaker.Serialize(blogNames);
+            ViewBag.ids = jsonMaker.Serialize(ids);
+            ViewBag.postDates = jsonMaker.Serialize(mostRecentPostDates);
             return View();
         }
     }

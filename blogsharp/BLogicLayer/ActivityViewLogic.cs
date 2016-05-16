@@ -55,15 +55,16 @@ namespace BLogicLayer
             return daily_trends;
         } 
 
-        public static List<Dictionary<string, double>> retrieveGeoPoints(List<String> addresses, List<String> blogNames)
+        public static List<Dictionary<string, double>> retrieveGeoPoints(List<String> addresses, List<String> blogNames, 
+                                                                            List<String> ids, List<String> postDates)
         {
 
-            // Now create a list of geopoints, loop through and geocode the addresses,
+            // Create a list of geopoints, loop through and geocode the addresses,
             // and return the list of geocoded addresses
 
             List<Dictionary<string, double>> geoPoints = new List<Dictionary<string, double>>();
 
-            int blogNameCounter = 0;
+            int counter = 0;
             foreach (String address in addresses)
             {
                // the assumption here is that the length of addresses and blogNames is the same
@@ -75,13 +76,16 @@ namespace BLogicLayer
                 if (geoPoint != null)
                 {
                     geoPoints.Add(geoPoint);
-                    blogNameCounter++;
-                } else
+                    counter++;
+                }
+                else
                 {
-                    // modify the blogNames list and remove the associated blogName
-                    // this will ensure that there's a 1:1 mapping from addresses of a user to their blognames
+                    // modify the blogNames list and remove the associated blogName, same with the ids
+                    // this will ensure that there's a 1:1 mapping from addresses of a user to their blognames/ids
 
-                    blogNames.RemoveAt(blogNameCounter);
+                    blogNames.RemoveAt(counter);
+                    ids.RemoveAt(counter);
+                    postDates.RemoveAt(counter);
                 }
             }
 
@@ -89,7 +93,7 @@ namespace BLogicLayer
         }
 
 
-        // The following two methods come from Microsoft's developer network.
+        // The following two methods (MakeRequest and GeocodeAddress) come from Microsoft's developer network.
         // The second one, GeocodeAddress(), is adapted from some sample code that was also provided.
         // First method's link: https://msdn.microsoft.com/en-us/library/dd221354.aspx
         // Second method's link: https://msdn.microsoft.com/en-us/library/jj819168.aspx

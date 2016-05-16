@@ -326,10 +326,11 @@ namespace BlogSharp.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditBio(string id)
+        public ActionResult EditBio(int? id)
         {
             Person checkPerson = null;
-            checkPerson = BlogViewLogic.validateRouteID(id, checkPerson, db);
+            //checkPerson = BlogViewLogic.validateRouteID(id, checkPerson, db);
+            checkPerson = db.Persons.Find(id);
 
             if (checkPerson == null)
             {
@@ -401,11 +402,12 @@ namespace BlogSharp.Controllers
         }
 
 
-        public ActionResult Profile(string id)
+        public ActionResult Profile(int? id)
         {
 
             Person checkPerson = null;
-            checkPerson = BlogViewLogic.validateRouteID(id, checkPerson, db);
+            //checkPerson = BlogViewLogic.validateRouteID(id, checkPerson, db);
+            checkPerson = db.Persons.Find(id);
 
             if (checkPerson == null)
             {
