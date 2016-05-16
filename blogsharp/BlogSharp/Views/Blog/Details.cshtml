@@ -75,17 +75,19 @@
     <div style="float:right">
         @if (ViewBag.userID != null && Model.ratings != null)
         {
-        if (Model.reports.Contains(ViewBag.userID))
+        if (ViewBag.isReported==true)
         {
             <label>Report submitted</label>
-        }
-        else
-        {
-            using (Html.BeginForm())
+            }
+            else
             {
-                @Html.HiddenFor(model => model.blogID)
+                using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.blogID)
                     <div>
-                        @Html.EditorFor(model => model.reports)
+                       @{ Model.newreport = ViewBag.userID;}
+                        @Html.HiddenFor(model => model.newreport)
                         <input type="submit" value="Report" class="btn btn-default" />
                     </div>
                 }

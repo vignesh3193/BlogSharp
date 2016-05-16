@@ -66,6 +66,12 @@ namespace BlogSharp.Models
         public string Number { get; set; }
     }
 
+    public class PrivacyUpdateViewModel
+    {
+        [Display(Name = "Privacy Status")]
+        public bool isPrivate { get; set; }
+    }
+
     public class VerifyPhoneNumberViewModel
     {
         [Required]

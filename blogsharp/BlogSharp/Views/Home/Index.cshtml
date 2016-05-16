@@ -28,11 +28,12 @@
     }
 
     #recommendations{
-        margin-right: 5%;
+        margin-right: 6%;
         float:right;
         height: 750px;
-        width: 10%;
+        width: 14%;
         background-color: Highlight;
+        margin-left:2%;
     }
 
 
@@ -41,7 +42,7 @@
 <div id="wrapper">
     <h3> is the home page of blog#.  Welcome!</h3>
     <h2><span class="label label-default">Todays Blogposts</span></h2>
-    <div id="testlist" style="width:65%; float:left">
+    <div id="testlist" style="width:55%; float:left">
         @foreach (DataLayer.BlogPost temp in Model)
         {
             if (temp.dateCreated.Date == DateTime.Today)
@@ -67,7 +68,7 @@
     @if (ViewBag.recommendations != null)
     {
         <div id="recommendations">
-            <h3 id="recommendations_label">People to Follow</h3>
+            <h3 id="recommendations_label" style="text-align:center">People to Follow</h3>
             @foreach (KeyValuePair<int, string> person in ViewBag.recommendations)
             {
                 <p id="person"><span class="label label-primary"><a style="color:ghostwhite" href="@Url.Action("Profile","Blog",new { id = person.Key })">@person.Value</a></span></p>

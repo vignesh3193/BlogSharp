@@ -43,7 +43,7 @@ namespace DataLayer
 
         public virtual ICollection<Person> userRatings { get; set; }
 
-        public ICollection<int> report { get; set; }
+        public virtual ICollection<Report> report { get; set; }
 
     }
 
@@ -98,7 +98,7 @@ namespace DataLayer
         [Range(minimum:0, maximum:5, ErrorMessage ="Must be between 0 and 5")]
         public int? newRating { get; set; }
 
-        public ICollection<int> reports { get; set; }
+        public ICollection<Report> reports { get; set; }
 
         public int? newreport { get; set; }
 

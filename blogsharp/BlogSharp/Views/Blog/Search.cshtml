@@ -34,6 +34,7 @@
                     </a>
                     }
                     }
+
 @if (ViewBag.blogs != null)
 {
     <h3>Blogs: </h3>
@@ -42,11 +43,11 @@
         <a href="@Url.Action("Profile", "Blog", new { id = item.Id })" class="list-group-item">
             <p class="list-group-item-text"> @Html.DisplayFor(model => item.blogName)  </p>
         </a>
-
     }
 }
-                    @if (ViewBag.people == null && ViewBag.posts == null && ViewBag.blogs == null)
-                    {
+
+@if (ViewBag.people == null && ViewBag.posts == null)
+{
                         <h4> No Search Results</h4>
                     }
 
