@@ -95,8 +95,9 @@ namespace BLogicLayer
 
         // The following two methods (MakeRequest and GeocodeAddress) come from Microsoft's developer network.
         // The second one, GeocodeAddress(), is adapted from some sample code that was also provided.
-        // First method's link: https://msdn.microsoft.com/en-us/library/dd221354.aspx
-        // Second method's link: https://msdn.microsoft.com/en-us/library/jj819168.aspx
+        // First method's link: https://msdn.microsoft.com/en-us/library/jj819168.aspx
+        // Second method's link: https://msdn.microsoft.com/en-us/library/dd221354.aspx
+
 
         public static Response MakeRequest(string requestUrl)
         {
@@ -131,20 +132,30 @@ namespace BLogicLayer
             String geocodeRequest = string.Format("http://dev.virtualearth.net/REST/v1/Locations?q={0}&key={1}", query, key);
             Response geocodeResponse = MakeRequest(geocodeRequest);
 
-            if (geocodeResponse == null)
+            // If there was any error in making the request, return nothing; else, process the results
+            if (geocodeResponse.StatusCode != 200)
             {
                 return null;
             }
             else
             {
-                JSON.Location location = (JSON.Location)geocodeResponse.ResourceSets[0].Resources[0];
+                try {
+                    JSON.Location location = (JSON.Location)geocodeResponse.ResourceSets[0].Resources[0];
 
-                Dictionary<String, double> results = new Dictionary<string, double>();
+                    Dictionary<String, double> results = new Dictionary<string, double>();
 
-                results.Add("Latitude", location.Point.Coordinates[0]);
-                results.Add("Longitude", location.Point.Coordinates[1]);
+                    results.Add("Latitude", location.Point.Coordinates[0]);
+                    results.Add("Longitude", location.Point.Coordinates[1]);
 
-                return results;
+                    return results;
+
+                }
+                catch (System.IndexOutOfRangeException arrayError) {
+                    // If the results were not complete, this error might occur
+                    // return null since the results are only partial
+
+                    return null;
+                }
 
             }
 
