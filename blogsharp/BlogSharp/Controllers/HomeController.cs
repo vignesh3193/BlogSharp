@@ -92,7 +92,7 @@ namespace BlogSharp.Controllers
                                                        where person.Id == id_number
                                                        select person.posts).FirstOrDefault();
 
-                    if (blogPosts == null)
+                    if (blogPosts.Count == 0)
                     {
                         // special case where a newly registered user hasn't made any posts just yet
                         mostRecentPostDates.Add("No posts yet");
