@@ -75,9 +75,12 @@
     <div style="float:right">
         @if (ViewBag.userID != null && Model.ratings != null)
         {
-        if (ViewBag.isReported==true)
-        {
-            <label>Report submitted</label>
+            if(Model.author.Id==ViewBag.userID)
+            {
+            }
+            else if (ViewBag.isReported==true)
+            {
+               <label>Report submitted</label>
             }
             else
             {
