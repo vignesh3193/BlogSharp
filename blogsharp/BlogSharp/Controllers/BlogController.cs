@@ -201,7 +201,7 @@ namespace BlogSharp.Controllers
                 var thisPerson = GeneralLogic.getLoggedInUser(db);
                 //get posts by tag, title or users
                 List<BlogPost> posts = (from p in db.BlogPosts
-                                        where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Contains(s))) && (thisPerson.following.Contains(p.person) || !p.person.isPrivate)
+                                        where (p.tags.Any(tag => tag.tagName.Equals(s)) || (p.title.Contains(s))) && (p.person.followers.Select(c => c.Id).Contains(thisPerson.Id) || !p.person.isPrivate)
                                         select p).ToList();
                 List<BlogPost> results = new List<BlogPost>();
                 foreach (BlogPost p in posts)
