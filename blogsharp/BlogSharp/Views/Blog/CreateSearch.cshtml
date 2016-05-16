@@ -1,4 +1,4 @@
-﻿@model DataLayer.BlogPost
+﻿@model DataLayer.BlogPostDetailsViewModel
 
 @{
     ViewBag.Title = "CreateSearch";
@@ -15,27 +15,29 @@
         
        
         <div class="form-group">
-            @Html.LabelFor(model => model.tags, htmlAttributes: new { @class = "control-label col-md-2" })
+            <p> Keyword: (May be a user, blog name, or tag)</p>
             <div class="col-md-10">
                 @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
             </div>
         </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.date, "", new { @class = "text-danger" })
+            </div>
+        </div>
         <p> Optional Search Filters: </p>
+        
         <div class="form-group">
-            @Html.LabelFor(model => model.dateCreated, htmlAttributes: new { @class = "control-label col-md-2" })
+           <p>Rating: </p>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.dateCreated, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dateCreated, "", new { @class = "text-danger" })
+                @Html.EditorFor(model=> model.newRating)
+                @Html.ValidationMessageFor(model => model.newRating, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.ratings, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ratings, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ratings, "", new { @class = "text-danger" })
-            </div>
-        </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Search" class="btn btn-default" />
@@ -45,7 +47,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to Home", "ViewPosts")
+    @Html.ActionLink("Back to Home", "Index", "Home")
 </div>
 
 @section Scripts {

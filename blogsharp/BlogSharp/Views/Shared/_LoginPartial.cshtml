@@ -9,7 +9,10 @@
         <li>@using (DataLayer.BlogContext db = new DataLayer.BlogContext())
         {
             var user = from p in db.Persons where p.Email.Equals(User.Identity.Name) select p;
-            @Html.ActionLink(@user.First().blogName, "Profile", "Blog", routeValues: new { id = user.First().Id }, htmlAttributes: new { title = "Profile" })
+            if (user.Count() != 0)
+            {
+               @Html.ActionLink(@user.First().blogName, "Profile", "Blog", routeValues: new { id = user.First().Id }, htmlAttributes: new { title = "Profile" })
+            }
         }
         </li>
         <li>        

@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BlogSharp.Models;
+using BLogicLayer;
+using DataLayer;
 
 namespace BlogSharp.Controllers
 {
@@ -15,6 +17,7 @@ namespace BlogSharp.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private BlogContext blogDb = new BlogContext();
 
         public ManageController()
         {
@@ -209,6 +212,21 @@ namespace BlogSharp.Controllers
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
+        }
+
+        public ActionResult ChangePrivacy()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ChangePrivacy([Bind(Include = "isPrivate")] PrivacyUpdateViewModel privacy)
+        {
+            
+            var user = GeneralLogic.getLoggedInUser(blogDb);
+            user.isPrivate = privacy.isPrivate;
+            blogDb.SaveChanges();
+            return RedirectToAction("Index", "Home");
         }
 
         //

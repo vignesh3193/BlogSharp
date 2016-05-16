@@ -20,6 +20,8 @@ namespace DataLayer
 
         [ForeignKey("BlogPostId")]
         public virtual BlogPost blogPost { get; set; }
+
+        public int theAuthorID { get; set; }
         
         [Required]
         public string Author { get; set; }
