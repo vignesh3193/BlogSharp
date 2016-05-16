@@ -135,7 +135,7 @@ namespace BlogSharp.Controllers
 
             foreach(Report r in details.reports)
             {
-                if(r.reporterID==thisPerson.Id)
+                if(thisPerson!=null &&r.reporterID==thisPerson.Id)
                 {
                     ViewBag.isReported = true;
                 }
