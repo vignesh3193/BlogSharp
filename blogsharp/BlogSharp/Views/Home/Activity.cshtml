@@ -161,6 +161,7 @@
             url: "../Blog/GetTagComparison",
             data: {},
             success: function(result) { 
+                toastr.info("Guess what?  We have enough data for this week to generate the tag trends graph.  We're making it now...")
                 var tags = JSON.parse(result).TagNames;
                 var tag1_data = JSON.parse(result).Tag1;
                 var tag2_data = JSON.parse(result).Tag2;
