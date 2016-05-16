@@ -25,8 +25,15 @@
     <hr />
     <dl >
         <dd id="contentContainer">
+            @if (Model.reports.Count > 2)
+            {
+                <p>This post has been reported too many times, and is hidden till the moderators review it</p>
+            }
+            else
+            {
             @Html.DisplayFor(model => model.content, new { cols = 100, @rows = 50 })
-        </dd>
+            }
+         </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.tags)
@@ -54,13 +61,40 @@
         @Html.AntiForgeryToken()
         if (ViewBag.userID != null && Model.ratings != null)
         {
-            <div class="editor_field">
-                @Html.EditorFor(model => model.newRating)
-                @Html.ValidationMessageFor(model => model.newRating)
+            <div style="float:left">
+                <div class="editor_field">
+                    @Html.EditorFor(model => model.newRating)
+                    @Html.ValidationMessageFor(model => model.newRating)
+                </div>
+                <input type="submit" value="Rate" class="btn btn-default" />
             </div>
-            <input type="submit" value="Rate" class="btn btn-default" />
+
         }
     }
+
+    <div style="float:right">
+        @if (ViewBag.userID != null && Model.ratings != null)
+        {
+        if (Model.reports.Contains(ViewBag.userID))
+        {
+            <label>Report submitted</label>
+        }
+        else
+        {
+            using (Html.BeginForm())
+            {
+                @Html.HiddenFor(model => model.blogID)
+                    <div>
+                        @Html.EditorFor(model => model.reports)
+                        <input type="submit" value="Report" class="btn btn-default" />
+                    </div>
+                }
+
+            }
+        }
+    </div>
+
+
     <br />
     @using (Html.BeginForm())
     {
@@ -82,16 +116,19 @@
                 <br/>
                 <input type="submit" value="Comment" class="btn btn-default" />
             </div>
+
         }
+
+
         
         foreach (var comment in Model.comments)
         {
             
             <h4 class="list-group-item-heading">@Html.DisplayFor(model => comment.contents)  
-                    @if (comment.theAuthorID == ViewBag.CurrUserID)
+                    @if (comment.theAuthorID == ViewBag.userID)
                     {
-                        <form>
-                            <input class="btn btn-default" value="Delete Comment" formaction="@Url.Action("DeleteComment", new { id = comment.Id, blogId=Model.blogID })"/>
+                        <form style="float:right">
+                            <input  type="submit" class="btn btn-default" value="Delete Comment" formaction="@Url.Action("DeleteComment", new { id = comment.Id, blogId=Model.blogID })"/>
                         </form>
                     }
 

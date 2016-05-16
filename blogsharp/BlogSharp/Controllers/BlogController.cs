@@ -35,11 +35,25 @@ namespace BlogSharp.Controllers
                     Rating r = new Rating();
                     r.blogPost = blogPost;
                     r.BlogPostId = blogPost.Id;
+                    if(model.newRating>5)
+                    {
+                        model.newRating = 5;
+                    }
+                    else if(model.newRating<0)
+                    {
+                        model.newRating = 0;
+                    }
                     r.ratingNumber = (int)model.newRating;
                     r.username = User.Identity.Name;
                     blogPost.ratings.Add(r);
                     db.SaveChanges();
                 }
+            }
+
+            if(model.newreport!=null)
+            {
+                blogPost.report.Add((int)model.newreport);
+                db.SaveChanges();
             }
 
             if (model.newComment != null)
@@ -63,7 +77,7 @@ namespace BlogSharp.Controllers
 
                 db.SaveChanges();
             }
-            ViewBag.CurrUserID = currUser.Id;
+    
             return RedirectToAction("Details", "Blog", model.blogID);
         }
 
@@ -85,6 +99,11 @@ namespace BlogSharp.Controllers
             details.tags = blogPost.tags;
             details.title = blogPost.title;
             details.ratings = blogPost.ratings;
+            details.reports = blogPost.report;
+            if (details.reports == null)
+            {
+                details.reports = new List<int>();
+            }
             if (details.ratings == null)
             {
                 details.ratings = new Collection<Rating>();
@@ -131,10 +150,11 @@ namespace BlogSharp.Controllers
                     if(c.Id==id)
                     {
                         db.Comments.Remove(c);
-                        db.SaveChanges();
+                        
                     }
                 }
-                return RedirectToAction("Details", "Blog", blogId);
+                db.SaveChanges();
+                return RedirectToAction("Details", "Blog", new { id = blogId });
             }
         }
 
@@ -482,10 +502,7 @@ namespace BlogSharp.Controllers
             };
         }
 
-        /*public ActionResult Report(int id)
-        {
-            retun View();
-        } */   
+        
 
         public ActionResult FollowRequests ()
         {

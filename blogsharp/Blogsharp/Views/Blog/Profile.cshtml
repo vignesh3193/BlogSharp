@@ -166,10 +166,12 @@ if (curruser.Id == Model.Id)
         <form id="EditBio">
             <button class="btn btn-primary" formaction="@Url.Action("EditBio", new { id = Model.Id })" id="editbio">Edit bio</button>
         </form>
-
+        @if (Model.isPrivate == true)
+        {           
         <form id="requests">
             <button type="submit" formaction="@Url.Action("FollowRequests", null, null)" class="btn btn-primary" id="followReqs"> @curruser.notifications.Count Follow Requests</button>
         </form>
+        }
     </div>
 
 }
@@ -184,8 +186,14 @@ else if (curruser.following.Contains(Model))
 else
 {
 <form id="foll" >
-    
+    @if (Model.notifications.Contains(ViewBag.CurrUser))
+    {
+        <label>Follow Request submitted</label>
+    }
+    else
+    {
     <button type="submit" formaction="@Url.Action("Follow", new { id = Model.Id })" class="btn btn-primary" id="follow">Follow</button>
+    }
 </form>
 }
 if (Model.isPrivate && !curruser.following.Contains(Model) && curruser.Id != Model.Id)
