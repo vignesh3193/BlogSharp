@@ -101,7 +101,7 @@
     </div>
      
 
-    <img class="img-circle" src="~/Content/images/@(User.Identity.Name).png" alt="Circle image" style="width:105px;height:105px">
+    <img class="img-circle" src="~/Content/images/@(Model.Email).png" alt="Circle image" style="width:105px;height:105px">
    
     
     <span id="following" class="label label-pill label-default"  data-container="body"
@@ -221,11 +221,13 @@ else {
 </div>
 }
 }
-@using (Html.BeginForm("Profile", "Blog", FormMethod.Post,
-                                        new { enctype = "multipart/form-data" }))
+@if (Model == curruser)
 {
+    using (Html.BeginForm("Profile", "Blog", FormMethod.Post,
+                                            new { enctype = "multipart/form-data" }))
+    {
     <label for="file">Upload A profile picure!:</label>
     <input type="file" name="file" id="file" style="width: 100%;" />
     <input type="submit" value="Upload" class="submit" />
+    }
 }
-
