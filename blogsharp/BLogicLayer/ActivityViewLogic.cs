@@ -163,6 +163,15 @@ namespace BLogicLayer
             using (var context = new BlogContext())
             {
                 topTenBloggers = context.Persons.OrderByDescending(blogPosts => blogPosts.posts.Count).ToList();
+
+                // If no users exist or no users have yet made any blog posts, return nothing
+                // The site user will be sent a message to sign up since the site doesn't have any users
+
+                if (topTenBloggers == null)
+                {
+                    return null;
+                }
+
                 topTenBloggers = topTenBloggers.Take(10);
 
                 foreach (Person blogger in topTenBloggers)
@@ -195,6 +204,13 @@ namespace BLogicLayer
                                                   where post.dateCreated <= endDate && post.dateCreated > middleEndDate
                                                   select post).ToList();
 
+                // if there are no data yet for this week, we will not have a graph to populate
+                if (thisWeeksPosts == null)
+                {
+                    return null;
+                }
+                
+
                 List<BlogPost> lastWeeksPosts = (from post in context.BlogPosts
                                                   where post.dateCreated <= middleEndDate && post.dateCreated > middleBeginDate
                                                   select post).ToList();
@@ -223,6 +239,15 @@ namespace BLogicLayer
                             thisWeekTags[tag.tagName] = thisWeekTags[tag.tagName] + 1;
                         }
                     }
+                }
+
+                // quickly check to see if 5 tags have been made yet; if not,
+                // then similar to the case above where there were no blog posts yet,
+                // return null since there's not enough data for the graph
+
+                if (thisWeekTags.Keys.Count < 5)
+                {
+                    return null;
                 }
 
                 // Create a list that can be sorted according to the tag counts,

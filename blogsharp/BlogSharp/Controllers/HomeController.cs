@@ -85,8 +85,6 @@ namespace BlogSharp.Controllers
                 ids = (from blogger in personContext.Persons
                        select blogger.Id.ToString()).ToList();
 
-
-
                 foreach (String id in ids)
                 {
                     int id_number = int.Parse(id);
@@ -94,17 +92,28 @@ namespace BlogSharp.Controllers
                                                        where person.Id == id_number
                                                        select person.posts).FirstOrDefault();
 
-                    blogPosts.OrderBy(x => x.dateCreated);
-                    mostRecentPostDates.Add(blogPosts.ElementAt(0).dateCreated.ToString());
+                    if (blogPosts.Count == 0)
+                    {
+                        // special case where a newly registered user hasn't made any posts just yet
+                        mostRecentPostDates.Add("No posts yet");
+                    }
+                    else
+                    {
+                        blogPosts.OrderBy(x => x.dateCreated);
+                        mostRecentPostDates.Add(blogPosts.ElementAt(0).dateCreated.ToString());
+                    }
+
                 }
 
             }
 
             var jsonMaker = new JavaScriptSerializer();
             ViewBag.geocodes = jsonMaker.Serialize(ActivityViewLogic.retrieveGeoPoints(addresses, blogNames, ids, mostRecentPostDates));
+
             ViewBag.blogNames = jsonMaker.Serialize(blogNames);
             ViewBag.ids = jsonMaker.Serialize(ids);
             ViewBag.postDates = jsonMaker.Serialize(mostRecentPostDates);
+
             return View();
         }
     }
