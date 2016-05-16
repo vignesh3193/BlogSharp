@@ -171,6 +171,143 @@ namespace BLogicLayer
 
             return bloggerRankings;
         }
+
+        public static Dictionary<String, List<String>> getTopTags()
+        {
+            // Create a list of lists where the first list is the list of blogger names
+            // and the second list is their corresponding blog post counts
+
+            Dictionary<String, List<String>> tagRankings = new Dictionary<String, List<String>>();
+            DateTime endDate = DateTime.Today;
+            DateTime middleEndDate = DateTime.Today.AddDays(-7);
+            DateTime middleBeginDate = DateTime.Today.AddDays(-14);
+            DateTime beginDate = DateTime.Today.AddDays(-21);
+
+            using (var context = new BlogContext())
+            {
+                // Get lists of the posts from the last three weeks
+
+                List<BlogPost> thisWeeksPosts = (from post in context.BlogPosts
+                                                  where post.dateCreated <= endDate && post.dateCreated > middleEndDate
+                                                  select post).ToList();
+
+                List<BlogPost> lastWeeksPosts = (from post in context.BlogPosts
+                                                  where post.dateCreated <= middleEndDate && post.dateCreated > middleBeginDate
+                                                  select post).ToList();
+
+                List<BlogPost> twoWeeksAgoPosts = (from post in context.BlogPosts
+                                                    where post.dateCreated <= middleBeginDate && post.dateCreated > beginDate
+                                                    select post).ToList();
+
+                Dictionary<string, int> thisWeekTags = new Dictionary<string, int>();
+                Dictionary<string, int> lastWeekTags = new Dictionary<string, int>();
+                Dictionary<string, int> twoWeeksAgoTags = new Dictionary<string, int>();
+
+                // First get the top 5 tags from the current week
+                // these will be searched for in the two previous weeks
+                foreach (BlogPost post in thisWeeksPosts)
+                {
+                    foreach (Tag tag in post.tags)
+                    {
+                        // if we haven't found the tag yet, add it
+                        if (thisWeekTags.ContainsKey(tag.tagName) == false) {
+                            thisWeekTags.Add(tag.tagName, 1);
+                        }
+                        // otherwise, just increment the count
+                        else
+                        {
+                            thisWeekTags[tag.tagName] = thisWeekTags[tag.tagName] + 1;
+                        }
+                    }
+                }
+
+                // Create a list that can be sorted according to the tag counts,
+                // then reverse it so that the top 5 tags can be identified
+                List<KeyValuePair<string, int>> thisWeekTags_List = thisWeekTags.ToList();
+                thisWeekTags_List.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+                thisWeekTags_List.Reverse();
+
+                List<String> topTags = new List<string>();
+
+                for (int i = 0; i < 5; i++)
+                {
+                    topTags.Add(thisWeekTags_List.ElementAt(i).Key);
+                    // we want to initialize the last week and two weeks ago dictionaries
+                    // to have the tags -- in this way, even if the tag didn't come up
+                    // in those weeks, there won't be an error when trying to access the tag key
+                    // from each dictionary
+                    lastWeekTags.Add(thisWeekTags_List.ElementAt(i).Key, 0);
+                    twoWeeksAgoTags.Add(thisWeekTags_List.ElementAt(i).Key, 0);
+                }
+
+                // now we look for data on these tags from the other two weeks
+
+
+                foreach (BlogPost post in lastWeeksPosts)
+                {
+                    foreach (Tag tag in post.tags)
+                    {
+                        // we're only interested in the current week's top 5 tags
+                        if (topTags.Contains(tag.tagName))
+                        {
+                        // note: at this point we know we're dealing with one of the top tags,
+                        // and we know that the top tags already have entries for the last week dictionary
+                        // (same for the two weeks ago dictionary later on)
+
+                            lastWeekTags[tag.tagName] = lastWeekTags[tag.tagName] + 1;
+
+                        }
+                    }
+                }
+
+                // same process, but this time for the very first week (the one two weeks ago)
+
+                foreach (BlogPost post in twoWeeksAgoPosts)
+                {
+                    foreach (Tag tag in post.tags)
+                    {
+                        
+                        if (topTags.Contains(tag.tagName))
+                        {
+                            twoWeeksAgoTags[tag.tagName] = twoWeeksAgoTags[tag.tagName] + 1;
+                        }
+                    }
+                }
+
+                // At this point we have info about the top 5 tags across the three weeks
+                // Now we need to put all the info together coherently into a single dictionary
+                // and return it
+
+
+                tagRankings.Add("TagNames", new List<string>());
+                tagRankings.Add("Tag1", new List<string>());
+                tagRankings.Add("Tag2", new List<string>());
+                tagRankings.Add("Tag3", new List<string>());
+                tagRankings.Add("Tag4", new List<string>());
+                tagRankings.Add("Tag5", new List<string>());
+
+                // create entry for the tag names themselves --
+                // they'll be used for the graph labels
+
+                int tagCounter = 1;
+                foreach (string tag in topTags)
+                {
+                    tagRankings["TagNames"].Add(tag);
+
+                    // now add the three counts, in chronological order
+                    // if a tag didn't come up at all in a given week, the value will be 0 since it was
+                    // initialized as such earlier
+
+                    tagRankings["Tag" + tagCounter.ToString()].Add(twoWeeksAgoTags[tag].ToString());
+                    tagRankings["Tag" + tagCounter.ToString()].Add(lastWeekTags[tag].ToString());
+                    tagRankings["Tag" + tagCounter.ToString()].Add(thisWeekTags[tag].ToString());
+                    tagCounter++;
+
+                }
+            }
+
+            return tagRankings;
+        }
     }
 
 }
