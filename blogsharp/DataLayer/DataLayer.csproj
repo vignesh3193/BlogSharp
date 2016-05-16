@@ -52,9 +52,9 @@
   <ItemGroup>
     <Compile Include="BlogContext.cs" />
     <Compile Include="BlogPost.cs" />
-    <Compile Include="Migrations\201605152235007_Initial.cs" />
-    <Compile Include="Migrations\201605152235007_Initial.Designer.cs">
-      <DependentUpon>201605152235007_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201605152310467_first.cs" />
+    <Compile Include="Migrations\201605152310467_first.Designer.cs">
+      <DependentUpon>201605152310467_first.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Rating.cs" />
@@ -68,8 +68,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201605152235007_Initial.resx">
-      <DependentUpon>201605152235007_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201605152310467_first.resx">
+      <DependentUpon>201605152310467_first.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

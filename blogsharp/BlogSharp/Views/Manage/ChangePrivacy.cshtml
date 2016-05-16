@@ -1,0 +1,29 @@
+﻿@model BlogSharp.Models.PrivacyUpdateViewModel
+@{
+    ViewBag.Title = "Change Privacy";
+}
+
+<h2>Change Privacy</h2>
+
+@using (Html.BeginForm("ChangePrivacy", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Change Privacy Status</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <p> Leave Unchecked if you would like to make your account public, check if you want to make your account private. </p>
+    <div class="form-group">
+         @Html.CheckBoxFor(m => m.isPrivate, new { @class = "col-md-2 control-label" })
+        
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Change Privacy" class="btn btn-default" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

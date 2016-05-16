@@ -15,11 +15,11 @@
         
        
         <div class="form-group">
-            <p>Keyword (May Contain People, Blog Name, or Tags): </p>
-            
+            <p> Keyword: (May be a user, blog name, or tag)</p>
+            <div class="col-md-10">
                 @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
-           
+            </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.date, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -31,11 +31,11 @@
         <p> Optional Search Filters: </p>
         
         <div class="form-group">
-           <p> Minimum Rating: </p>
-            
+           <p>Rating: </p>
+            <div class="col-md-10">
                 @Html.EditorFor(model=> model.newRating)
                 @Html.ValidationMessageFor(model => model.newRating, "", new { @class = "text-danger" })
-           
+            </div>
         </div>
 
         <div class="form-group">
@@ -47,7 +47,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to Home", "ViewPosts")
+    @Html.ActionLink("Back to Home", "Index", "Home")
 </div>
 
 @section Scripts {
