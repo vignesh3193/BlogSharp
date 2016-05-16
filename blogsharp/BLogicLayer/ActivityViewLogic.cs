@@ -133,7 +133,7 @@ namespace BLogicLayer
             Response geocodeResponse = MakeRequest(geocodeRequest);
 
             // If there was any error in making the request, return nothing; else, process the results
-            if (geocodeRequest == null)
+            if (geocodeResponse == null)
             {
                 return null;
             }
