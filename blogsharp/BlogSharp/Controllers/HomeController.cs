@@ -17,6 +17,8 @@ namespace BlogSharp.Controllers
         private BlogContext personContext = new BlogContext();
         public ActionResult Index()
         {
+            CreateTags.generate(personContext);
+
             List<String> trends = ActivityViewLogic.getTrends();
             ViewBag.trends = trends;
             //if user is logged in see public and followings posts

@@ -101,8 +101,9 @@
     </div>
      
 
-    <img class="img-circle" src="http://s3-us-west-2.amazonaws.com/s.cdpn.io/69263/profile/profile-512_2.jpg" alt="Circle image" style="width:105px;height:105px">
+    <img class="img-circle" src="~/Content/images/@(Model.Email).png" alt="Circle image" style="width:105px;height:105px">
    
+    
     <span id="following" class="label label-pill label-default"  data-container="body"
         data-toggle="popover" title="Followers" data-placement="bottom">Following @Html.DisplayFor(model=>model.following.Count)</span>
     <div class="popper-content hide" id="follower_popover_content_wrapper" style="display: none;height:50px;overflow:scroll;">
@@ -220,4 +221,13 @@ else {
 </div>
 }
 }
-
+@if (Model == curruser)
+{
+    using (Html.BeginForm("Profile", "Blog", FormMethod.Post,
+                                            new { enctype = "multipart/form-data" }))
+    {
+    <label for="file">Upload A profile picure!:</label>
+    <input type="file" name="file" id="file" style="width: 100%;" />
+    <input type="submit" value="Upload" class="submit" />
+    }
+}
