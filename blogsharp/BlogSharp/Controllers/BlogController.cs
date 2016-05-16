@@ -512,13 +512,39 @@ namespace BlogSharp.Controllers
         {
             var jsonMaker = new JavaScriptSerializer();
 
-            return jsonMaker.Serialize(ActivityViewLogic.getTopBloggers());
+            Dictionary<string, List<string>> bloggerRanks = new Dictionary<string, List<string>>();
+            bloggerRanks = ActivityViewLogic.getTopBloggers();
+
+            if (bloggerRanks == null)
+            {
+                // something went wrong, return an error code and do not send any data back
+                Response.StatusCode = 400;
+                return "";
+            }
+            else
+            {
+                return jsonMaker.Serialize(bloggerRanks);
+            }
         }
 
+        [HttpPost]
         public string GetTagComparison()
         {
             var jsonMaker = new JavaScriptSerializer();
-            return jsonMaker.Serialize(ActivityViewLogic.getTopTags());
+            Dictionary<string, List<string>> tagRanks = new Dictionary<string, List<string>>();
+            tagRanks = ActivityViewLogic.getTopTags();
+
+            if (tagRanks == null)
+            {
+                // something went wrong, return an error status code and do not return any data
+                Response.StatusCode = 400;
+                return "";
+            }
+            else
+            {
+                return jsonMaker.Serialize(tagRanks);
+            }
+            
            
         }
 
