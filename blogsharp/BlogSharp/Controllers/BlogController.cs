@@ -8,6 +8,7 @@ using BLogicLayer;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Web.Script.Serialization;
+using System.IO;
 
 namespace BlogSharp.Controllers
 {
@@ -135,7 +136,7 @@ namespace BlogSharp.Controllers
 
             foreach(Report r in details.reports)
             {
-                if(thisPerson!=null &&r.reporterID==thisPerson.Id)
+                if( thisPerson!=null &&r.reporterID==thisPerson.Id)
                 {
                     ViewBag.isReported = true;
                 }
@@ -473,6 +474,32 @@ namespace BlogSharp.Controllers
             ViewBag.cTags = CommonTags;
             return View(checkPerson);
     }
+
+        [HttpPost]
+        public ActionResult Profile(HttpPostedFileBase file)
+        {
+            if (file != null)
+        {
+            string pic = System.IO.Path.GetFileName(file.FileName);
+            pic = User.Identity.Name+".png";
+            string path = System.IO.Path.Combine(
+                                   Server.MapPath("~/Content/images"), pic); 
+            // file is uploaded
+            file.SaveAs(path);
+
+            // save the image path path to the database or you can send image 
+            // directly to database
+            // in-case if you want to store byte[] ie. for DB
+            using (MemoryStream ms = new MemoryStream()) 
+            {
+                 file.InputStream.CopyTo(ms);
+                 byte[] array = ms.GetBuffer();
+            }
+
+        }
+        // after successfully uploading redirect the user
+        return RedirectToAction("Profile", "Blog");
+        }
 
 
         //next 2 functions take in id of the profile being viewed and updates their followers and following tables
